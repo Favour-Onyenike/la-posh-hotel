@@ -5,12 +5,12 @@ import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from "lucide-react"
 
 const Footer = () => {
   return (
-    <footer className="bg-hotel-navy text-white pt-16 pb-8">
+    <footer className="bg-black text-white pt-16 pb-8">
       <div className="hotel-container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Hotel Info */}
           <div>
-            <h3 className="font-serif text-2xl font-bold mb-4">Luxe Haven</h3>
+            <h3 className="font-serif text-2xl font-bold mb-4">La-Posh</h3>
             <p className="mb-4 text-gray-300">
               Experience luxury redefined in the heart of the city. Our hotel combines
               elegant design with impeccable service to create unforgettable stays.
@@ -77,7 +77,7 @@ const Footer = () => {
               <input
                 type="email"
                 placeholder="Your email address"
-                className="px-4 py-2 bg-hotel-navy border border-gray-600 text-white focus:outline-none focus:border-hotel-gold flex-grow"
+                className="px-4 py-2 bg-black border border-gray-600 text-white focus:outline-none focus:border-hotel-gold flex-grow"
               />
               <button className="bg-hotel-gold px-4 py-2 text-white hover:bg-white hover:text-hotel-navy transition-colors">
                 Subscribe
@@ -89,7 +89,7 @@ const Footer = () => {
         <div className="border-t border-gray-700 pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} Luxe Haven Hotel. All rights reserved.
+              &copy; {new Date().getFullYear()} La-Posh Hotel. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-400">
               <a href="#" className="hover:text-hotel-gold transition-colors">Privacy Policy</a>

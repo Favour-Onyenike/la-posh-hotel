@@ -81,12 +81,12 @@ const Index = () => {
               <img
                 src="/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png"
                 alt="Luxury Hotel Room"
-                className="rounded-lg w-1/2 h-[500px] object-cover"
+                className="rounded-lg w-1/2 h-[350px] object-cover"
               />
               <img
                 src="/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png"
                 alt="Hotel Exterior"
-                className="rounded-lg w-1/2 h-[500px] object-cover"
+                className="rounded-lg w-1/2 h-[350px] object-cover"
               />
             </div>
           </div>
@@ -229,7 +229,7 @@ const Index = () => {
       <section className="section-padding bg-hotel-beige">
         <div className="hotel-container">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="hotel-title text-black mb-6">Experience Luxury at Luxe Haven</h2>
+            <h2 className="hotel-title text-black mb-6">Experience Luxury at La-Posh</h2>
             <p className="text-black mb-8">
               Book your stay now and discover why our guests return again and again for our
               exceptional service and unparalleled comfort.
