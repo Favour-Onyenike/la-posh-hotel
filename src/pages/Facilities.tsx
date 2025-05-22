@@ -7,12 +7,12 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Star } from "lucide-react";
 
 const Facilities = () => {
-  // Updated facility items with more detailed descriptions
+  // Updated facility items with images matching the appropriate facilities
   const facilityItems = [
     {
       title: "Fine Dining Restaurant",
       description: "Experience exquisite cuisine at our in-house restaurant offering a blend of local delicacies and international dishes prepared by our expert chefs. Our restaurant features an elegant ambiance with both indoor and outdoor seating options, a carefully curated wine list, and seasonal menus that showcase the freshest local ingredients. Whether you're enjoying a romantic dinner or hosting a business lunch, our attentive staff ensures an unforgettable dining experience.",
-      imageSrc: "/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png"
+      imageSrc: "/lovable-uploads/5554f5f5-c5dc-46b2-b735-61e278864872.png"
     },
     {
       title: "Executive Suites",
@@ -22,17 +22,17 @@ const Facilities = () => {
     {
       title: "24/7 Power Supply",
       description: "Uninterrupted power supply through our integrated system of solar inverters, state-of-the-art generators and a dedicated transformer. Our eco-friendly power solution ensures that all hotel facilities operate seamlessly, with automatic switching between power sources that is virtually undetectable to guests. This reliable infrastructure powers everything from climate control systems to electronic door locks, providing peace of mind regardless of external power conditions.",
-      imageSrc: "/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png"
+      imageSrc: "/lovable-uploads/2041bcf9-cce4-478f-95c0-b002a66664b5.png"
     },
     {
       title: "Modern Fitness Center",
       description: "Stay fit during your stay with our fully-equipped gym featuring cardio machines, weight training equipment, and personal training options. The fitness center includes the latest Technogym equipment, dedicated areas for stretching and functional training, complimentary towel service, purified water station, and personal TV screens on each cardio machine. Professional trainers are available by appointment for customized workout programs and fitness assessments.",
-      imageSrc: "/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png"
+      imageSrc: "/lovable-uploads/d9d5cdb1-1c16-4557-8c64-39e713537d74.png"
     },
     {
       title: "Outdoor Recreation Area",
       description: "Enjoy our outdoor seating area with various entertainment options including a professional pool table and other games for your leisure. The beautifully landscaped space features comfortable lounge furniture, ambient lighting for evening relaxation, a covered gazebo area for shade during hot days, and multiple activity zones including table tennis and lawn chess. It's the perfect setting for casual gatherings or simply unwinding with a book from our reading collection.",
-      imageSrc: "/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png"
+      imageSrc: "/lovable-uploads/9423b162-188e-46ac-a0ac-33fbdf219e2c.png"
     }
   ];
 
@@ -84,7 +84,7 @@ const Facilities = () => {
         {/* Grid Layout for Facilities */}
         <section className="bg-gray-50 py-16">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {facilityItems.map((item, index) => (
                 <React.Fragment key={index}>
                   {/* For even items: image on left, text on right */}
