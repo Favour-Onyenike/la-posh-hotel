@@ -9,12 +9,16 @@ const About = () => {
     <>
       <Navbar />
       <div className="pt-24 md:pt-28 lg:pt-32 pb-16">
-        {/* Hero Section */}
-        <section className="bg-hotel-beige py-16 md:py-24">
-          <div className="hotel-container">
+        {/* Hero Section with Background Image */}
+        <section 
+          className="py-20 md:py-32 lg:py-40 bg-cover bg-center relative"
+          style={{ backgroundImage: "url('/lovable-uploads/e9be561a-1ed6-476f-aab8-fd04aaef0620.png')" }}
+        >
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="hotel-container relative z-10">
             <div className="max-w-4xl mx-auto text-center">
-              <h1 className="hotel-title mb-6 text-black">About La Posh</h1>
-              <p className="text-xl text-black">
+              <h1 className="hotel-title mb-6 text-white">About La Posh</h1>
+              <p className="text-xl text-white">
                 Where luxury meets elegance and sophistication
               </p>
             </div>
