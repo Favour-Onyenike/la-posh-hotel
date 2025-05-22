@@ -3,6 +3,8 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const About = () => {
   return (
@@ -53,81 +55,88 @@ const About = () => {
           </div>
         </section>
 
-        {/* Vision Section */}
+        {/* Vision & Mission Section Side by Side */}
         <section className="section-padding bg-white">
           <div className="hotel-container">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="hotel-subtitle mb-6 text-black">OUR VISION</h2>
-              <div className="prose prose-lg max-w-none">
-                <p className="mb-6 text-black">
-                  At La Posh Signature Hotel & Suites, our vision is to become the premier luxury
-                  destination in the hospitality industry, renowned for our exceptional service,
-                  opulent amenities, and unparalleled guest experiences.
-                </p>
-                <p className="mb-6 text-black">
-                  We strive to create a haven of elegance and sophistication, where every guest
-                  feels valued, pampered, and inspired. Through our commitment to excellence,
-                  innovation, and sustainability, we aim to exceed expectations, foster loyalty,
-                  and make every stay with us an unforgettable memory.
-                </p>
-                <p className="mb-6 text-black">Our vision is built on the pillars of:</p>
-                <ul className="list-disc pl-6 mb-6 text-black">
-                  <li>Uncompromising quality and attention to detail</li>
-                  <li>Personalized service and genuine hospitality</li>
-                  <li>Innovative amenities and cutting-edge technology</li>
-                  <li>Sustainable practices and social responsibility</li>
-                  <li>Continuous improvement and excellence</li>
-                </ul>
-                <p className="mb-6 text-black">
-                  By living our vision, we aim to make La Posh Signature Hotel & Suites the
-                  ultimate choice for discerning travelers, and a benchmark for luxury
-                  hospitality worldwide.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Vision Card */}
+              <Card className="shadow-md border-hotel-gold/20">
+                <CardHeader>
+                  <CardTitle className="hotel-subtitle text-black">OUR VISION</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="prose prose-lg max-w-none">
+                    <p className="mb-6 text-black">
+                      At La Posh Signature Hotel & Suites, our vision is to become the premier luxury
+                      destination in the hospitality industry, renowned for our exceptional service,
+                      opulent amenities, and unparalleled guest experiences.
+                    </p>
+                    <p className="mb-6 text-black">
+                      We strive to create a haven of elegance and sophistication, where every guest
+                      feels valued, pampered, and inspired. Through our commitment to excellence,
+                      innovation, and sustainability, we aim to exceed expectations, foster loyalty,
+                      and make every stay with us an unforgettable memory.
+                    </p>
+                    <p className="mb-4 text-black">Our vision is built on the pillars of:</p>
+                    <ul className="list-disc pl-6 mb-6 text-black">
+                      <li>Uncompromising quality and attention to detail</li>
+                      <li>Personalized service and genuine hospitality</li>
+                      <li>Innovative amenities and cutting-edge technology</li>
+                      <li>Sustainable practices and social responsibility</li>
+                      <li>Continuous improvement and excellence</li>
+                    </ul>
+                    <p className="text-black">
+                      By living our vision, we aim to make La Posh Signature Hotel & Suites the
+                      ultimate choice for discerning travelers, and a benchmark for luxury
+                      hospitality worldwide.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
 
-        {/* Mission Section */}
-        <section className="section-padding bg-hotel-beige">
-          <div className="hotel-container">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="hotel-subtitle mb-6 text-black">OUR MISSION</h2>
-              <div className="prose prose-lg max-w-none">
-                <p className="mb-6 text-black">
-                  At La Posh Signature Hotel & Suites, our mission is to provide exceptional
-                  hospitality experiences that exceed our guests' expectations, while fostering a
-                  culture of excellence, innovation, and sustainability.
-                </p>
-                <p className="mb-6 text-black">We are committed to:</p>
-                <ul className="list-disc pl-6 mb-6 text-black">
-                  <li>
-                    Delivering personalized, intuitive, and genuine service that makes every
-                    guest feel valued and cared for.
-                  </li>
-                  <li>
-                    Creating a luxurious, comfortable, and inspiring environment that enhances
-                    our guests' well-being and productivity.
-                  </li>
-                  <li>
-                    Offering innovative amenities, services, and experiences that surprise and
-                    delight our guests.
-                  </li>
-                  <li>
-                    Building strong relationships with our guests, partners, and community, based
-                    on trust, respect, and mutual benefit.
-                  </li>
-                  <li>
-                    Embracing sustainable practices and social responsibility, to minimize our
-                    impact on the environment and contribute to the well-being of our community.
-                  </li>
-                </ul>
-                <p className="mb-6 text-black">
-                  By living our mission, we aim to make La Posh Signature Hotel & Suites the
-                  preferred choice for discerning travelers, and a leader in the hospitality
-                  industry.
-                </p>
-              </div>
+              {/* Mission Card */}
+              <Card className="shadow-md border-hotel-gold/20">
+                <CardHeader>
+                  <CardTitle className="hotel-subtitle text-black">OUR MISSION</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="prose prose-lg max-w-none">
+                    <p className="mb-6 text-black">
+                      At La Posh Signature Hotel & Suites, our mission is to provide exceptional
+                      hospitality experiences that exceed our guests' expectations, while fostering a
+                      culture of excellence, innovation, and sustainability.
+                    </p>
+                    <p className="mb-4 text-black">We are committed to:</p>
+                    <ul className="list-disc pl-6 mb-6 text-black">
+                      <li>
+                        Delivering personalized, intuitive, and genuine service that makes every
+                        guest feel valued and cared for.
+                      </li>
+                      <li>
+                        Creating a luxurious, comfortable, and inspiring environment that enhances
+                        our guests' well-being and productivity.
+                      </li>
+                      <li>
+                        Offering innovative amenities, services, and experiences that surprise and
+                        delight our guests.
+                      </li>
+                      <li>
+                        Building strong relationships with our guests, partners, and community, based
+                        on trust, respect, and mutual benefit.
+                      </li>
+                      <li>
+                        Embracing sustainable practices and social responsibility, to minimize our
+                        impact on the environment and contribute to the well-being of our community.
+                      </li>
+                    </ul>
+                    <p className="text-black">
+                      By living our mission, we aim to make La Posh Signature Hotel & Suites the
+                      preferred choice for discerning travelers, and a leader in the hospitality
+                      industry.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
