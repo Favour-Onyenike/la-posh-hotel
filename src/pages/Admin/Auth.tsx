@@ -7,13 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Home } from "lucide-react";
+import { Loader2, Home, Shield } from "lucide-react";
 
 const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { signIn, isAdmin, isLoading, user, profile } = useAuth();
+  const [isUpdatingRole, setIsUpdatingRole] = useState(false);
+  const { signIn, isAdmin, isLoading, user, profile, updateUserRole } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -66,6 +67,20 @@ const Auth = () => {
     }
   };
 
+  const handleMakeAdmin = async () => {
+    if (!user) return;
+    
+    setIsUpdatingRole(true);
+    try {
+      await updateUserRole(user.id, 'admin');
+      // The role update will trigger a profile update which will be caught by the useEffect
+    } catch (error) {
+      console.error('Error making user admin:', error);
+    } finally {
+      setIsUpdatingRole(false);
+    }
+  };
+
   // If still loading, show loading state
   if (isLoading) {
     return (
@@ -84,51 +99,53 @@ const Auth = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md">
-        <Card className="border-2 border-primary/10 shadow-lg">
-          <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-3xl font-bold text-primary">Admin Login</CardTitle>
-            <CardDescription className="text-sm text-muted-foreground">
-              Enter your credentials to access the admin panel
-            </CardDescription>
-          </CardHeader>
-          <form onSubmit={handleSubmit}>
+        {user && profile && profile.role !== 'admin' ? (
+          <Card className="border-2 border-primary/10 shadow-lg">
+            <CardHeader className="space-y-1 text-center">
+              <CardTitle className="text-3xl font-bold text-primary">Admin Access Required</CardTitle>
+              <CardDescription className="text-sm text-muted-foreground">
+                Your account doesn't have admin privileges
+              </CardDescription>
+            </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="admin@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
+              <div className="rounded-md bg-amber-50 p-4">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <Shield className="h-5 w-5 text-amber-400" />
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-amber-800">Access Denied</h3>
+                    <div className="mt-2 text-sm text-amber-700">
+                      <p>Your account doesn't have the necessary permissions to access the admin area.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
+              <Button
+                onClick={handleMakeAdmin}
+                className="w-full"
+                disabled={isUpdatingRole}
+              >
+                {isUpdatingRole ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Setting admin privileges...
+                  </>
+                ) : (
+                  <>
+                    <Shield className="mr-2 h-4 w-4" />
+                    Grant Admin Privileges
+                  </>
+                )}
+              </Button>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
               <Button 
-                type="submit" 
+                onClick={() => signOut()} 
+                variant="outline" 
                 className="w-full"
-                disabled={isSubmitting}
               >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
-                    Logging in...
-                  </>
-                ) : (
-                  'Sign In'
-                )}
+                Sign Out and Try Another Account
               </Button>
               <Link to="/" className="w-full">
                 <Button 
@@ -141,8 +158,68 @@ const Auth = () => {
                 </Button>
               </Link>
             </CardFooter>
-          </form>
-        </Card>
+          </Card>
+        ) : (
+          <Card className="border-2 border-primary/10 shadow-lg">
+            <CardHeader className="space-y-1 text-center">
+              <CardTitle className="text-3xl font-bold text-primary">Admin Login</CardTitle>
+              <CardDescription className="text-sm text-muted-foreground">
+                Enter your credentials to access the admin panel
+              </CardDescription>
+            </CardHeader>
+            <form onSubmit={handleSubmit}>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="admin@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-col space-y-4">
+                <Button 
+                  type="submit" 
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                      Logging in...
+                    </>
+                  ) : (
+                    'Sign In'
+                  )}
+                </Button>
+                <Link to="/" className="w-full">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    className="w-full"
+                  >
+                    <Home className="mr-2 h-4 w-4" />
+                    Back to Home
+                  </Button>
+                </Link>
+              </CardFooter>
+            </form>
+          </Card>
+        )}
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Use "admin@laposh.com" with your password to log in as admin
         </p>

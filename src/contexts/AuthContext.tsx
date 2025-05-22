@@ -13,6 +13,7 @@ type AuthContextType = {
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
+  updateUserRole: (userId: string, role: 'admin' | 'user') => Promise<{ error: Error | null }>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -77,6 +78,54 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setProfile(data as Profile);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
+    }
+  };
+
+  const updateUserRole = async (userId: string, role: 'admin' | 'user') => {
+    try {
+      setIsLoading(true);
+      console.log(`Updating user ${userId} role to ${role}`);
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update({ role })
+        .eq('id', userId);
+      
+      if (error) {
+        console.error('Error updating user role:', error);
+        toast({
+          title: "Update failed",
+          description: error.message,
+          variant: "destructive"
+        });
+        return { error };
+      }
+      
+      // If updating the current user's role, refresh the profile
+      if (user && user.id === userId) {
+        await fetchProfile(userId);
+        toast({
+          title: "Role updated",
+          description: `Your account now has ${role} privileges.`,
+        });
+      } else {
+        toast({
+          title: "Role updated",
+          description: `User's account now has ${role} privileges.`,
+        });
+      }
+      
+      return { error: null };
+    } catch (error) {
+      console.error('Error in updateUserRole:', error);
+      toast({
+        title: "Update failed",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      });
+      return { error: error as Error };
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -162,6 +211,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         signIn,
         signOut,
+        updateUserRole,
       }}
     >
       {children}
