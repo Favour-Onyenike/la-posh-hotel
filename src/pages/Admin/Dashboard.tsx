@@ -218,7 +218,7 @@ const Dashboard = () => {
   return (
     <AdminLayout>
       <div className="space-y-8">
-        <div>
+        <div className="mt-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           <p className="text-muted-foreground">Admin overview of bookings and hotel statistics.</p>
         </div>

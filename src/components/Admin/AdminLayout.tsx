@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -105,7 +106,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <Button
             variant="outline"
             size="icon"
-            className="fixed left-4 top-4 z-50 lg:hidden"
+            className="fixed left-4 top-4 z-40 lg:hidden"
           >
             <Menu size={20} />
           </Button>
@@ -161,8 +162,8 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </SheetContent>
       </Sheet>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto p-4 lg:p-8">{children}</main>
+      {/* Main Content - Add padding-top for mobile */}
+      <main className="flex-1 overflow-y-auto p-4 pt-14 lg:p-8 lg:pt-8">{children}</main>
     </div>
   );
 };
