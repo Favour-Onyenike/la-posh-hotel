@@ -184,6 +184,7 @@ export type Database = {
       }
       rooms: {
         Row: {
+          availability_status: string
           capacity: number
           created_at: string
           description: string
@@ -196,6 +197,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          availability_status?: string
           capacity: number
           created_at?: string
           description: string
@@ -208,6 +210,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          availability_status?: string
           capacity?: number
           created_at?: string
           description?: string

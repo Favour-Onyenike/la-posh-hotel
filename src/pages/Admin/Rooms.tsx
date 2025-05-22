@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Room } from '@/types/supabase';
@@ -84,7 +83,7 @@ const Rooms = () => {
         throw error;
       }
 
-      // Default any rooms without availability_status to 'available'
+      // Ensure all rooms have an availability_status property
       const roomsWithDefaultStatus = (data || []).map(room => ({
         ...room,
         availability_status: room.availability_status || 'available' as Room['availability_status']
