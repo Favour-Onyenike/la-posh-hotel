@@ -10,12 +10,12 @@ const Facilities = () => {
   // Updated facility items with images matching the appropriate facilities
   const facilityItems = [
     {
-      title: "Fine Dining Restaurant",
+      title: "Restaurant",
       description: "Experience exquisite cuisine at our in-house restaurant offering a blend of local delicacies and international dishes prepared by our expert chefs. Our restaurant features an elegant ambiance with both indoor and outdoor seating options, a carefully curated wine list, and seasonal menus that showcase the freshest local ingredients. Whether you're enjoying a romantic dinner or hosting a business lunch, our attentive staff ensures an unforgettable dining experience.",
       imageSrc: "/lovable-uploads/5554f5f5-c5dc-46b2-b735-61e278864872.png"
     },
     {
-      title: "Executive Suites",
+      title: "Executive Rooms",
       description: "Spacious and elegantly furnished suites designed for ultimate comfort and relaxation. Each suite features a separate living area, premium king-sized beds with luxury linens, a work desk with ergonomic chair, high-definition smart TVs, custom bathroom amenities, and complimentary high-speed WiFi. The thoughtful design incorporates both modern convenience and classic elegance, with soundproofed walls ensuring a peaceful atmosphere throughout your stay.",
       imageSrc: "/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png"
     },
@@ -25,8 +25,8 @@ const Facilities = () => {
       imageSrc: "/lovable-uploads/2041bcf9-cce4-478f-95c0-b002a66664b5.png"
     },
     {
-      title: "Modern Fitness Center",
-      description: "Stay fit during your stay with our fully-equipped gym featuring cardio machines, weight training equipment, and personal training options. The fitness center includes the latest Technogym equipment, dedicated areas for stretching and functional training, complimentary towel service, purified water station, and personal TV screens on each cardio machine. Professional trainers are available by appointment for customized workout programs and fitness assessments.",
+      title: "Fitness Center",
+      description: "Stay fit during your stay with our well-equipped gym featuring standard cardio machines, free weights, and basic training equipment. The fitness center includes treadmills, stationary bikes, and weight machines to help you maintain your workout routine while traveling. Fresh towels are available, along with a water cooler for your convenience. The space is clean, functional, and available to all hotel guests.",
       imageSrc: "/lovable-uploads/d9d5cdb1-1c16-4557-8c64-39e713537d74.png"
     },
     {
