@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Wifi, Utensils, ConciergeBell, ShowerHead, Hotel, Car, Clock, Map, Coffee, Star, Sparkles } from "lucide-react";
+import { Wifi, Utensils, ConciergeBell, ShowerHead, Hotel, Car, Clock, Map, Coffee, Star, Sparkles, Power, Dumbbell, Gamepad } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const Facilities = () => {
@@ -17,8 +17,8 @@ const Facilities = () => {
       imageSrc: "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png"
     },
     {
-      title: "Fine Dining",
-      description: "Experience exquisite cuisine at our in-house restaurant offering local and international dishes.",
+      title: "Fine Dining Restaurant",
+      description: "Experience exquisite cuisine at our in-house restaurant offering a blend of local delicacies and international dishes prepared by our expert chefs.",
       icon: Utensils,
       imageSrc: "/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png"
     },
@@ -45,6 +45,24 @@ const Facilities = () => {
       description: "Convenient airport shuttle service for hassle-free transportation to and from the airport.",
       icon: Car,
       imageSrc: "/lovable-uploads/b0b33b9b-6fb9-4d30-836e-20c55bc93064.png"
+    },
+    {
+      title: "24/7 Power Supply",
+      description: "Uninterrupted power supply through our integrated system of solar inverters, state-of-the-art generators and a dedicated transformer.",
+      icon: Power,
+      imageSrc: "/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png"
+    },
+    {
+      title: "Modern Fitness Center",
+      description: "Stay fit during your stay with our fully-equipped gym featuring cardio machines, weight training equipment, and personal training options.",
+      icon: Dumbbell,
+      imageSrc: "/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png"
+    },
+    {
+      title: "Outdoor Recreation Area",
+      description: "Enjoy our outdoor seating area with various entertainment options including a professional pool table and other games for your leisure.",
+      icon: Gamepad,
+      imageSrc: "/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png"
     }
   ];
 
