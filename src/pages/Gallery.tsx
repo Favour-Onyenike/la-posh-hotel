@@ -1,15 +1,9 @@
 
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Star } from "lucide-react";
-import { 
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { Star, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Gallery = () => {
   // All uploaded images for the gallery
@@ -28,8 +22,18 @@ const Gallery = () => {
     "/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png"
   ];
 
-  // Featured images for the carousel
-  const featuredImages = galleryImages.slice(0, 5);
+  // State to track the currently enlarged image
+  const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
+
+  // Handler to open the enlarged image modal
+  const handleImageClick = (image: string) => {
+    setEnlargedImage(image);
+  };
+
+  // Handler to close the enlarged image modal
+  const closeEnlargedImage = () => {
+    setEnlargedImage(null);
+  };
 
   return (
     <>
@@ -58,39 +62,6 @@ const Gallery = () => {
           </div>
         </section>
         
-        {/* Featured Carousel */}
-        <section className="bg-white py-20">
-          <div className="hotel-container max-w-6xl mx-auto">
-            <div className="flex items-center mb-8">
-              <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
-              <h2 className="hotel-subtitle text-black text-3xl uppercase font-bold">FEATURED SPACES</h2>
-              <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
-            </div>
-            
-            <div className="mb-12">
-              <Carousel className="w-full">
-                <CarouselContent>
-                  {featuredImages.map((image, index) => (
-                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                      <div className="p-1">
-                        <div className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 aspect-[4/3]">
-                          <img 
-                            src={image} 
-                            alt={`Featured image ${index + 1}`} 
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                          />
-                        </div>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="left-1" />
-                <CarouselNext className="right-1" />
-              </Carousel>
-            </div>
-          </div>
-        </section>
-        
         {/* Main Gallery Grid */}
         <section className="bg-gray-50 py-16">
           <div className="hotel-container max-w-6xl mx-auto">
@@ -104,7 +75,8 @@ const Gallery = () => {
               {galleryImages.map((image, index) => (
                 <div 
                   key={index}
-                  className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-64"
+                  className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-64 cursor-pointer"
+                  onClick={() => handleImageClick(image)}
                 >
                   <img 
                     src={image} 
@@ -127,6 +99,33 @@ const Gallery = () => {
           </div>
         </section>
       </div>
+
+      {/* Enlarged Image Modal */}
+      {enlargedImage && (
+        <div 
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 md:p-8"
+          onClick={closeEnlargedImage}
+        >
+          <div className="relative max-w-4xl w-full max-h-[90vh]">
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute -top-12 right-0 md:right-auto md:top-0 md:-right-12 bg-white/30 hover:bg-white/50 backdrop-blur-sm z-10"
+              onClick={closeEnlargedImage}
+            >
+              <X className="h-6 w-6" />
+              <span className="sr-only">Close</span>
+            </Button>
+            <img 
+              src={enlargedImage} 
+              alt="Enlarged view"
+              className="w-full h-full object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
+      
       <Footer />
     </>
   );
