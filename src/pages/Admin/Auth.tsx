@@ -20,6 +20,7 @@ const Auth = () => {
   useEffect(() => {
     // If the user is authenticated and admin, redirect to admin dashboard
     if (user && isAdmin) {
+      console.log('User is admin, navigating to dashboard');
       navigate('/admin/dashboard');
     }
   }, [user, isAdmin, navigate]);
@@ -38,7 +39,15 @@ const Auth = () => {
     
     setIsSubmitting(true);
     try {
-      await signIn(email, password);
+      console.log('Submitting login form');
+      const { error } = await signIn(email, password);
+      
+      if (!error) {
+        console.log('Login successful, waiting for auth state to update');
+        // The useEffect above will handle redirect when auth state updates
+      }
+    } catch (error) {
+      console.error('Login form submission error:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -54,6 +63,9 @@ const Auth = () => {
   }
 
   // If user is already logged in and is admin, they will be redirected via useEffect
+  if (user && isAdmin) {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">

@@ -11,7 +11,7 @@ type AuthContextType = {
   profile: Profile | null;
   isAdmin: boolean;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 };
 
@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -44,6 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session check:', session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
       
@@ -71,6 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return;
       }
 
+      console.log('Profile fetched:', data);
       setProfile(data as Profile);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
@@ -80,15 +83,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signIn = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      console.log('Attempting sign in with:', email);
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       
       if (error) {
+        console.error('Sign in error:', error);
         toast({
           title: "Login failed",
           description: error.message,
           variant: "destructive"
         });
+        return { error };
       }
+      
+      console.log('Sign in successful:', data.user?.email);
+      toast({
+        title: "Login successful",
+        description: "You have been successfully logged in",
+      });
+      return { error: null };
     } catch (error) {
       console.error('Error in signIn:', error);
       toast({
@@ -96,6 +109,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         description: "An unexpected error occurred",
         variant: "destructive"
       });
+      return { error: error as Error };
     } finally {
       setIsLoading(false);
     }
