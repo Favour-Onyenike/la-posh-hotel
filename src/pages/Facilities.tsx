@@ -96,16 +96,7 @@ const Facilities = () => {
         {/* Facilities Introduction */}
         <section className="section-padding bg-white py-20">
           <div className="hotel-container">
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-16">
-                <Sparkles className="text-hotel-gold mx-auto mb-4" size={32} />
-                <h2 className="hotel-title text-black mb-4">WORLD-CLASS AMENITIES</h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                  Experience the height of luxury and convenience
-                </p>
-                <div className="h-1 w-24 bg-hotel-gold mx-auto mt-6"></div>
-              </div>
-              
+            <div className="max-w-4xl mx-auto">              
               <div className="prose prose-lg max-w-none text-center mb-12">
                 <p className="mb-6 text-black text-lg leading-relaxed">
                   At La Posh Signature Hotel & Suites, we pride ourselves on offering a comprehensive range of 
