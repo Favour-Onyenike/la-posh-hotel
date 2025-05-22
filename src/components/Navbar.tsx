@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -30,9 +31,9 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
     { name: "Rooms", href: "/rooms" },
-    { name: "Dining", href: "/dining" },
-    { name: "Amenities", href: "/amenities" },
+    { name: "Suites", href: "/suites" },
     { name: "Gallery", href: "/gallery" },
     { name: "Contact", href: "/contact" },
   ];
@@ -65,7 +66,8 @@ const Navbar = () => {
                   key={link.name}
                   to={link.href}
                   className={cn(
-                    "font-medium transition-colors duration-300 hover:text-hotel-gold text-hotel-navy"
+                    "font-medium transition-colors duration-300 text-black hover:text-hotel-gold",
+                    location.pathname === link.href && "border-b-2 border-hotel-gold"
                   )}
                 >
                   {link.name}
@@ -77,7 +79,7 @@ const Navbar = () => {
           {/* Buttons on the right */}
           <div className="hidden md:flex items-center space-x-4">
             <Button 
-              className="bg-hotel-gold hover:bg-hotel-gold/90 text-white"
+              className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white"
               variant="default"
             >
               Book Now
@@ -86,7 +88,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 focus:outline-none text-hotel-navy"
+            className="md:hidden p-2 focus:outline-none text-black"
             onClick={toggleMenu}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -101,7 +103,10 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   to={link.href}
-                  className="py-3 px-4 text-hotel-navy font-medium hover:bg-hotel-beige hover:text-hotel-gold"
+                  className={cn(
+                    "py-3 px-4 text-black font-medium hover:text-hotel-gold",
+                    location.pathname === link.href && "border-l-4 border-hotel-gold"
+                  )}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
@@ -109,7 +114,7 @@ const Navbar = () => {
               ))}
               <div className="px-4 py-3">
                 <Button 
-                  className="bg-hotel-gold hover:bg-hotel-gold/90 text-white w-full"
+                  className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Book Now
