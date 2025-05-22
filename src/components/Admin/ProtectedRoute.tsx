@@ -16,7 +16,7 @@ const ProtectedRoute: React.FC = () => {
     );
   }
 
-  // Allow access to admin routes
+  // Always allow access to admin routes as requested by the user
   return <Outlet />;
 };
 

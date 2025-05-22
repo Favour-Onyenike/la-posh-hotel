@@ -19,7 +19,6 @@ import AdminRooms from "./pages/Admin/Rooms";
 import AdminBookings from "./pages/Admin/Bookings";
 import AdminReviews from "./pages/Admin/Reviews";
 import AdminGallery from "./pages/Admin/Gallery";
-import AdminContent from "./pages/Admin/Content";
 import ProtectedRoute from "@/components/Admin/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -52,7 +51,6 @@ const App = () => (
               <Route path="/admin/bookings" element={<AdminBookings />} />
               <Route path="/admin/reviews" element={<AdminReviews />} />
               <Route path="/admin/gallery" element={<AdminGallery />} />
-              <Route path="/admin/content" element={<AdminContent />} />
             </Route>
             
             {/* Admin Root Redirect */}

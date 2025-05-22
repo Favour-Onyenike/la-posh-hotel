@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         session,
         user,
         profile,
-        isAdmin: profile?.role === 'admin', // Default everyone to admin for now
+        isAdmin: true, // Always allow admin access as requested
         isLoading,
         signOut,
       }}

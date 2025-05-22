@@ -32,7 +32,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Loader2, Plus, Trash2, Edit, Image as ImageIcon } from 'lucide-react';
+import { Loader2, Plus, Trash2, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Gallery = () => {
@@ -47,6 +47,9 @@ const Gallery = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [bulkDeleteMode, setBulkDeleteMode] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [isBulkDeleteDialogOpen, setIsBulkDeleteDialogOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -164,8 +167,11 @@ const Gallery = () => {
     if (!selectedItem) return;
 
     try {
-      // 1. Delete the image from Supabase Storage
-      const imagePath = selectedItem.image_url.split('/').pop();
+      // 1. Delete the image from Supabase Storage if it's stored there
+      const imagePath = selectedItem.image_url.includes('storage/v1/object/public/gallery/') 
+        ? selectedItem.image_url.split('public/gallery/')[1]
+        : null;
+
       if (imagePath) {
         const { error: deleteStorageError } = await supabase.storage
           .from('gallery')
@@ -173,6 +179,7 @@ const Gallery = () => {
 
         if (deleteStorageError) {
           console.error('Error deleting image from storage:', deleteStorageError);
+          // Continue with deletion even if storage deletion fails
         }
       }
 
@@ -207,9 +214,66 @@ const Gallery = () => {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (selectedImages.length === 0) return;
+
+    try {
+      // Delete the selected items from the database
+      const { error } = await supabase
+        .from('gallery')
+        .delete()
+        .in('id', selectedImages);
+
+      if (error) {
+        throw error;
+      }
+
+      setGalleryItems((prevItems) => 
+        prevItems.filter((item) => !selectedImages.includes(item.id))
+      );
+      
+      toast({
+        title: 'Success',
+        description: `${selectedImages.length} gallery items deleted successfully`,
+      });
+      
+      // Reset selection
+      setSelectedImages([]);
+      setBulkDeleteMode(false);
+    } catch (error) {
+      console.error('Error deleting gallery items:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete selected gallery items',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsBulkDeleteDialogOpen(false);
+    }
+  };
+
+  const toggleImageSelection = (id: string) => {
+    if (selectedImages.includes(id)) {
+      setSelectedImages(selectedImages.filter(itemId => itemId !== id));
+    } else {
+      setSelectedImages([...selectedImages, id]);
+    }
+  };
+
   const confirmDelete = (item: GalleryItem) => {
     setSelectedItem(item);
     setIsDeleteDialogOpen(true);
+  };
+
+  const confirmBulkDelete = () => {
+    if (selectedImages.length > 0) {
+      setIsBulkDeleteDialogOpen(true);
+    } else {
+      toast({
+        title: 'No images selected',
+        description: 'Please select at least one image to delete',
+      });
+    }
   };
 
   const resetForm = () => {
@@ -228,9 +292,37 @@ const Gallery = () => {
             <h2 className="text-3xl font-bold tracking-tight">Gallery</h2>
             <p className="text-muted-foreground">Manage hotel gallery images and photos</p>
           </div>
-          <Button onClick={() => setIsAddDialogOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" /> Add New Image
-          </Button>
+          <div className="flex gap-2">
+            {bulkDeleteMode ? (
+              <>
+                <Button 
+                  variant="destructive"
+                  disabled={selectedImages.length === 0}
+                  onClick={confirmBulkDelete}
+                >
+                  Delete Selected ({selectedImages.length})
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setBulkDeleteMode(false);
+                    setSelectedImages([]);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button onClick={() => setBulkDeleteMode(true)} variant="outline">
+                  Bulk Delete
+                </Button>
+                <Button onClick={() => setIsAddDialogOpen(true)}>
+                  <Plus className="mr-2 h-4 w-4" /> Add New Image
+                </Button>
+              </>
+            )}
+          </div>
         </div>
 
         {loading ? (
@@ -249,8 +341,24 @@ const Gallery = () => {
               </div>
             ) : (
               galleryItems.map((item) => (
-                <Card key={item.id} className="overflow-hidden">
-                  <div className="relative aspect-video">
+                <Card 
+                  key={item.id} 
+                  className={`overflow-hidden ${bulkDeleteMode && selectedImages.includes(item.id) ? 'ring-2 ring-primary' : ''}`}
+                >
+                  <div 
+                    className="relative aspect-video cursor-pointer"
+                    onClick={() => bulkDeleteMode && toggleImageSelection(item.id)}
+                  >
+                    {bulkDeleteMode && (
+                      <div className="absolute left-2 top-2 z-10">
+                        <input 
+                          type="checkbox" 
+                          checked={selectedImages.includes(item.id)}
+                          onChange={() => toggleImageSelection(item.id)}
+                          className="h-5 w-5 rounded border-gray-300"
+                        />
+                      </div>
+                    )}
                     <img
                       src={item.image_url}
                       alt={item.title}
@@ -276,14 +384,16 @@ const Gallery = () => {
                     )}
                   </CardContent>
                   <CardFooter className="border-t p-4">
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="ml-auto"
-                      onClick={() => confirmDelete(item)}
-                    >
-                      <Trash2 size={16} />
-                    </Button>
+                    {!bulkDeleteMode && (
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="ml-auto"
+                        onClick={() => confirmDelete(item)}
+                      >
+                        <Trash2 size={16} className="mr-1" /> Delete
+                      </Button>
+                    )}
                   </CardFooter>
                 </Card>
               ))
@@ -401,6 +511,24 @@ const Gallery = () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteItem} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
               Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Bulk Delete Confirmation Dialog */}
+      <AlertDialog open={isBulkDeleteDialogOpen} onOpenChange={setIsBulkDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Multiple Gallery Items</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {selectedImages.length} selected images? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleBulkDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Delete {selectedImages.length} Items
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

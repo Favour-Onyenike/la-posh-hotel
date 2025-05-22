@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,7 +8,6 @@ import {
   CalendarDays,
   MessageSquare,
   Image as ImageIcon,
-  FileText,
   LogOut,
   Menu,
   X,
@@ -53,11 +51,10 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const navItems = [
     { to: "/admin/dashboard", icon: <LayoutDashboard size={18} />, label: "Dashboard" },
-    { to: "/admin/rooms", icon: <Hotel size={18} />, label: "Rooms" },
+    { to: "/admin/rooms", icon: <Hotel size={18} />, label: "Rooms & Suites" },
     { to: "/admin/bookings", icon: <CalendarDays size={18} />, label: "Bookings" },
     { to: "/admin/reviews", icon: <MessageSquare size={18} />, label: "Reviews" },
     { to: "/admin/gallery", icon: <ImageIcon size={18} />, label: "Gallery" },
-    { to: "/admin/content", icon: <FileText size={18} />, label: "Content" },
   ];
 
   return (

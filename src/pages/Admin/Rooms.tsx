@@ -54,7 +54,8 @@ const Rooms = () => {
   const [roomType, setRoomType] = useState('room');
   const [availabilityStatus, setAvailabilityStatus] = useState<Room['availability_status']>('available');
   const [imageUrl, setImageUrl] = useState('');
-  const [features, setFeatures] = useState('');
+  const [featuresArray, setFeaturesArray] = useState<string[]>([]);
+  const [newFeature, setNewFeature] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   
@@ -110,7 +111,8 @@ const Rooms = () => {
     setRoomType('room');
     setAvailabilityStatus('available');
     setImageUrl('');
-    setFeatures('');
+    setFeaturesArray([]);
+    setNewFeature('');
     setImageFile(null);
     setImagePreview(null);
   };
@@ -125,6 +127,17 @@ const Rooms = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const addFeature = () => {
+    if (newFeature.trim()) {
+      setFeaturesArray([...featuresArray, newFeature.trim()]);
+      setNewFeature('');
+    }
+  };
+
+  const removeFeature = (index: number) => {
+    setFeaturesArray(featuresArray.filter((_, i) => i !== index));
   };
 
   const handleAddRoom = async () => {
@@ -170,7 +183,7 @@ const Rooms = () => {
           room_type: roomType,
           availability_status: availabilityStatus,
           image_url: finalImageUrl || null,
-          features: features.split(',').map(feature => feature.trim()).filter(feature => feature),
+          features: featuresArray,
         });
 
       if (insertError) {
@@ -241,7 +254,7 @@ const Rooms = () => {
           room_type: roomType,
           availability_status: availabilityStatus,
           image_url: finalImageUrl || null,
-          features: features.split(',').map(feature => feature.trim()).filter(feature => feature),
+          features: featuresArray,
         })
         .eq('id', selectedRoom.id);
 
@@ -422,7 +435,7 @@ const Rooms = () => {
     setRoomType(room.room_type);
     setAvailabilityStatus(room.availability_status || 'available');
     setImageUrl(room.image_url || '');
-    setFeatures(room.features ? room.features.join(', ') : '');
+    setFeaturesArray(room.features || []);
     setImagePreview(room.image_url || null);
     setIsEditDialogOpen(true);
   };
@@ -457,7 +470,7 @@ const Rooms = () => {
 
     return (
       <Dialog open={dialogProps.open} onOpenChange={dialogProps.onOpenChange}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{dialogProps.title}</DialogTitle>
             <DialogDescription>{dialogProps.description}</DialogDescription>
@@ -501,8 +514,8 @@ const Rooms = () => {
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Write a description of the room"
-                className="min-h-[100px]"
+                placeholder="Write a detailed description of the room"
+                className="min-h-[150px]"
               />
             </div>
             
@@ -556,13 +569,52 @@ const Rooms = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="features">Features (comma-separated)</Label>
-              <Input
-                id="features"
-                value={features}
-                onChange={(e) => setFeatures(e.target.value)}
-                placeholder="King Bed, WiFi, Air Conditioning, Mini Bar"
-              />
+              <Label htmlFor="features">Features & Amenities</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="newFeature"
+                  value={newFeature}
+                  onChange={(e) => setNewFeature(e.target.value)}
+                  placeholder="Add a feature (e.g., WiFi, Mini Bar)"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      addFeature();
+                    }
+                  }}
+                />
+                <Button 
+                  type="button" 
+                  variant="secondary" 
+                  onClick={addFeature}
+                >
+                  Add
+                </Button>
+              </div>
+              
+              {featuresArray.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {featuresArray.map((feature, index) => (
+                    <Badge 
+                      key={index} 
+                      variant="secondary"
+                      className="flex items-center gap-1"
+                    >
+                      {feature}
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-4 w-4 rounded-full"
+                        onClick={() => removeFeature(index)}
+                      >
+                        <X className="h-3 w-3" />
+                        <span className="sr-only">Remove</span>
+                      </Button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -629,7 +681,7 @@ const Rooms = () => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Rooms & Suites</h2>
-            <p className="text-muted-foreground">Manage hotel rooms and suites.</p>
+            <p className="text-muted-foreground">Manage hotel rooms and suites content.</p>
           </div>
           <Button onClick={() => setIsAddDialogOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Add New Room
