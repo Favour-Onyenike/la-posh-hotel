@@ -3,7 +3,7 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
-import { Star, Utensils, Wifi, Users, MapPin, Clock } from "lucide-react";
+import { Star, Utensils, Wifi, Car, Clock, Glass } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Feature = ({ icon: Icon, title, description }) => {
@@ -102,16 +102,16 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-8">
             <Feature
               icon={Star}
               title="5-Star Accommodations"
               description="Luxurious rooms and suites featuring premium amenities and elegant decor"
             />
             <Feature
-              icon={Utensils}
-              title="Fine Dining"
-              description="Award-winning restaurants serving global cuisine prepared by master chefs"
+              icon={Clock}
+              title="24-Hour Room Service"
+              description="Enjoy delicious meals and refreshments delivered to your room at any hour"
             />
             <Feature
               icon={Wifi}
@@ -119,9 +119,19 @@ const Index = () => {
               description="High-speed internet connectivity throughout the hotel premises"
             />
             <Feature
-              icon={Users}
-              title="24/7 Concierge"
-              description="Personalized assistance for all your needs during your stay with us"
+              icon={Utensils}
+              title="Fine Dining Restaurant"
+              description="Savor exquisite cuisine prepared by our master chefs in an elegant setting"
+            />
+            <Feature
+              icon={Glass}
+              title="Exclusive Bar"
+              description="Unwind with premium drinks and cocktails in our sophisticated lounge bar"
+            />
+            <Feature
+              icon={Car}
+              title="Secure Parking"
+              description="Complimentary valet and secure parking facilities for all our guests"
             />
           </div>
         </div>
