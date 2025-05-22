@@ -130,93 +130,6 @@ const roomCategories = [
   }
 ];
 
-const suiteCategories = [
-  {
-    type: "Suite",
-    name: "Diamond",
-    count: 2,
-    image: "/lovable-uploads/7d3b8634-80e9-4dc1-ba22-be8f76121c97.png",
-    description: "Luxurious suites with separate living areas and premium amenities.",
-    price: 85000,
-    roomNumbers: ["Diamond 01", "Diamond 02"],
-    amenities: ["Ultra-Fast Wi-Fi", "65\" Smart TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi", "Smart Climate Control", "Premium Mini Bar", "Dining Area"],
-    maxGuests: 4,
-    bedType: "King",
-    size: "70 sq.m",
-    features: ["Dedicated Butler Service", "Private Dining Options", "Electronic Safe", "Executive Work Area", "Separate Living Room", "Complimentary Breakfast", "Evening Turndown Service"]
-  },
-  {
-    type: "Suite",
-    name: "Sapphire",
-    count: 2,
-    image: "/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png",
-    description: "Elegant suites featuring sophisticated design and premium services.",
-    price: 80000,
-    roomNumbers: ["Sapphire 01", "Sapphire 02"],
-    amenities: ["Ultra-Fast Wi-Fi", "60\" Smart TV", "Kitchenette", "Luxury Bathroom with Walk-in Shower", "Smart Climate Control", "Premium Mini Bar"],
-    maxGuests: 3,
-    bedType: "King",
-    size: "65 sq.m",
-    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Living Room", "Complimentary Breakfast"]
-  },
-  {
-    type: "Suite",
-    name: "Emerald",
-    count: 1,
-    image: "/lovable-uploads/c5b0e6f8-b1da-4fc2-ae09-35e930422a81.png",
-    description: "Mini suite offering luxurious comfort in a compact yet elegant space.",
-    price: 65000,
-    roomNumbers: ["Emerald 01"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Coffee and Tea Bar", "Luxury Bathroom", "Climate Control", "Mini Bar"],
-    maxGuests: 2,
-    bedType: "King",
-    size: "45 sq.m",
-    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Seating Area", "Complimentary Breakfast"]
-  },
-  {
-    type: "Suite",
-    name: "Gold",
-    count: 2,
-    image: "/lovable-uploads/8625d04c-54ec-4d6c-83b7-3a1081dac086.png",
-    description: "Premium suites with opulent furnishings and expansive living areas.",
-    price: 75000,
-    roomNumbers: ["Gold 01", "Gold 02"],
-    amenities: ["Ultra-Fast Wi-Fi", "60\" Smart TV", "Kitchenette", "Marble Bathroom with Dual Sinks", "Smart Climate Control", "Premium Mini Bar", "Dining Area"],
-    maxGuests: 3,
-    bedType: "King",
-    size: "60 sq.m",
-    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Living Room", "Complimentary Breakfast"]
-  },
-  {
-    type: "Suite",
-    name: "Pearl",
-    count: 1,
-    image: "/lovable-uploads/28419863-c4a4-4fb6-a14e-c864333d1966.png",
-    description: "Exclusive suite offering the ultimate in luxury and personalized service.",
-    price: 90000,
-    roomNumbers: ["Pearl 01"],
-    amenities: ["Ultra-Fast Wi-Fi", "75\" Smart TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi and Steam Shower", "Smart Climate Control", "Premium Stocked Bar", "Dining Area"],
-    maxGuests: 4,
-    bedType: "Emperor King",
-    size: "85 sq.m",
-    features: ["Dedicated 24/7 Butler Service", "Private Chef Available", "Electronic Safe", "Executive Office Area", "Separate Living Room", "Complimentary Breakfast and Evening Canapés", "Airport Transfer"]
-  },
-  {
-    type: "Suite",
-    name: "Ruby",
-    count: 3,
-    image: "/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png",
-    description: "Double bed suites perfect for couples or families, with deluxe amenities.",
-    price: 70000,
-    roomNumbers: ["Ruby 01", "Ruby 02", "Ruby 03"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Kitchenette", "Luxury Bathroom", "Climate Control", "Mini Bar"],
-    maxGuests: 4,
-    bedType: "Two Queen Beds",
-    size: "55 sq.m",
-    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Seating Area", "Complimentary Breakfast"]
-  }
-];
-
 const RoomCard = ({ category }) => {
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
@@ -237,7 +150,7 @@ const RoomCard = ({ category }) => {
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <span>{category.name}</span>
-          <Badge variant="outline" className="bg-hotel-gold/10 text-hotel-gold border-hotel-gold">
+          <Badge variant="hotel" className="bg-hotel-gold/10 text-hotel-gold border-hotel-gold">
             {category.size}
           </Badge>
         </CardTitle>
@@ -264,12 +177,6 @@ const RoomCard = ({ category }) => {
               <Clock size={16} />
               <span>24h Check-in</span>
             </div>
-            {category.type === "Suite" && (
-              <div className="flex items-center gap-1">
-                <Award size={16} />
-                <span>Premium</span>
-              </div>
-            )}
           </div>
         </div>
         
@@ -294,25 +201,7 @@ const RoomCard = ({ category }) => {
   );
 };
 
-const AmenityIcon = ({ name }) => {
-  const iconMap = {
-    "Wi-Fi": <Wifi size={18} />,
-    "TV": <Tv size={18} />,
-    "Coffee": <Coffee size={18} />,
-    "Bathroom": <Bath size={18} />,
-    "AC": <AirVent size={18} />,
-    "Fridge": <Refrigerator size={18} />,
-    "Dining": <Utensils size={18} />
-  };
-  
-  // Find the first matching key in the iconMap
-  const iconKey = Object.keys(iconMap).find(key => name.includes(key));
-  
-  // Return the matching icon or a default
-  return iconKey ? iconMap[iconKey] : <DoorClosed size={18} />;
-};
-
-const RoomsAndSuites = () => {
+const Rooms = () => {
   return (
     <>
       <Navbar />
@@ -325,9 +214,9 @@ const RoomsAndSuites = () => {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">
             <div className="max-w-6xl mx-auto text-center">
-              <h1 className="hotel-title mb-6 text-white text-4xl md:text-5xl lg:text-6xl font-bold">Rooms & Suites</h1>
+              <h1 className="hotel-title mb-6 text-white text-4xl md:text-5xl lg:text-6xl font-bold">Our Rooms</h1>
               <p className="text-xl md:text-2xl text-white">
-                Experience luxury accommodations tailored to your needs
+                Comfortable accommodations designed for your relaxation
               </p>
             </div>
           </div>
@@ -339,13 +228,20 @@ const RoomsAndSuites = () => {
             <div className="max-w-6xl mx-auto">
               <div className="prose prose-lg max-w-none text-center mb-12">
                 <p className="mb-6 text-black text-lg leading-relaxed">
-                  At La Posh Signature Hotel & Suites, we offer a variety of luxurious rooms and suites 
-                  designed to provide the utmost comfort and elegance during your stay.
+                  At La Posh Signature Hotel & Suites, we offer a variety of luxurious rooms 
+                  designed to provide comfort and elegance during your stay.
                 </p>
                 <p className="text-black text-lg leading-relaxed">
-                  From our standard rooms to our premium suites, each accommodation is meticulously 
-                  maintained and furnished with modern amenities to ensure a memorable experience.
+                  Each room is meticulously maintained and furnished with modern amenities 
+                  to ensure a memorable experience.
                 </p>
+              </div>
+              <div className="flex justify-center">
+                <Link to="/suites">
+                  <Button variant="outline" className="border-hotel-gold text-hotel-gold hover:bg-hotel-gold hover:text-white">
+                    View Our Premium Suites
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -365,27 +261,13 @@ const RoomsAndSuites = () => {
           </div>
         </section>
 
-        {/* Suites Section */}
+        {/* Amenities Section */}
         <section className="section-padding bg-white py-16">
           <div className="hotel-container">
             <div className="max-w-7xl mx-auto">
-              <h2 className="hotel-title text-center mb-12">Our Premium Suites</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {suiteCategories.map((category, index) => (
-                  <RoomCard key={index} category={category} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Amenities Section */}
-        <section className="section-padding bg-hotel-beige py-16">
-          <div className="hotel-container">
-            <div className="max-w-7xl mx-auto">
-              <h2 className="hotel-title text-center mb-8">Standard Amenities in All Accommodations</h2>
+              <h2 className="hotel-title text-center mb-8">Standard Room Amenities</h2>
               <p className="text-center mb-12 max-w-3xl mx-auto text-gray-700">
-                Every room and suite at La Posh Signature Hotel & Suites comes equipped with the following amenities
+                Every room at La Posh Signature Hotel & Suites comes equipped with the following amenities
                 to ensure your comfort and convenience.
               </p>
               
@@ -478,19 +360,30 @@ const RoomsAndSuites = () => {
         <section className="section-padding bg-white py-16">
           <div className="hotel-container">
             <div className="max-w-6xl mx-auto text-center">
-              <h2 className="hotel-title mb-6">Ready to Experience Luxury?</h2>
+              <h2 className="hotel-title mb-6">Ready to Experience Comfort?</h2>
               <p className="text-lg mb-8 text-gray-700 max-w-3xl mx-auto">
-                Book your stay today and enjoy our world-class accommodations, impeccable service, 
+                Book your stay today and enjoy our comfortable accommodations, impeccable service, 
                 and the perfect blend of comfort and elegance.
               </p>
-              <Button 
-                variant="hotel" 
-                size="lg" 
-                className="font-medium"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                Book Your Stay Now
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  variant="hotel" 
+                  size="lg" 
+                  className="font-medium"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
+                  Book Your Room Now
+                </Button>
+                <Link to="/suites">
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="font-medium border-hotel-gold text-hotel-gold hover:bg-hotel-gold hover:text-white"
+                  >
+                    Explore Our Suites
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -500,4 +393,4 @@ const RoomsAndSuites = () => {
   );
 };
 
-export default RoomsAndSuites;
+export default Rooms;

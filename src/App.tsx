@@ -9,7 +9,8 @@ import About from "./pages/About";
 import Facilities from "./pages/Facilities";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
-import RoomsAndSuites from "./pages/RoomsAndSuites";
+import Rooms from "./pages/Rooms";
+import Suites from "./pages/Suites";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,9 +27,10 @@ const App = () => (
           <Route path="/facilities" element={<Facilities />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/rooms-and-suites" element={<RoomsAndSuites />} />
-          {/* Redirect from /rooms to /rooms-and-suites */}
-          <Route path="/rooms" element={<Navigate to="/rooms-and-suites" replace />} />
+          <Route path="/rooms" element={<Rooms />} />
+          <Route path="/suites" element={<Suites />} />
+          {/* Redirects for backward compatibility */}
+          <Route path="/rooms-and-suites" element={<Navigate to="/rooms" replace />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
