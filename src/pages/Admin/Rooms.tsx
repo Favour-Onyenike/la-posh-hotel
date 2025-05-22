@@ -39,7 +39,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Plus, Trash2, Edit, Hotel } from 'lucide-react';
+import { Loader2, Plus, Trash2, Edit, Hotel, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Rooms = () => {

@@ -41,7 +41,7 @@ const App = () => (
             <Route path="/suites" element={<Suites />} />
             <Route path="/booking" element={<Booking />} />
             
-            {/* Admin Auth Redirect */}
+            {/* Admin Auth Redirect - directly to dashboard since we removed auth */}
             <Route path="/admin/auth" element={<Navigate to="/admin/dashboard" replace />} />
             
             {/* Protected Admin Routes */}
