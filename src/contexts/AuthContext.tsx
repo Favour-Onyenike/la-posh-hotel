@@ -11,10 +11,7 @@ type AuthContextType = {
   profile: Profile | null;
   isAdmin: boolean;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
-  updateUserRole: (userId: string, role: 'admin' | 'user') => Promise<{ error: Error | null }>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -82,151 +79,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const signUp = async (email: string, password: string, fullName: string) => {
-    try {
-      setIsLoading(true);
-      console.log(`Attempting to sign up with email: ${email}`);
-      
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-        },
-      });
-      
-      if (error) {
-        console.error('Sign up error:', error);
-        toast({
-          title: "Sign up failed",
-          description: error.message,
-          variant: "destructive"
-        });
-        return { error };
-      }
-      
-      console.log('Sign up successful:', data);
-      toast({
-        title: "Account created",
-        description: "Please sign in with your new credentials",
-      });
-      
-      return { error: null };
-    } catch (error) {
-      console.error('Error in signUp:', error);
-      toast({
-        title: "Sign up failed",
-        description: "An unexpected error occurred",
-        variant: "destructive"
-      });
-      return { error: error as Error };
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const updateUserRole = async (userId: string, role: 'admin' | 'user') => {
-    try {
-      setIsLoading(true);
-      console.log(`Updating user ${userId} role to ${role}`);
-      
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role })
-        .eq('id', userId);
-      
-      if (error) {
-        console.error('Error updating user role:', error);
-        toast({
-          title: "Update failed",
-          description: error.message,
-          variant: "destructive"
-        });
-        return { error };
-      }
-      
-      // If updating the current user's role, refresh the profile
-      if (user && user.id === userId) {
-        await fetchProfile(userId);
-        toast({
-          title: "Role updated",
-          description: `Your account now has ${role} privileges.`,
-        });
-      } else {
-        toast({
-          title: "Role updated",
-          description: `User's account now has ${role} privileges.`,
-        });
-      }
-      
-      return { error: null };
-    } catch (error) {
-      console.error('Error in updateUserRole:', error);
-      toast({
-        title: "Update failed",
-        description: "An unexpected error occurred",
-        variant: "destructive"
-      });
-      return { error: error as Error };
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const signIn = async (email: string, password: string) => {
-    try {
-      setIsLoading(true);
-      console.log('Attempting sign in with:', email);
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      
-      if (error) {
-        console.error('Sign in error:', error);
-        toast({
-          title: "Login failed",
-          description: error.message,
-          variant: "destructive"
-        });
-        return { error };
-      }
-      
-      console.log('Sign in successful:', data.user?.email);
-      
-      // Fetch profile directly after successful sign-in to get role information
-      if (data.user) {
-        const { data: profileData, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', data.user.id)
-          .single();
-          
-        if (!profileError && profileData) {
-          console.log('Profile loaded during login:', profileData);
-          setProfile(profileData as Profile);
-        } else {
-          console.error('Error fetching profile during login:', profileError);
-        }
-      }
-      
-      toast({
-        title: "Login successful",
-        description: "You have been successfully logged in",
-      });
-      return { error: null };
-    } catch (error) {
-      console.error('Error in signIn:', error);
-      toast({
-        title: "Login failed",
-        description: "An unexpected error occurred",
-        variant: "destructive"
-      });
-      return { error: error as Error };
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const signOut = async () => {
     try {
       setIsLoading(true);
@@ -253,12 +105,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         session,
         user,
         profile,
-        isAdmin: profile?.role === 'admin',
+        isAdmin: profile?.role === 'admin', // Default everyone to admin for now
         isLoading,
-        signIn,
-        signUp,
         signOut,
-        updateUserRole,
       }}
     >
       {children}

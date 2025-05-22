@@ -14,7 +14,6 @@ import Rooms from "./pages/Rooms";
 import Suites from "./pages/Suites";
 import Booking from "./pages/Booking";
 import NotFound from "./pages/NotFound";
-import Auth from "./pages/Admin/Auth";
 import Dashboard from "./pages/Admin/Dashboard";
 import AdminRooms from "./pages/Admin/Rooms";
 import AdminBookings from "./pages/Admin/Bookings";
@@ -43,8 +42,8 @@ const App = () => (
             <Route path="/suites" element={<Suites />} />
             <Route path="/booking" element={<Booking />} />
             
-            {/* Admin Authentication */}
-            <Route path="/admin/auth" element={<Auth />} />
+            {/* Admin Auth Redirect */}
+            <Route path="/admin/auth" element={<Navigate to="/admin/dashboard" replace />} />
             
             {/* Protected Admin Routes */}
             <Route element={<ProtectedRoute />}>

@@ -6,7 +6,7 @@ import { Lock } from 'lucide-react';
 
 const AdminLoginLink = () => {
   return (
-    <Link to="/admin/auth" className="ml-auto">
+    <Link to="/admin/dashboard" className="ml-auto">
       <Button variant="outline" size="sm" className="text-xs">
         <Lock className="mr-1 h-3 w-3" />
         Admin

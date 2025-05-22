@@ -1,16 +1,12 @@
 
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { Outlet } from 'react-router-dom';
 import { Loader2 } from "lucide-react";
+import { useAuth } from '@/contexts/AuthContext';
 
 const ProtectedRoute: React.FC = () => {
-  const { user, profile, isAdmin, isLoading } = useAuth();
+  const { isLoading } = useAuth();
   
-  console.log('ProtectedRoute - User:', user?.email);
-  console.log('ProtectedRoute - Profile:', profile);
-  console.log('ProtectedRoute - Is admin:', isAdmin, 'Role:', profile?.role);
-
   // Show loading state
   if (isLoading) {
     return (
@@ -20,19 +16,7 @@ const ProtectedRoute: React.FC = () => {
     );
   }
 
-  // If user isn't logged in or isn't an admin, redirect to admin login
-  if (!user || !profile) {
-    console.log('ProtectedRoute - No user or profile, redirecting to login');
-    return <Navigate to="/admin/auth" replace />;
-  }
-  
-  if (profile.role !== 'admin') {
-    console.log('ProtectedRoute - User is not admin, redirecting to login');
-    return <Navigate to="/admin/auth" replace />;
-  }
-
-  // Render children routes
-  console.log('ProtectedRoute - User is authorized, rendering outlet');
+  // Allow access to admin routes
   return <Outlet />;
 };
 
