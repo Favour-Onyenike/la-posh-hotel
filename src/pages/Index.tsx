@@ -80,12 +80,12 @@ const Index = () => {
               <img
                 src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
                 alt="Hotel Lobby"
-                className="rounded-lg w-3/4 h-64 object-cover"
+                className="rounded-lg w-1/2 h-64 object-cover"
               />
               <img
                 src="https://images.unsplash.com/photo-1584132915807-fd1f5fbc078f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
                 alt="Hotel Room"
-                className="rounded-lg w-3/4 h-64 object-cover"
+                className="rounded-lg w-1/2 h-64 object-cover"
               />
             </div>
           </div>
