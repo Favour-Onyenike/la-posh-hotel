@@ -95,13 +95,13 @@ const CounterBar = () => {
           />
           <CounterItem 
             icon={BedDouble}
-            targetValue={4}
+            targetValue={6}
             label="Premium Suites"
           />
           <CounterItem 
             icon={BedDouble}
-            targetValue={9}
-            label="Standard Rooms"
+            targetValue={32}
+            label="Rooms"
           />
           <CounterItem 
             icon={Users}
