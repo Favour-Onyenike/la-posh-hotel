@@ -77,16 +77,16 @@ const Index = () => {
                 Discover Our Story
               </button>
             </div>
-            <div className="lg:w-1/2 flex flex-col gap-4 items-center">
+            <div className="lg:w-1/2 flex flex-row gap-4 items-center justify-center">
               <img
                 src="/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png"
                 alt="Luxury Hotel Room"
-                className="rounded-lg w-4/5 h-64 object-cover"
+                className="rounded-lg w-1/2 h-80 object-cover"
               />
               <img
                 src="/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png"
                 alt="Hotel Exterior"
-                className="rounded-lg w-4/5 h-64 object-cover"
+                className="rounded-lg w-1/2 h-80 object-cover"
               />
             </div>
           </div>
