@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -47,35 +48,41 @@ const Navbar = () => {
     >
       <div className="hotel-container">
         <div className="flex items-center justify-between">
+          {/* Logo on the left */}
           <Link to="/" className="flex items-center">
-            <h1 className={cn(
-              "font-serif text-2xl md:text-3xl font-bold transition-colors duration-300",
-              isScrolled ? "text-hotel-navy" : "text-white"
-            )}>
-              Luxe Haven
-            </h1>
+            <img 
+              src="/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png" 
+              alt="LA POSH Signature Suites" 
+              className="h-12 md:h-16"
+            />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                className={cn(
-                  "font-medium transition-colors duration-300 hover:text-hotel-gold",
-                  isScrolled ? "text-hotel-navy" : "text-white"
-                )}
-              >
-                {link.name}
-              </Link>
-            ))}
-            <Link 
-              to="/book" 
-              className="hotel-button ml-4"
+          {/* Desktop Navigation - Centered */}
+          <div className="hidden md:flex items-center justify-center flex-1 mx-6">
+            <div className="flex items-center space-x-6">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className={cn(
+                    "font-medium transition-colors duration-300 hover:text-hotel-gold",
+                    isScrolled ? "text-hotel-navy" : "text-white"
+                  )}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Buttons on the right */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Button 
+              className="bg-hotel-gold hover:bg-hotel-gold/90 text-white"
+              variant="default"
             >
               Book Now
-            </Link>
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -104,13 +111,14 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <Link 
-                to="/book" 
-                className="hotel-button mx-4 my-3 text-center"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Book Now
-              </Link>
+              <div className="px-4 py-3">
+                <Button 
+                  className="bg-hotel-gold hover:bg-hotel-gold/90 text-white w-full"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Book Now
+                </Button>
+              </div>
             </div>
           </div>
         )}
