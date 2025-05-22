@@ -85,7 +85,7 @@ const Dashboard = () => {
         }
         
         // Count standard rooms and suites
-        const standardRooms = rooms?.filter(room => room.room_type === 'standard') || [];
+        const standardRooms = rooms?.filter(room => room.room_type === 'room') || [];
         const suites = rooms?.filter(room => room.room_type === 'suite') || [];
         
         setTotalRooms(standardRooms.length);
@@ -107,7 +107,9 @@ const Dashboard = () => {
           console.error('Error fetching active bookings:', activeBookingsError);
         }
         
-        setAvailableRooms(Math.max(0, (rooms?.length || 0) - (activeBookings?.length || 0)));
+        // Calculate available rooms (total rooms + suites minus active bookings)
+        const totalAccommodations = (rooms?.length || 0);
+        setAvailableRooms(Math.max(0, totalAccommodations - (activeBookings?.length || 0)));
         
         // Fetch pending bookings
         const { data: pendingBookingsData, error: pendingBookingsError } = await supabase
@@ -232,7 +234,7 @@ const Dashboard = () => {
           <StatCard 
             title="Premium Suites" 
             value={totalSuites}
-            icon={<Hotel size={20} />}
+            icon={<Star size={20} />}
           />
           <StatCard 
             title="Available Rooms" 
