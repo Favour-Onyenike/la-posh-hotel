@@ -160,13 +160,13 @@ const Index = () => {
               description="Elegant room with king-size bed, city views, and modern amenities"
             />
             <RoomPreview
-              image="/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png"
+              image="/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png"
               title="Standard Suite"
               price={80000}
               description="Spacious suite with separate living area and premium amenities"
             />
             <RoomPreview
-              image="/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png"
+              image="/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png"
               title="Mini Suite"
               price={45000}
               description="Our finest accommodation with panoramic views and luxurious features"
