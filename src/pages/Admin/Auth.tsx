@@ -14,7 +14,7 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUpdatingRole, setIsUpdatingRole] = useState(false);
-  const { signIn, isAdmin, isLoading, user, profile, updateUserRole } = useAuth();
+  const { signIn, isAdmin, isLoading, user, profile, updateUserRole, signOut } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -221,7 +221,7 @@ const Auth = () => {
           </Card>
         )}
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          Use "admin@laposh.com" with your password to log in as admin
+          Use "onyenikefavour8@gmail.com" with password "abcd1234" to log in as admin
         </p>
       </div>
     </div>
