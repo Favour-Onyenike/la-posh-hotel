@@ -70,7 +70,7 @@ const Gallery = () => {
           </div>
         </section>
         
-        {/* Main Gallery Grid */}
+        {/* Main Gallery Grid - Updated grid layout for mobile */}
         <section className="bg-gray-50 py-16">
           <div className="hotel-container max-w-6xl mx-auto">
             <div className="flex items-center mb-12">
@@ -79,11 +79,11 @@ const Gallery = () => {
               <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
               {galleryImages.map((image, index) => (
                 <div 
                   key={index}
-                  className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-64 cursor-pointer"
+                  className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-24 sm:h-48 md:h-64 cursor-pointer"
                   onClick={() => handleImageClick(image)}
                 >
                   <img 
