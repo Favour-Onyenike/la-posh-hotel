@@ -39,6 +39,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Loader2, Plus, Trash2, Edit, Hotel } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -52,6 +53,7 @@ const Rooms = () => {
   const [pricePerNight, setPricePerNight] = useState('');
   const [capacity, setCapacity] = useState('');
   const [roomType, setRoomType] = useState('room');
+  const [availabilityStatus, setAvailabilityStatus] = useState<Room['availability_status']>('available');
   const [imageUrl, setImageUrl] = useState('');
   const [features, setFeatures] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -82,7 +84,13 @@ const Rooms = () => {
         throw error;
       }
 
-      setRooms(data || []);
+      // Default any rooms without availability_status to 'available'
+      const roomsWithDefaultStatus = (data || []).map(room => ({
+        ...room,
+        availability_status: room.availability_status || 'available' as Room['availability_status']
+      }));
+
+      setRooms(roomsWithDefaultStatus as Room[]);
     } catch (error) {
       console.error('Error fetching rooms:', error);
       toast({
@@ -101,6 +109,7 @@ const Rooms = () => {
     setPricePerNight('');
     setCapacity('');
     setRoomType('room');
+    setAvailabilityStatus('available');
     setImageUrl('');
     setFeatures('');
     setImageFile(null);
@@ -160,6 +169,7 @@ const Rooms = () => {
           price_per_night: parseFloat(pricePerNight),
           capacity: parseInt(capacity),
           room_type: roomType,
+          availability_status: availabilityStatus,
           image_url: finalImageUrl || null,
           features: features.split(',').map(feature => feature.trim()).filter(feature => feature),
         });
@@ -230,6 +240,7 @@ const Rooms = () => {
           price_per_night: parseFloat(pricePerNight),
           capacity: parseInt(capacity),
           room_type: roomType,
+          availability_status: availabilityStatus,
           image_url: finalImageUrl || null,
           features: features.split(',').map(feature => feature.trim()).filter(feature => feature),
         })
@@ -257,6 +268,75 @@ const Rooms = () => {
       });
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleQuickStatusUpdate = async (roomId: string, newStatus: Room['availability_status']) => {
+    try {
+      const { error } = await supabase
+        .from('rooms')
+        .update({ availability_status: newStatus })
+        .eq('id', roomId);
+
+      if (error) throw error;
+
+      // Update local state
+      setRooms(prevRooms => 
+        prevRooms.map(room => 
+          room.id === roomId ? { ...room, availability_status: newStatus } : room
+        )
+      );
+
+      toast({
+        title: 'Status Updated',
+        description: `Room marked as ${newStatus}`,
+      });
+    } catch (error) {
+      console.error('Error updating room status:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update room status',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleQuickPriceUpdate = async (roomId: string, newPrice: number) => {
+    if (isNaN(newPrice) || newPrice <= 0) {
+      toast({
+        title: 'Invalid Price',
+        description: 'Please enter a valid price',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('rooms')
+        .update({ price_per_night: newPrice })
+        .eq('id', roomId);
+
+      if (error) throw error;
+
+      // Update local state
+      setRooms(prevRooms => 
+        prevRooms.map(room => 
+          room.id === roomId ? { ...room, price_per_night: newPrice } : room
+        )
+      );
+
+      toast({
+        title: 'Price Updated',
+        description: `Room price updated to $${newPrice.toFixed(2)}`,
+      });
+    } catch (error) {
+      console.error('Error updating room price:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update room price',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -341,6 +421,7 @@ const Rooms = () => {
     setPricePerNight(String(room.price_per_night));
     setCapacity(String(room.capacity));
     setRoomType(room.room_type);
+    setAvailabilityStatus(room.availability_status || 'available');
     setImageUrl(room.image_url || '');
     setFeatures(room.features ? room.features.join(', ') : '');
     setImagePreview(room.image_url || null);
@@ -456,6 +537,24 @@ const Rooms = () => {
                 />
               </div>
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="availability">
+                Availability Status <span className="text-destructive">*</span>
+              </Label>
+              <Select 
+                value={availabilityStatus} 
+                onValueChange={(value) => setAvailabilityStatus(value as Room['availability_status'])}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select availability" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="available">Available</SelectItem>
+                  <SelectItem value="taken">Taken</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             
             <div className="space-y-2">
               <Label htmlFor="features">Features (comma-separated)</Label>
@@ -567,11 +666,18 @@ const Rooms = () => {
                     <div className="absolute right-2 top-2 rounded-md bg-white px-2 py-1 text-xs font-medium shadow">
                       {room.room_type === 'suite' ? 'Suite' : 'Room'}
                     </div>
+                    <div className="absolute left-2 top-2">
+                      <Badge className={room.availability_status === 'available' ? 'bg-green-500' : 'bg-red-500'}>
+                        {room.availability_status === 'available' ? 'Available' : 'Taken'}
+                      </Badge>
+                    </div>
                   </div>
                   <CardHeader className="p-4">
                     <div className="flex items-center justify-between">
                       <CardTitle className="line-clamp-1 text-lg">{room.name}</CardTitle>
-                      <p className="font-bold text-primary">${Number(room.price_per_night).toFixed(2)}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-bold text-primary">${Number(room.price_per_night).toFixed(2)}</p>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="p-4 pt-0">
@@ -592,6 +698,54 @@ const Rooms = () => {
                           +{room.features.length - 3} more
                         </span>
                       )}
+                    </div>
+                    
+                    {/* Quick Actions */}
+                    <div className="mt-4 grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <Label htmlFor={`price-${room.id}`} className="text-xs">Update Price (₦)</Label>
+                        <div className="flex gap-1">
+                          <Input 
+                            id={`price-${room.id}`} 
+                            type="number" 
+                            min="0" 
+                            step="0.01"
+                            defaultValue={room.price_per_night}
+                            className="h-8 text-xs"
+                            onBlur={(e) => {
+                              if (e.target.value && parseFloat(e.target.value) !== room.price_per_night) {
+                                handleQuickPriceUpdate(room.id, parseFloat(e.target.value));
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' && e.currentTarget.value) {
+                                handleQuickPriceUpdate(room.id, parseFloat(e.currentTarget.value));
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor={`status-${room.id}`} className="text-xs">Availability</Label>
+                        <div className="flex gap-1">
+                          <Button
+                            size="sm"
+                            variant={room.availability_status === 'available' ? 'default' : 'outline'} 
+                            className={`h-8 w-full ${room.availability_status === 'available' ? 'bg-green-500 hover:bg-green-600' : ''}`}
+                            onClick={() => handleQuickStatusUpdate(room.id, 'available')}
+                          >
+                            Available
+                          </Button>
+                          <Button 
+                            size="sm"
+                            variant={room.availability_status === 'taken' ? 'default' : 'outline'}
+                            className={`h-8 w-full ${room.availability_status === 'taken' ? 'bg-red-500 hover:bg-red-600' : ''}`}
+                            onClick={() => handleQuickStatusUpdate(room.id, 'taken')}
+                          >
+                            Taken
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                   <CardFooter className="border-t p-4">

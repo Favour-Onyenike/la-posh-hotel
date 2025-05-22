@@ -17,6 +17,7 @@ export type Room = {
   room_type: string;
   image_url: string | null;
   features: string[];
+  availability_status: 'available' | 'taken';
   created_at: string;
   updated_at: string;
 }
