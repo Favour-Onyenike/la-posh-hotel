@@ -137,9 +137,6 @@ const SuiteCard = ({ category }) => {
       <CardHeader className="py-3">
         <CardTitle className="flex justify-between items-center">
           <span>{category.name}</span>
-          <Badge variant="hotel" className="bg-hotel-gold/10 text-hotel-gold border-hotel-gold">
-            {category.size}
-          </Badge>
         </CardTitle>
         <CardDescription className="flex items-center gap-2">
           <DoorClosed size={16} />
@@ -171,7 +168,9 @@ const SuiteCard = ({ category }) => {
         <div className="text-hotel-gold font-bold">
           ₦{category.price.toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
         </div>
-        <Button variant="hotel" size="sm" onClick={() => window.scrollTo(0, 0)}>Book Now</Button>
+        <Link to="/booking">
+          <Button variant="hotel" size="sm">Book Now</Button>
+        </Link>
       </CardFooter>
     </Card>
   );
@@ -334,14 +333,15 @@ const Suites = () => {
                 Book your suite today and indulge in the finest accommodations La Posh Signature Hotel has to offer.
                 Enjoy spacious living areas, premium amenities, and personalized service.
               </p>
-              <Button 
-                variant="hotel" 
-                size="lg" 
-                className="font-medium"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                Book Your Suite Now
-              </Button>
+              <Link to="/booking">
+                <Button 
+                  variant="hotel" 
+                  size="lg" 
+                  className="font-medium"
+                >
+                  Book Your Suite Now
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

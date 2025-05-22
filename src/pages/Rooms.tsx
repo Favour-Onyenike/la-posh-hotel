@@ -147,9 +147,6 @@ const RoomCard = ({ category }) => {
       <CardHeader className="py-3">
         <CardTitle className="flex justify-between items-center">
           <span>{category.name}</span>
-          <Badge variant="hotel" className="bg-hotel-gold/10 text-hotel-gold border-hotel-gold">
-            {category.size}
-          </Badge>
         </CardTitle>
         <CardDescription className="flex items-center gap-2">
           <DoorClosed size={16} />
@@ -181,7 +178,9 @@ const RoomCard = ({ category }) => {
         <div className="text-hotel-gold font-bold">
           ₦{category.price.toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
         </div>
-        <Button variant="hotel" size="sm" onClick={() => window.scrollTo(0, 0)}>Book Now</Button>
+        <Link to="/booking">
+          <Button variant="hotel" size="sm">Book Now</Button>
+        </Link>
       </CardFooter>
     </Card>
   );
@@ -343,14 +342,15 @@ const Rooms = () => {
                 and the perfect blend of comfort and elegance.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  variant="hotel" 
-                  size="lg" 
-                  className="font-medium"
-                  onClick={() => window.scrollTo(0, 0)}
-                >
-                  Book Your Room Now
-                </Button>
+                <Link to="/booking">
+                  <Button 
+                    variant="hotel" 
+                    size="lg" 
+                    className="font-medium"
+                  >
+                    Book Your Room Now
+                  </Button>
+                </Link>
                 <Link to="/suites">
                   <Button 
                     variant="outline" 

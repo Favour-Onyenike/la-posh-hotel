@@ -11,6 +11,7 @@ import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
 import Rooms from "./pages/Rooms";
 import Suites from "./pages/Suites";
+import Booking from "./pages/Booking";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/suites" element={<Suites />} />
+          <Route path="/booking" element={<Booking />} />
           {/* Redirects for backward compatibility */}
           <Route path="/rooms-and-suites" element={<Navigate to="/rooms" replace />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
