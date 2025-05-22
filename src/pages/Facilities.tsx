@@ -47,7 +47,7 @@ const Facilities = () => {
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">
-            <div className="max-w-4xl mx-auto text-center animate-fade-in">
+            <div className="max-w-6xl mx-auto text-center animate-fade-in">
               <h1 className="hotel-title mb-6 text-white text-4xl md:text-5xl lg:text-6xl font-bold">Our Facilities</h1>
               <p className="text-xl md:text-2xl text-white">
                 Luxury amenities for an unforgettable stay
@@ -66,7 +66,7 @@ const Facilities = () => {
         {/* Facilities Introduction */}
         <section className="section-padding bg-white py-20">
           <div className="hotel-container">
-            <div className="max-w-4xl mx-auto">              
+            <div className="max-w-6xl mx-auto">              
               <div className="prose prose-lg max-w-none text-center mb-12">
                 <p className="mb-6 text-black text-lg leading-relaxed">
                   At La Posh Signature Hotel & Suites, we pride ourselves on offering a comprehensive range of 
@@ -83,8 +83,8 @@ const Facilities = () => {
 
         {/* Grid Layout for Facilities */}
         <section className="bg-gray-50 py-16">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
               {facilityItems.map((item, index) => (
                 <React.Fragment key={index}>
                   {/* For even items: image on left, text on right */}
@@ -135,9 +135,9 @@ const Facilities = () => {
         {/* CTA Section */}
         <section className="bg-hotel-beige py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
+            <div className="max-w-6xl mx-auto text-center">
               <h2 className="hotel-title mb-6">Experience Luxury at La Posh</h2>
-              <p className="text-lg mb-8 text-gray-700 max-w-2xl mx-auto">
+              <p className="text-lg mb-8 text-gray-700 max-w-3xl mx-auto">
                 Indulge in our world-class facilities and impeccable service. Book your stay today and 
                 discover the epitome of luxury and comfort at La Posh Signature Hotel & Suites.
               </p>
