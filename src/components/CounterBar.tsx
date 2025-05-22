@@ -68,18 +68,24 @@ const CounterItem = ({
       <div className="bg-hotel-gold p-4 rounded-full mb-4">
         <Icon className="text-white" size={24} />
       </div>
-      <div className="text-4xl font-bold mb-2">
+      <div className="text-4xl font-bold mb-2 text-white">
         {count}{suffix}
       </div>
-      <p className="text-center text-black">{label}</p>
+      <p className="text-center text-white font-medium">{label}</p>
     </div>
   );
 };
 
 const CounterBar = () => {
   return (
-    <section className="section-padding bg-white">
-      <div className="hotel-container">
+    <section className="relative section-padding">
+      <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png')" }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      </div>
+      <div className="hotel-container relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <CounterItem 
             icon={Percent}
