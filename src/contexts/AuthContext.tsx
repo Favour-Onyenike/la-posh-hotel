@@ -97,6 +97,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       
       console.log('Sign in successful:', data.user?.email);
+      
+      // Fetch profile directly after successful sign-in to get role information
+      if (data.user) {
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.user.id)
+          .single();
+          
+        if (!profileError && profileData) {
+          console.log('Profile loaded during login:', profileData);
+          setProfile(profileData as Profile);
+        } else {
+          console.error('Error fetching profile during login:', profileError);
+        }
+      }
+      
       toast({
         title: "Login successful",
         description: "You have been successfully logged in",

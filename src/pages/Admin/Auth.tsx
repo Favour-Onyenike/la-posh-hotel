@@ -13,17 +13,30 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { signIn, isAdmin, isLoading, user } = useAuth();
+  const { signIn, isAdmin, isLoading, user, profile } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  // This effect runs when auth state changes
   useEffect(() => {
-    // If the user is authenticated and admin, redirect to admin dashboard
-    if (user && isAdmin) {
-      console.log('User is admin, navigating to dashboard');
-      navigate('/admin/dashboard');
+    if (user && profile) {
+      console.log('Auth.tsx - User logged in:', user.email);
+      console.log('Auth.tsx - User profile:', profile);
+      console.log('Auth.tsx - Is admin check:', profile.role === 'admin', 'Role:', profile.role);
+      
+      if (profile.role === 'admin') {
+        console.log('Auth.tsx - User is admin, redirecting to dashboard');
+        navigate('/admin/dashboard');
+      } else {
+        console.log('Auth.tsx - User is not admin, showing error');
+        toast({
+          title: "Access Denied",
+          description: "You don't have admin privileges",
+          variant: "destructive"
+        });
+      }
     }
-  }, [user, isAdmin, navigate]);
+  }, [user, profile, navigate, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,8 +75,9 @@ const Auth = () => {
     );
   }
 
-  // If user is already logged in and is admin, they will be redirected via useEffect
-  if (user && isAdmin) {
+  // If user is already logged in and is admin, redirect immediately
+  if (user && profile?.role === 'admin') {
+    console.log('Auth.tsx - Already logged in as admin, redirecting immediately');
     return <Navigate to="/admin/dashboard" replace />;
   }
 
