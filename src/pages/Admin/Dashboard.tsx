@@ -276,13 +276,13 @@ const Dashboard = () => {
   
   return (
     <AdminLayout>
-      <div className="space-y-8 mt-4 lg:mt-0">
+      <div className="space-y-6 mt-4 lg:mt-0">
         <div className="mt-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           <p className="text-muted-foreground">Admin overview of bookings and hotel statistics.</p>
         </div>
         
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard 
             title="Rooms" 
             value={totalRooms}
@@ -307,13 +307,13 @@ const Dashboard = () => {
           />
         </div>
         
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle>Booking Activity</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[300px]">
+              <div className="h-[250px] sm:h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={bookingsByMonth}>
                     <XAxis dataKey="month" />
@@ -338,7 +338,7 @@ const Dashboard = () => {
               <CardTitle>Today's Activity</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                 <div className="flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100">
                     <ArrowRightLeft size={18} className="text-blue-700" />
@@ -390,10 +390,12 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {rooms.length === 0 ? (
+              {loading ? (
+                <p className="text-center py-4">Loading rooms...</p>
+              ) : rooms.length === 0 ? (
                 <p>No rooms or suites found</p>
               ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                   {rooms.map((room) => (
                     <div key={room.id} className="flex items-center justify-between p-3 border rounded-md">
                       <div>
