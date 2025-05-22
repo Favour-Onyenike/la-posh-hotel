@@ -285,6 +285,7 @@ const Dashboard = () => {
           <p className="text-muted-foreground">Admin overview of bookings and hotel statistics.</p>
         </div>
         
+        {/* Stats Cards */}
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard 
             title="Rooms" 
@@ -310,6 +311,7 @@ const Dashboard = () => {
           />
         </div>
         
+        {/* Chart and Activity Cards */}
         <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
           <Card className="lg:col-span-2">
             <CardHeader>
@@ -386,6 +388,7 @@ const Dashboard = () => {
           </Card>
         </div>
 
+        {/* Room Availability Management */}
         <Card>
           <CardHeader>
             <CardTitle>Room & Suite Availability</CardTitle>
