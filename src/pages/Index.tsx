@@ -12,8 +12,8 @@ const Feature = ({ icon: Icon, title, description }) => {
       <div className="bg-hotel-beige p-4 rounded-full mb-4">
         <Icon className="text-hotel-gold" size={24} />
       </div>
-      <h3 className="font-serif text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="font-serif text-xl font-semibold mb-2 text-black">{title}</h3>
+      <p className="text-black">{description}</p>
     </div>
   );
 };
@@ -29,9 +29,9 @@ const RoomPreview = ({ image, title, price, description }) => {
         />
         <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-all duration-300"></div>
       </div>
-      <h3 className="font-serif text-xl font-semibold mb-2">{title}</h3>
+      <h3 className="font-serif text-xl font-semibold mb-2 text-black">{title}</h3>
       <p className="text-hotel-gold font-medium mb-2">From ${price} per night</p>
-      <p className="text-gray-600 mb-4">{description}</p>
+      <p className="text-black mb-4">{description}</p>
       <button className="text-hotel-navy font-medium border-b-2 border-hotel-gold pb-1 hover:text-hotel-gold transition-colors">
         View Details
       </button>
@@ -50,27 +50,27 @@ const Index = () => {
         <div className="hotel-container">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2">
-              <h2 className="hotel-title mb-6 text-hotel-navy">
+              <h2 className="hotel-title mb-6 text-black">
                 Welcome to La Posh Signature Hotel & Suites
               </h2>
-              <p className="mb-4 text-gray-600">
+              <p className="mb-4 text-black">
                 Welcome to La Posh Signature Hotel & Suites, where luxury meets elegance and sophistication. 
                 Located in the heart of the Abraka Town, our hotel offers an unparalleled hospitality 
                 experience, blending modern amenities with timeless charm.
               </p>
-              <p className="mb-4 text-gray-600">
+              <p className="mb-4 text-black">
                 Our story began with a passion for creating unforgettable experiences, and a commitment 
                 to excellence in every detail. From our lavish rooms and suites, to our world-class dining 
                 and entertainment options, every aspect of our hotel is designed to exceed your expectations.
               </p>
-              <p className="mb-6 text-gray-600">
+              <p className="mb-6 text-black">
                 Whether you're a discerning business traveler, a romantic couple, or a family on vacation, 
                 we invite you to experience the La Posh difference. Let us pamper you with our signature 
                 blend of luxury, comfort, and genuine hospitality.
               </p>
               <div className="flex items-center mb-8">
                 <hr className="w-12 border-t-2 border-hotel-gold mr-4" />
-                <span className="font-serif italic text-lg text-hotel-navy">Experience the difference</span>
+                <span className="font-serif italic text-lg text-black">Experience the difference</span>
               </div>
               <button className="hotel-button">
                 Discover Our Story
@@ -96,8 +96,8 @@ const Index = () => {
       <section className="section-padding bg-white">
         <div className="hotel-container">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="hotel-title text-hotel-navy mb-4">Experience Premium Amenities</h2>
-            <p className="text-gray-600">
+            <h2 className="hotel-title text-black mb-4">Experience Premium Amenities</h2>
+            <p className="text-black">
               Indulge in the finest features and services designed for your comfort and convenience
             </p>
           </div>
@@ -131,8 +131,8 @@ const Index = () => {
       <section className="section-padding bg-hotel-beige">
         <div className="hotel-container">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="hotel-title text-hotel-navy mb-4">Our Luxury Accommodations</h2>
-            <p className="text-gray-600">
+            <h2 className="hotel-title text-black mb-4">Our Luxury Accommodations</h2>
+            <p className="text-black">
               Choose from our selection of meticulously designed rooms and suites
             </p>
           </div>
@@ -175,8 +175,8 @@ const Index = () => {
         />
         <div className="hotel-container relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="hotel-title text-hotel-navy mb-4">What Our Guests Say</h2>
-            <p className="text-gray-600">
+            <h2 className="hotel-title text-black mb-4">What Our Guests Say</h2>
+            <p className="text-black">
               Hear from those who have experienced our hospitality
             </p>
           </div>
@@ -189,7 +189,7 @@ const Index = () => {
                     <Star key={star} size={16} fill="currentColor" />
                   ))}
                 </div>
-                <p className="text-gray-600 mb-6">
+                <p className="text-black mb-6">
                   "An exceptional experience from start to finish. The staff was attentive,
                   the room was immaculate, and the amenities were top-notch. Will definitely return."
                 </p>
@@ -201,8 +201,8 @@ const Index = () => {
                     }}
                   />
                   <div>
-                    <h4 className="font-semibold">John Doe</h4>
-                    <p className="text-gray-500 text-sm">Business Traveler</p>
+                    <h4 className="font-semibold text-black">John Doe</h4>
+                    <p className="text-black text-sm">Business Traveler</p>
                   </div>
                 </div>
               </div>
@@ -212,14 +212,14 @@ const Index = () => {
       </section>
 
       {/* Location Section */}
-      <section className="section-padding bg-hotel-navy text-white">
+      <section className="section-padding bg-hotel-navy">
         <div className="hotel-container">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2">
-              <h2 className="hotel-title mb-6">
+              <h2 className="hotel-title mb-6 text-white">
                 Prime Location in the City Center
               </h2>
-              <p className="mb-6 text-gray-300">
+              <p className="mb-6 text-white">
                 Located in the heart of the city, Luxe Haven provides easy access to major
                 attractions, business districts, and entertainment venues. Our prime location
                 makes us the ideal choice for both business and leisure travelers.
@@ -227,13 +227,13 @@ const Index = () => {
               <div className="space-y-4 mb-8">
                 <div className="flex items-start">
                   <MapPin className="text-hotel-gold mt-1 mr-3" size={18} />
-                  <p className="text-gray-300">123 Luxury Avenue, Downtown, City 10001</p>
+                  <p className="text-white">123 Luxury Avenue, Downtown, City 10001</p>
                 </div>
                 <div className="flex items-start">
                   <Clock className="text-hotel-gold mt-1 mr-3" size={18} />
                   <div>
                     <p className="text-white font-medium">Check-in / Check-out</p>
-                    <p className="text-gray-300">3:00 PM / 12:00 PM</p>
+                    <p className="text-white">3:00 PM / 12:00 PM</p>
                   </div>
                 </div>
               </div>
@@ -259,8 +259,8 @@ const Index = () => {
       <section className="section-padding bg-hotel-beige">
         <div className="hotel-container">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="hotel-title text-hotel-navy mb-6">Experience Luxury at Luxe Haven</h2>
-            <p className="text-gray-600 mb-8">
+            <h2 className="hotel-title text-black mb-6">Experience Luxury at Luxe Haven</h2>
+            <p className="text-black mb-8">
               Book your stay now and discover why our guests return again and again for our
               exceptional service and unparalleled comfort.
             </p>
