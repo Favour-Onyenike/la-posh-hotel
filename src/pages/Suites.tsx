@@ -18,7 +18,6 @@ import {
   DoorClosed, 
   Wifi, 
   Tv, 
-  Coffee, 
   Bath, 
   AirVent, 
   Refrigerator, 
@@ -39,8 +38,8 @@ const suiteCategories = [
     description: "Luxurious suites with separate living areas and premium amenities.",
     price: 85000,
     roomNumbers: ["Diamond 01", "Diamond 02"],
-    amenities: ["Ultra-Fast Wi-Fi", "65\" Smart TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
-    maxGuests: 4,
+    amenities: ["Ultra-Fast Wi-Fi", "65\" TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
+    maxGuests: 2,
     bedType: "King",
     size: "70 sq.m",
     features: ["Dedicated Butler Service", "Private Dining Options", "Electronic Safe", "Executive Work Area", "Separate Sitting Area", "Gym Access", "Refrigerator", "Evening Turndown Service"]
@@ -53,8 +52,8 @@ const suiteCategories = [
     description: "Elegant suites featuring sophisticated design and premium services.",
     price: 80000,
     roomNumbers: ["Sapphire 01", "Sapphire 02"],
-    amenities: ["Ultra-Fast Wi-Fi", "60\" Smart TV", "Kitchenette", "Luxury Bathroom with Walk-in Shower", "Smart Climate Control", "Premium Mini Bar", "Free Breakfast"],
-    maxGuests: 3,
+    amenities: ["Ultra-Fast Wi-Fi", "60\" TV", "Kitchenette", "Luxury Bathroom with Walk-in Shower", "Smart Climate Control", "Premium Mini Bar", "Free Breakfast"],
+    maxGuests: 2,
     bedType: "King",
     size: "65 sq.m",
     features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
@@ -67,7 +66,7 @@ const suiteCategories = [
     description: "Mini suite offering luxurious comfort in a compact yet elegant space.",
     price: 65000,
     roomNumbers: ["Emerald 01"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Coffee and Tea Bar", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
+    amenities: ["High-Speed Wi-Fi", "55\" TV", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "45 sq.m",
@@ -81,8 +80,8 @@ const suiteCategories = [
     description: "Premium suites with opulent furnishings and expansive living areas.",
     price: 75000,
     roomNumbers: ["Gold 01", "Gold 02"],
-    amenities: ["Ultra-Fast Wi-Fi", "60\" Smart TV", "Kitchenette", "Marble Bathroom with Dual Sinks", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
-    maxGuests: 3,
+    amenities: ["Ultra-Fast Wi-Fi", "60\" TV", "Kitchenette", "Marble Bathroom with Dual Sinks", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
+    maxGuests: 2,
     bedType: "King",
     size: "60 sq.m",
     features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
@@ -95,8 +94,8 @@ const suiteCategories = [
     description: "Exclusive suite offering the ultimate in luxury and personalized service.",
     price: 90000,
     roomNumbers: ["Pearl 01"],
-    amenities: ["Ultra-Fast Wi-Fi", "75\" Smart TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi and Steam Shower", "Smart Climate Control", "Premium Stocked Bar", "Dining Area", "Free Breakfast"],
-    maxGuests: 4,
+    amenities: ["Ultra-Fast Wi-Fi", "75\" TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi and Steam Shower", "Smart Climate Control", "Premium Stocked Bar", "Dining Area", "Free Breakfast"],
+    maxGuests: 2,
     bedType: "Emperor King",
     size: "85 sq.m",
     features: ["Dedicated 24/7 Butler Service", "Private Chef Available", "Electronic Safe", "Executive Office Area", "Luxurious Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast and Evening Canapés"]
@@ -106,11 +105,11 @@ const suiteCategories = [
     name: "Ruby",
     count: 3,
     image: "/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png",
-    description: "Double bed suites perfect for couples or families, with deluxe amenities.",
+    description: "Double bed suites perfect for couples, with deluxe amenities.",
     price: 70000,
     roomNumbers: ["Ruby 01", "Ruby 02", "Ruby 03"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Kitchenette", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
-    maxGuests: 4,
+    amenities: ["High-Speed Wi-Fi", "55\" TV", "Kitchenette", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
+    maxGuests: 2,
     bedType: "Two Queen Beds",
     size: "55 sq.m",
     features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Separate Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
@@ -264,7 +263,7 @@ const Suites = () => {
                   <CardContent className="flex items-start gap-4 p-6">
                     <Tv className="text-hotel-gold" />
                     <div>
-                      <h3 className="font-medium mb-1">Large Smart TVs</h3>
+                      <h3 className="font-medium mb-1">Large TVs</h3>
                       <p className="text-sm text-gray-600">60"+ screens with streaming services</p>
                     </div>
                   </CardContent>
@@ -276,16 +275,6 @@ const Suites = () => {
                     <div>
                       <h3 className="font-medium mb-1">Premium Bathrooms</h3>
                       <p className="text-sm text-gray-600">Jacuzzi tubs and rainfall showers</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <Coffee className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">Gourmet Coffee & Tea</h3>
-                      <p className="text-sm text-gray-600">Premium brewing equipment and selections</p>
                     </div>
                   </CardContent>
                 </Card>

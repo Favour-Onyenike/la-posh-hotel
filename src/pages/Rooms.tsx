@@ -18,10 +18,8 @@ import {
   DoorClosed, 
   Wifi, 
   Tv, 
-  Coffee, 
   Bath, 
   AirVent, 
-  Refrigerator, 
   Clock,
   Utensils
 } from "lucide-react";
@@ -37,7 +35,7 @@ const roomCategories = [
     description: "Comfortable rooms offering essential amenities with elegant designs.",
     price: 35000,
     roomNumbers: ["Opal 01", "Opal 02"],
-    amenities: ["Free Wi-Fi", "Smart TV", "Coffee Maker", "Private Bathroom", "Air Conditioning", "Free Breakfast"],
+    amenities: ["Free Wi-Fi", "TV", "Private Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "Queen",
     size: "24 sq.m",
@@ -51,7 +49,7 @@ const roomCategories = [
     description: "Spacious rooms with enhanced comfort and modern furnishings.",
     price: 40000,
     roomNumbers: ["Topaz 01", "Topaz 02", "Topaz 03"],
-    amenities: ["High-Speed Wi-Fi", "43\" Smart TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
+    amenities: ["High-Speed Wi-Fi", "43\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "Queen",
     size: "28 sq.m",
@@ -65,7 +63,7 @@ const roomCategories = [
     description: "Elegant rooms featuring premium amenities and sophisticated decor.",
     price: 45000,
     roomNumbers: ["Onyx 01", "Onyx 02", "Onyx 03", "Onyx 04", "Onyx 05"],
-    amenities: ["High-Speed Wi-Fi", "50\" Smart TV", "Nespresso Machine", "Luxury Bathroom", "Air Conditioning", "Free Breakfast"],
+    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Luxury Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "32 sq.m",
@@ -79,7 +77,7 @@ const roomCategories = [
     description: "Bright and airy rooms with luxurious touches and ample space.",
     price: 42000,
     roomNumbers: ["Ivory 01", "Ivory 02", "Ivory 03", "Ivory 04", "Ivory 05", "Ivory 06"],
-    amenities: ["High-Speed Wi-Fi", "48\" Smart TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
+    amenities: ["High-Speed Wi-Fi", "48\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King/Twin",
     size: "30 sq.m",
@@ -93,7 +91,7 @@ const roomCategories = [
     description: "Warm and inviting executive rooms with premium bedding and stylish furnishings.",
     price: 48000,
     roomNumbers: ["Amber 01", "Amber 02", "Amber 03", "Amber 04", "Amber 05"],
-    amenities: ["High-Speed Wi-Fi", "50\" Smart TV", "Nespresso Machine", "Marble Bathroom", "Air Conditioning", "Free Breakfast"],
+    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Marble Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "34 sq.m",
@@ -107,7 +105,7 @@ const roomCategories = [
     description: "Mini suite offering exceptional comfort and luxury amenities.",
     price: 50000,
     roomNumbers: ["Emerald 01", "Emerald 02"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Nespresso Machine", "Luxury Bathroom with Rain Shower", "Air Conditioning", "Mini Refrigerator", "Free Breakfast"],
+    amenities: ["High-Speed Wi-Fi", "55\" TV", "Nespresso Machine", "Luxury Bathroom with Rain Shower", "Air Conditioning", "Mini Refrigerator", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "36 sq.m",
@@ -121,7 +119,7 @@ const roomCategories = [
     description: "Exclusive single room with premium features and personalized service.",
     price: 55000,
     roomNumbers: ["Beryl 01"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Nespresso Machine", "Luxury Bathroom with Soaking Tub", "Air Conditioning", "Free Breakfast"],
+    amenities: ["High-Speed Wi-Fi", "55\" TV", "Nespresso Machine", "Luxury Bathroom with Soaking Tub", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "40 sq.m",
@@ -284,7 +282,7 @@ const Rooms = () => {
                   <CardContent className="flex items-start gap-4 p-6">
                     <Tv className="text-hotel-gold" />
                     <div>
-                      <h3 className="font-medium mb-1">Smart TV</h3>
+                      <h3 className="font-medium mb-1">TV</h3>
                       <p className="text-sm text-gray-600">Flat-screen television with satellite channels</p>
                     </div>
                   </CardContent>
@@ -296,16 +294,6 @@ const Rooms = () => {
                     <div>
                       <h3 className="font-medium mb-1">Luxury Bathroom</h3>
                       <p className="text-sm text-gray-600">Premium bath amenities and plush towels</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <Coffee className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">Coffee/Tea Facilities</h3>
-                      <p className="text-sm text-gray-600">In-room coffee and tea making equipment</p>
                     </div>
                   </CardContent>
                 </Card>
