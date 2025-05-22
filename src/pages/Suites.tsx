@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -189,7 +190,7 @@ const Suites = () => {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">
             <div className="max-w-6xl mx-auto text-center">
-              <h1 className="hotel-title mb-6 text-white text-4xl md:text-5xl lg:text-6xl font-bold">Our Premium Suites</h1>
+              <h1 className="hotel-title mb-6 text-white text-4xl md:text-5xl lg:text-6xl font-bold">Our Suites</h1>
               <p className="text-xl md:text-2xl text-white">
                 Experience extraordinary luxury in our exclusive suites
               </p>
@@ -219,7 +220,7 @@ const Suites = () => {
         <section className="section-padding bg-hotel-beige py-16">
           <div className="hotel-container">
             <div className="max-w-7xl mx-auto">
-              <h2 className="hotel-title text-center mb-12">Available Suites</h2>
+              <h2 className="hotel-title text-center mb-12">Premium Suites</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {suiteCategories.map((category, index) => (
                   <SuiteCard key={index} category={category} />
