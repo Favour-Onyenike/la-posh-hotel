@@ -1,5 +1,6 @@
+
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -128,6 +129,12 @@ const roomCategories = [
 ];
 
 const RoomCard = ({ category }) => {
+  const navigate = useNavigate();
+  
+  const handleBookNow = () => {
+    navigate('/booking', { state: { roomType: category.name, roomPrice: category.price } });
+  };
+  
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
       <div className="relative h-48 overflow-hidden">
@@ -178,15 +185,19 @@ const RoomCard = ({ category }) => {
         <div className="text-hotel-gold font-bold">
           ₦{category.price.toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
         </div>
-        <Link to="/booking">
-          <Button variant="hotel" size="sm">Book Now</Button>
-        </Link>
+        <Button variant="hotel" size="sm" onClick={handleBookNow}>Book Now</Button>
       </CardFooter>
     </Card>
   );
 };
 
 const Rooms = () => {
+  const navigate = useNavigate();
+  
+  const handleBookNow = () => {
+    navigate('/booking');
+  };
+  
   return (
     <>
       <Navbar />
@@ -222,11 +233,13 @@ const Rooms = () => {
                 </p>
               </div>
               <div className="flex justify-center">
-                <Link to="/suites">
-                  <Button variant="outline" className="border-hotel-gold text-hotel-gold hover:bg-hotel-gold hover:text-white">
-                    View Our Premium Suites
-                  </Button>
-                </Link>
+                <Button 
+                  variant="outline" 
+                  className="border-hotel-gold text-hotel-gold hover:bg-hotel-gold hover:text-white"
+                  onClick={() => navigate('/suites')}
+                >
+                  View Our Premium Suites
+                </Button>
               </div>
             </div>
           </div>
@@ -342,24 +355,22 @@ const Rooms = () => {
                 and the perfect blend of comfort and elegance.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/booking">
-                  <Button 
-                    variant="hotel" 
-                    size="lg" 
-                    className="font-medium"
-                  >
-                    Book Your Room Now
-                  </Button>
-                </Link>
-                <Link to="/suites">
-                  <Button 
-                    variant="outline" 
-                    size="lg" 
-                    className="font-medium border-hotel-gold text-hotel-gold hover:bg-hotel-gold hover:text-white"
-                  >
-                    Explore Our Suites
-                  </Button>
-                </Link>
+                <Button 
+                  variant="hotel" 
+                  size="lg" 
+                  className="font-medium"
+                  onClick={handleBookNow}
+                >
+                  Book Your Room Now
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="font-medium border-hotel-gold text-hotel-gold hover:bg-hotel-gold hover:text-white"
+                  onClick={() => navigate('/suites')}
+                >
+                  Explore Our Suites
+                </Button>
               </div>
             </div>
           </div>

@@ -1,10 +1,21 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Calendar, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Hero = () => {
+  const navigate = useNavigate();
+  
+  const handleExploreRooms = () => {
+    navigate('/rooms');
+  };
+  
+  const handleBookNow = () => {
+    navigate('/booking');
+  };
+  
   return (
     <div className="relative h-[85vh] md:h-screen w-full">
       {/* Background Image with Overlay */}
@@ -28,16 +39,18 @@ const Hero = () => {
             Discover a blend of exquisite amenities and personalized service at Luxe Haven
           </p>
           <div className="flex flex-row justify-start gap-4">
-            <Link to="/gallery" className="hotel-button" onClick={() => window.scrollTo(0, 0)}>
+            <Button 
+              className="hotel-button" 
+              onClick={handleExploreRooms}
+            >
               Explore Rooms
-            </Link>
-            <Link
-              to="/contact"
+            </Button>
+            <Button
               className="px-6 py-3 bg-transparent border-2 border-white text-white font-sans font-medium transition-all duration-300 hover:bg-white hover:text-hotel-navy"
-              onClick={() => window.scrollTo(0, 0)}
+              onClick={handleBookNow}
             >
               Book Now
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
@@ -64,7 +77,8 @@ const Hero = () => {
               <h3 className="font-semibold text-hotel-navy">Special Offers</h3>
               <p className="text-gray-600 text-sm">View current promotions</p>
             </div>
-            <button className="text-hotel-gold font-medium hover:text-hotel-navy transition-colors">
+            <button className="text-hotel-gold font-medium hover:text-hotel-navy transition-colors"
+              onClick={handleBookNow}>
               View Details
             </button>
           </div>

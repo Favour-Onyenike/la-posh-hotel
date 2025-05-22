@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -118,6 +118,12 @@ const suiteCategories = [
 ];
 
 const SuiteCard = ({ category }) => {
+  const navigate = useNavigate();
+  
+  const handleBookNow = () => {
+    navigate('/booking', { state: { roomType: category.name, roomPrice: category.price } });
+  };
+  
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
       <div className="relative h-48 overflow-hidden">
@@ -168,15 +174,19 @@ const SuiteCard = ({ category }) => {
         <div className="text-hotel-gold font-bold">
           ₦{category.price.toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
         </div>
-        <Link to="/booking">
-          <Button variant="hotel" size="sm">Book Now</Button>
-        </Link>
+        <Button variant="hotel" size="sm" onClick={handleBookNow}>Book Now</Button>
       </CardFooter>
     </Card>
   );
 };
 
 const Suites = () => {
+  const navigate = useNavigate();
+  
+  const handleBookNow = () => {
+    navigate('/booking');
+  };
+  
   return (
     <>
       <Navbar />
@@ -333,15 +343,14 @@ const Suites = () => {
                 Book your suite today and indulge in the finest accommodations La Posh Signature Hotel has to offer.
                 Enjoy spacious living areas, premium amenities, and personalized service.
               </p>
-              <Link to="/booking">
-                <Button 
-                  variant="hotel" 
-                  size="lg" 
-                  className="font-medium"
-                >
-                  Book Your Suite Now
-                </Button>
-              </Link>
+              <Button 
+                variant="hotel" 
+                size="lg" 
+                className="font-medium"
+                onClick={handleBookNow}
+              >
+                Book Your Suite Now
+              </Button>
             </div>
           </div>
         </section>

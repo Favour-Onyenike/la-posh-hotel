@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import AdminLoginLink from "@/components/AdminLoginLink";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -27,6 +28,12 @@ const Navbar = () => {
   }, []);
 
   const handleNavClick = () => {
+    window.scrollTo(0, 0);
+    setIsMenuOpen(false);
+  };
+
+  const handleBookNow = () => {
+    navigate('/booking');
     window.scrollTo(0, 0);
     setIsMenuOpen(false);
   };
@@ -90,7 +97,7 @@ const Navbar = () => {
             <Button 
               className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white"
               variant="default"
-              onClick={handleNavClick}
+              onClick={handleBookNow}
             >
               Book Now
             </Button>
@@ -126,7 +133,7 @@ const Navbar = () => {
                 <AdminLoginLink />
                 <Button 
                   className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white"
-                  onClick={handleNavClick}
+                  onClick={handleBookNow}
                 >
                   Book Now
                 </Button>
