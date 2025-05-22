@@ -31,7 +31,7 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				hotel: {
 					navy: '#0F2454',
-					gold: '#AA8453',
+					gold: '#FFA500', // Updated the gold color to #FFA500
 					beige: '#F8F5F0',
 					dark: '#222222',
 					light: '#FFFFFF',
