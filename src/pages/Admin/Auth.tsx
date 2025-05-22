@@ -8,31 +8,56 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Home, Shield, User, Key, LogIn } from "lucide-react";
+import { Loader2, Home, Shield, User, Key, LogIn, AlertCircle, UserPlus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// Define the form schema for validation
-const formSchema = z.object({
+// Define the login form schema
+const loginFormSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(1, "Password is required"),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+// Define the signup form schema with additional validation
+const signupFormSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(1, "Confirm password is required"),
+  fullName: z.string().min(1, "Full name is required"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type LoginFormValues = z.infer<typeof loginFormSchema>;
+type SignupFormValues = z.infer<typeof signupFormSchema>;
 
 const Auth = () => {
   const [isUpdatingRole, setIsUpdatingRole] = useState(false);
-  const { signIn, isLoading, user, profile, updateUserRole, signOut } = useAuth();
+  const [isSigningUp, setIsSigningUp] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const { signIn, signUp, isLoading, user, profile, updateUserRole, signOut } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  // Initialize react-hook-form with zod validation
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  // Initialize login form
+  const loginForm = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: 'onyenikefavour8@gmail.com',
+      email: 'manager@laposh.com',
       password: 'abcd1234',
+    },
+  });
+
+  // Initialize signup form
+  const signupForm = useForm<SignupFormValues>({
+    resolver: zodResolver(signupFormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      fullName: '',
     },
   });
 
@@ -57,21 +82,54 @@ const Auth = () => {
     }
   }, [user, profile, navigate, toast]);
 
-  const onSubmit = async (values: FormValues) => {
+  const onLoginSubmit = async (values: LoginFormValues) => {
     try {
+      setAuthError(null);
       console.log('Submitting login form');
       const { error } = await signIn(values.email, values.password);
       
-      if (!error) {
-        console.log('Login successful, waiting for auth state to update');
-        toast({
-          title: "Logging in",
-          description: "Authenticating your credentials...",
-        });
-        // The useEffect above will handle redirect when auth state updates
+      if (error) {
+        console.error('Login error:', error.message);
+        setAuthError(error.message);
+        return;
       }
-    } catch (error) {
+      
+      console.log('Login successful, waiting for auth state to update');
+      toast({
+        title: "Logging in",
+        description: "Authenticating your credentials...",
+      });
+      // The useEffect above will handle redirect when auth state updates
+    } catch (error: any) {
       console.error('Login form submission error:', error);
+      setAuthError(error?.message || 'An unknown error occurred');
+    }
+  };
+
+  const onSignupSubmit = async (values: SignupFormValues) => {
+    try {
+      setAuthError(null);
+      console.log('Submitting signup form');
+      
+      // Call the signUp function from AuthContext
+      const { error } = await signUp(values.email, values.password, values.fullName);
+      
+      if (error) {
+        console.error('Signup error:', error.message);
+        setAuthError(error.message);
+        return;
+      }
+      
+      toast({
+        title: "Account created",
+        description: "Please log in with your new credentials",
+      });
+      
+      // Switch back to login form
+      setIsSigningUp(false);
+    } catch (error: any) {
+      console.error('Signup form submission error:', error);
+      setAuthError(error?.message || 'An unknown error occurred');
     }
   };
 
@@ -172,91 +230,249 @@ const Auth = () => {
           ) : (
             <Card className="border-0 shadow-lg bg-white/10 backdrop-blur-md text-white">
               <CardHeader className="space-y-1 text-center">
-                <CardTitle className="text-3xl font-bold text-white">Admin Login</CardTitle>
+                <CardTitle className="text-3xl font-bold text-white">
+                  {isSigningUp ? "Create Admin Account" : "Admin Login"}
+                </CardTitle>
                 <CardDescription className="text-gray-300">
-                  Enter your credentials to access the admin panel
+                  {isSigningUp 
+                    ? "Create a new account to access the admin panel" 
+                    : "Enter your credentials to access the admin panel"
+                  }
                 </CardDescription>
               </CardHeader>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                  <CardContent className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-gray-300">Email</FormLabel>
-                          <div className="relative">
-                            <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                            <FormControl>
-                              <Input
-                                placeholder="Enter your email"
-                                className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
-                                {...field}
-                              />
-                            </FormControl>
-                          </div>
-                          <FormMessage className="text-red-400" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-gray-300">Password</FormLabel>
-                          <div className="relative">
-                            <Key className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Enter your password"
-                                className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
-                                {...field}
-                              />
-                            </FormControl>
-                          </div>
-                          <FormMessage className="text-red-400" />
-                        </FormItem>
-                      )}
-                    />
-                  </CardContent>
-                  <CardFooter className="flex flex-col space-y-4">
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-amber-500 hover:bg-amber-600 text-white"
-                      disabled={form.formState.isSubmitting}
-                    >
-                      {form.formState.isSubmitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
-                          Logging in...
-                        </>
-                      ) : (
-                        <>
-                          <LogIn className="mr-2 h-4 w-4" />
-                          Sign In
-                        </>
-                      )}
-                    </Button>
-                    <Link to="/" className="w-full">
+
+              {authError && (
+                <div className="mx-6 mb-2 rounded-md bg-red-900/30 p-3">
+                  <div className="flex">
+                    <div className="flex-shrink-0">
+                      <AlertCircle className="h-5 w-5 text-red-400" />
+                    </div>
+                    <div className="ml-3">
+                      <h3 className="text-sm font-medium text-red-300">Authentication Error</h3>
+                      <div className="mt-1 text-sm text-red-200">
+                        <p>{authError}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {isSigningUp ? (
+                <Form {...signupForm}>
+                  <form onSubmit={signupForm.handleSubmit(onSignupSubmit)}>
+                    <CardContent className="space-y-4">
+                      <FormField
+                        control={signupForm.control}
+                        name="fullName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Full Name</FormLabel>
+                            <div className="relative">
+                              <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter your full name"
+                                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={signupForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Email</FormLabel>
+                            <div className="relative">
+                              <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter your email"
+                                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={signupForm.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Password</FormLabel>
+                            <div className="relative">
+                              <Key className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder="Enter your password"
+                                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={signupForm.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Confirm Password</FormLabel>
+                            <div className="relative">
+                              <Key className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder="Confirm your password"
+                                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
+                      />
+                    </CardContent>
+                    <CardFooter className="flex flex-col space-y-4">
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-amber-500 hover:bg-amber-600 text-white"
+                        disabled={signupForm.formState.isSubmitting}
+                      >
+                        {signupForm.formState.isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                            Creating Account...
+                          </>
+                        ) : (
+                          <>
+                            <UserPlus className="mr-2 h-4 w-4" />
+                            Sign Up
+                          </>
+                        )}
+                      </Button>
                       <Button 
                         type="button" 
                         variant="outline" 
                         className="w-full border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                        onClick={() => setIsSigningUp(false)}
                       >
-                        <Home className="mr-2 h-4 w-4" />
-                        Back to Home
+                        Already have an account? Log in
                       </Button>
-                    </Link>
-                  </CardFooter>
-                </form>
-              </Form>
+                      <Link to="/" className="w-full">
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          className="w-full border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                        >
+                          <Home className="mr-2 h-4 w-4" />
+                          Back to Home
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </form>
+                </Form>
+              ) : (
+                <Form {...loginForm}>
+                  <form onSubmit={loginForm.handleSubmit(onLoginSubmit)}>
+                    <CardContent className="space-y-4">
+                      <FormField
+                        control={loginForm.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Email</FormLabel>
+                            <div className="relative">
+                              <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter your email"
+                                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={loginForm.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-gray-300">Password</FormLabel>
+                            <div className="relative">
+                              <Key className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                              <FormControl>
+                                <Input
+                                  type="password"
+                                  placeholder="Enter your password"
+                                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </div>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
+                      />
+                    </CardContent>
+                    <CardFooter className="flex flex-col space-y-4">
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-amber-500 hover:bg-amber-600 text-white"
+                        disabled={loginForm.formState.isSubmitting}
+                      >
+                        {loginForm.formState.isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                            Logging in...
+                          </>
+                        ) : (
+                          <>
+                            <LogIn className="mr-2 h-4 w-4" />
+                            Sign In
+                          </>
+                        )}
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        className="w-full border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                        onClick={() => setIsSigningUp(true)}
+                      >
+                        Don't have an account? Sign up
+                      </Button>
+                      <Link to="/" className="w-full">
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          className="w-full border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                        >
+                          <Home className="mr-2 h-4 w-4" />
+                          Back to Home
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </form>
+                </Form>
+              )}
             </Card>
           )}
           <p className="mt-4 text-center text-sm text-gray-400">
-            Use "onyenikefavour8@gmail.com" with password "abcd1234" to log in as admin
+            Default admin credentials: "manager@laposh.com" with password "abcd1234"
           </p>
         </div>
       </div>

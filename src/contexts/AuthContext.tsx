@@ -12,6 +12,7 @@ type AuthContextType = {
   isAdmin: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   updateUserRole: (userId: string, role: 'admin' | 'user') => Promise<{ error: Error | null }>;
 };
@@ -78,6 +79,51 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setProfile(data as Profile);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
+    }
+  };
+
+  const signUp = async (email: string, password: string, fullName: string) => {
+    try {
+      setIsLoading(true);
+      console.log(`Attempting to sign up with email: ${email}`);
+      
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
+        },
+      });
+      
+      if (error) {
+        console.error('Sign up error:', error);
+        toast({
+          title: "Sign up failed",
+          description: error.message,
+          variant: "destructive"
+        });
+        return { error };
+      }
+      
+      console.log('Sign up successful:', data);
+      toast({
+        title: "Account created",
+        description: "Please sign in with your new credentials",
+      });
+      
+      return { error: null };
+    } catch (error) {
+      console.error('Error in signUp:', error);
+      toast({
+        title: "Sign up failed",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      });
+      return { error: error as Error };
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -210,6 +256,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAdmin: profile?.role === 'admin',
         isLoading,
         signIn,
+        signUp,
         signOut,
         updateUserRole,
       }}
