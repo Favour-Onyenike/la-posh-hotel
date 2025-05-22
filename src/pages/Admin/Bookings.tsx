@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Booking, Room } from '@/types/supabase';
@@ -43,6 +44,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import { Loader2, Calendar, User, Home, CheckCircle, XCircle, CreditCard } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
@@ -53,7 +55,7 @@ const Bookings = () => {
   const [loading, setLoading] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
-  const [isDeleteDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [newStatus, setNewStatus] = useState<Booking['status']>('pending');
   
   const { toast } = useToast();
@@ -101,7 +103,7 @@ const Bookings = () => {
       // Make sure all room data has the availability_status property
       const roomsWithStatus = (data || []).map(room => ({
         ...room,
-        availability_status: room.availability_status || 'available'
+        availability_status: room.availability_status || 'available' as Room['availability_status']
       }));
 
       setRooms(roomsWithStatus as Room[]);
@@ -296,7 +298,10 @@ const Bookings = () => {
               <Label htmlFor="status" className="text-right">
                 Status
               </Label>
-              <Select value={newStatus} onValueChange={setNewStatus}>
+              <Select 
+                value={newStatus} 
+                onValueChange={(value: Booking['status']) => setNewStatus(value)}
+              >
                 <SelectTrigger className="col-span-3">
                   <SelectValue placeholder="Select a status" />
                 </SelectTrigger>
@@ -320,7 +325,7 @@ const Bookings = () => {
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={() => {}}>
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Booking</AlertDialogTitle>
