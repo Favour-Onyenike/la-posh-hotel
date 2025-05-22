@@ -81,12 +81,12 @@ const Index = () => {
               <img
                 src="/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png"
                 alt="Luxury Hotel Room"
-                className="rounded-lg w-1/2 h-96 object-cover"
+                className="rounded-lg w-1/2 h-[500px] object-cover"
               />
               <img
                 src="/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png"
                 alt="Hotel Exterior"
-                className="rounded-lg w-1/2 h-96 object-cover"
+                className="rounded-lg w-1/2 h-[500px] object-cover"
               />
             </div>
           </div>
