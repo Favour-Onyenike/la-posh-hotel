@@ -51,15 +51,22 @@ const Index = () => {
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2">
               <h2 className="hotel-title mb-6 text-hotel-navy">
-                A Luxury Hotel in the Heart of the City
+                Welcome to La Posh Signature Hotel & Suites
               </h2>
               <p className="mb-4 text-gray-600">
-                Welcome to Luxe Haven, where luxury meets comfort. Nestled in the vibrant city center, 
-                our hotel offers a perfect blend of elegant design, modern amenities, and unparalleled service.
+                Welcome to La Posh Signature Hotel & Suites, where luxury meets elegance and sophistication. 
+                Located in the heart of the Abraka Town, our hotel offers an unparalleled hospitality 
+                experience, blending modern amenities with timeless charm.
+              </p>
+              <p className="mb-4 text-gray-600">
+                Our story began with a passion for creating unforgettable experiences, and a commitment 
+                to excellence in every detail. From our lavish rooms and suites, to our world-class dining 
+                and entertainment options, every aspect of our hotel is designed to exceed your expectations.
               </p>
               <p className="mb-6 text-gray-600">
-                Each space is meticulously crafted to provide an atmosphere of tranquility and sophistication,
-                making it an ideal retreat for both business and leisure travelers.
+                Whether you're a discerning business traveler, a romantic couple, or a family on vacation, 
+                we invite you to experience the La Posh difference. Let us pamper you with our signature 
+                blend of luxury, comfort, and genuine hospitality.
               </p>
               <div className="flex items-center mb-8">
                 <hr className="w-12 border-t-2 border-hotel-gold mr-4" />
