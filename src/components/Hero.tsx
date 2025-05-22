@@ -19,15 +19,15 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex flex-col justify-center items-center text-white text-center px-4">
-        <div className="max-w-4xl animate-fade-in">
-          <h1 className="hotel-title mb-4 text-4xl md:text-5xl lg:text-6xl tracking-tight">
+      <div className="relative h-full flex flex-col justify-center px-4">
+        <div className="max-w-4xl animate-fade-in ml-8 md:ml-16 lg:ml-24 text-left">
+          <h1 className="hotel-title mb-4 text-5xl md:text-6xl lg:text-7xl tracking-tight text-white">
             Experience Luxury & Comfort
           </h1>
-          <p className="hotel-subtitle mb-8 opacity-90 max-w-2xl mx-auto">
+          <p className="hotel-subtitle mb-8 opacity-90 text-xl md:text-2xl text-white">
             Discover a blend of exquisite amenities and personalized service at Luxe Haven
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex flex-row justify-start gap-4">
             <Link to="/rooms" className="hotel-button">
               Explore Rooms
             </Link>
@@ -74,3 +74,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
