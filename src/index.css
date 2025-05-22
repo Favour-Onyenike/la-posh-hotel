@@ -67,7 +67,7 @@
   }
   
   .hotel-button {
-    @apply px-6 py-3 bg-transparent text-hotel-gold font-sans font-medium border-2 border-hotel-gold transition-all duration-300 hover:bg-hotel-gold hover:text-white;
+    @apply px-6 py-3 bg-hotel-gold text-white font-sans font-medium border-2 border-hotel-gold transition-all duration-300 hover:bg-transparent hover:text-hotel-gold;
   }
   
   .section-padding {
