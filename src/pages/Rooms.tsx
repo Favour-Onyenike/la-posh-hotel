@@ -38,7 +38,7 @@ const roomCategories = [
     description: "Comfortable rooms offering essential amenities with elegant designs.",
     price: 35000,
     roomNumbers: ["Opal 01", "Opal 02"],
-    amenities: ["Free Wi-Fi", "Smart TV", "Coffee Maker", "Private Bathroom", "Air Conditioning", "Mini Refrigerator"],
+    amenities: ["Free Wi-Fi", "Smart TV", "Coffee Maker", "Private Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "Queen",
     size: "24 sq.m",
@@ -52,7 +52,7 @@ const roomCategories = [
     description: "Spacious rooms with enhanced comfort and modern furnishings.",
     price: 40000,
     roomNumbers: ["Topaz 01", "Topaz 02", "Topaz 03"],
-    amenities: ["High-Speed Wi-Fi", "43\" Smart TV", "Premium Coffee Maker", "Spacious Bathroom", "Climate Control", "Mini Refrigerator"],
+    amenities: ["High-Speed Wi-Fi", "43\" Smart TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "Queen",
     size: "28 sq.m",
@@ -66,11 +66,11 @@ const roomCategories = [
     description: "Elegant rooms featuring premium amenities and sophisticated decor.",
     price: 45000,
     roomNumbers: ["Onyx 01", "Onyx 02", "Onyx 03", "Onyx 04", "Onyx 05"],
-    amenities: ["High-Speed Wi-Fi", "50\" Smart TV", "Nespresso Machine", "Luxury Bathroom", "Climate Control", "Mini Bar"],
+    amenities: ["High-Speed Wi-Fi", "50\" Smart TV", "Nespresso Machine", "Luxury Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "32 sq.m",
-    features: ["Turn-down Service", "24-hour Room Service", "Electronic Safe", "Work Desk", "Lounge Area"]
+    features: ["Turn-down Service", "24-hour Room Service", "Electronic Safe", "Work Desk"]
   },
   {
     type: "Room",
@@ -80,7 +80,7 @@ const roomCategories = [
     description: "Bright and airy rooms with luxurious touches and ample space.",
     price: 42000,
     roomNumbers: ["Ivory 01", "Ivory 02", "Ivory 03", "Ivory 04", "Ivory 05", "Ivory 06"],
-    amenities: ["High-Speed Wi-Fi", "48\" Smart TV", "Premium Coffee Maker", "Spacious Bathroom", "Climate Control", "Mini Refrigerator"],
+    amenities: ["High-Speed Wi-Fi", "48\" Smart TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King/Twin",
     size: "30 sq.m",
@@ -91,28 +91,28 @@ const roomCategories = [
     name: "Amber",
     count: 5,
     image: "/lovable-uploads/8625d04c-54ec-4d6c-83b7-3a1081dac086.png",
-    description: "Warm and inviting rooms with premium bedding and stylish furnishings.",
+    description: "Warm and inviting executive rooms with premium bedding and stylish furnishings.",
     price: 48000,
     roomNumbers: ["Amber 01", "Amber 02", "Amber 03", "Amber 04", "Amber 05"],
-    amenities: ["High-Speed Wi-Fi", "50\" Smart TV", "Nespresso Machine", "Marble Bathroom", "Climate Control", "Mini Bar"],
+    amenities: ["High-Speed Wi-Fi", "50\" Smart TV", "Nespresso Machine", "Marble Bathroom", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "34 sq.m",
-    features: ["Turn-down Service", "24-hour Room Service", "Digital Safe", "Work Desk", "Reading Nook"]
+    features: ["Turn-down Service", "24-hour Room Service", "Digital Safe", "Work Desk", "Gym Access"]
   },
   {
     type: "Room",
     name: "Emerald",
     count: 2,
     image: "/lovable-uploads/84758c2a-d279-4a63-ba5d-9df205cdec90.png",
-    description: "Superior rooms offering exceptional comfort and luxury amenities.",
+    description: "Mini suite offering exceptional comfort and luxury amenities.",
     price: 50000,
     roomNumbers: ["Emerald 01", "Emerald 02"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Nespresso Machine", "Luxury Bathroom with Rain Shower", "Climate Control", "Mini Bar"],
+    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Nespresso Machine", "Luxury Bathroom with Rain Shower", "Air Conditioning", "Mini Refrigerator", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "36 sq.m",
-    features: ["Turn-down Service", "24-hour Room Service", "Electronic Safe", "Executive Work Desk", "Lounge Area"]
+    features: ["Turn-down Service", "24-hour Room Service", "Electronic Safe", "Executive Work Desk", "Gym Access"]
   },
   {
     type: "Room",
@@ -122,11 +122,11 @@ const roomCategories = [
     description: "Exclusive single room with premium features and personalized service.",
     price: 55000,
     roomNumbers: ["Beryl 01"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Nespresso Machine", "Luxury Bathroom with Soaking Tub", "Climate Control", "Premium Mini Bar"],
+    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Nespresso Machine", "Luxury Bathroom with Soaking Tub", "Air Conditioning", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "40 sq.m",
-    features: ["Personalized Turn-down Service", "Priority Room Service", "Electronic Safe", "Executive Work Area", "Lounge Area", "Complimentary Breakfast"]
+    features: ["Personalized Turn-down Service", "Priority Room Service", "Electronic Safe", "Executive Work Area", "Free Breakfast"]
   }
 ];
 
@@ -267,7 +267,7 @@ const Rooms = () => {
             <div className="max-w-7xl mx-auto">
               <h2 className="hotel-title text-center mb-8">Standard Room Amenities</h2>
               <p className="text-center mb-12 max-w-3xl mx-auto text-gray-700">
-                Every room at La Posh Signature Hotel & Suites comes equipped with the following amenities
+                Every room at La Posh Signature Hotel & Suites comes equipped with these standard amenities
                 to ensure your comfort and convenience.
               </p>
               
@@ -276,8 +276,18 @@ const Rooms = () => {
                   <CardContent className="flex items-start gap-4 p-6">
                     <Wifi className="text-hotel-gold" />
                     <div>
-                      <h3 className="font-medium mb-1">High-Speed Wi-Fi</h3>
+                      <h3 className="font-medium mb-1">Wi-Fi Access</h3>
                       <p className="text-sm text-gray-600">Complimentary internet access throughout your stay</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-white/80 backdrop-blur">
+                  <CardContent className="flex items-start gap-4 p-6">
+                    <AirVent className="text-hotel-gold" />
+                    <div>
+                      <h3 className="font-medium mb-1">Air Conditioning</h3>
+                      <p className="text-sm text-gray-600">Individually controlled climate system</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -288,16 +298,6 @@ const Rooms = () => {
                     <div>
                       <h3 className="font-medium mb-1">Smart TV</h3>
                       <p className="text-sm text-gray-600">Flat-screen television with satellite channels</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <AirVent className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">Climate Control</h3>
-                      <p className="text-sm text-gray-600">Individually controlled air conditioning</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -324,10 +324,10 @@ const Rooms = () => {
                 
                 <Card className="bg-white/80 backdrop-blur">
                   <CardContent className="flex items-start gap-4 p-6">
-                    <Refrigerator className="text-hotel-gold" />
+                    <Utensils className="text-hotel-gold" />
                     <div>
-                      <h3 className="font-medium mb-1">Mini Refrigerator</h3>
-                      <p className="text-sm text-gray-600">Stocked with refreshments and snacks</p>
+                      <h3 className="font-medium mb-1">Free Breakfast</h3>
+                      <p className="text-sm text-gray-600">Complimentary breakfast included with all rooms</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -341,16 +341,17 @@ const Rooms = () => {
                     </div>
                   </CardContent>
                 </Card>
-                
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <Utensils className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">Dining Options</h3>
-                      <p className="text-sm text-gray-600">Room service menu featuring local and international cuisine</p>
-                    </div>
-                  </CardContent>
-                </Card>
+              </div>
+
+              <div className="mt-12 text-center">
+                <h3 className="text-xl font-semibold mb-4">Executive & Premium Rooms</h3>
+                <p className="text-gray-700 mb-6">
+                  Our Amber and Emerald rooms include additional amenities:
+                </p>
+                <div className="flex flex-wrap justify-center gap-4 max-w-2xl mx-auto">
+                  <Badge variant="outline" className="bg-gray-50 px-3 py-1">Gym Access</Badge>
+                  <Badge variant="outline" className="bg-gray-50 px-3 py-1">Mini Refrigerator (Emerald only)</Badge>
+                </div>
               </div>
             </div>
           </div>

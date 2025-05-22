@@ -24,7 +24,9 @@ import {
   AirVent, 
   Refrigerator, 
   Clock,
-  Utensils
+  Utensils,
+  Dumbbell,
+  Sofa
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -38,11 +40,11 @@ const suiteCategories = [
     description: "Luxurious suites with separate living areas and premium amenities.",
     price: 85000,
     roomNumbers: ["Diamond 01", "Diamond 02"],
-    amenities: ["Ultra-Fast Wi-Fi", "65\" Smart TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi", "Smart Climate Control", "Premium Mini Bar", "Dining Area"],
+    amenities: ["Ultra-Fast Wi-Fi", "65\" Smart TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
     maxGuests: 4,
     bedType: "King",
     size: "70 sq.m",
-    features: ["Dedicated Butler Service", "Private Dining Options", "Electronic Safe", "Executive Work Area", "Separate Living Room", "Complimentary Breakfast", "Evening Turndown Service"]
+    features: ["Dedicated Butler Service", "Private Dining Options", "Electronic Safe", "Executive Work Area", "Separate Sitting Area", "Gym Access", "Refrigerator", "Evening Turndown Service"]
   },
   {
     type: "Suite",
@@ -52,11 +54,11 @@ const suiteCategories = [
     description: "Elegant suites featuring sophisticated design and premium services.",
     price: 80000,
     roomNumbers: ["Sapphire 01", "Sapphire 02"],
-    amenities: ["Ultra-Fast Wi-Fi", "60\" Smart TV", "Kitchenette", "Luxury Bathroom with Walk-in Shower", "Smart Climate Control", "Premium Mini Bar"],
+    amenities: ["Ultra-Fast Wi-Fi", "60\" Smart TV", "Kitchenette", "Luxury Bathroom with Walk-in Shower", "Smart Climate Control", "Premium Mini Bar", "Free Breakfast"],
     maxGuests: 3,
     bedType: "King",
     size: "65 sq.m",
-    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Living Room", "Complimentary Breakfast"]
+    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
   },
   {
     type: "Suite",
@@ -66,11 +68,11 @@ const suiteCategories = [
     description: "Mini suite offering luxurious comfort in a compact yet elegant space.",
     price: 65000,
     roomNumbers: ["Emerald 01"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Coffee and Tea Bar", "Luxury Bathroom", "Climate Control", "Mini Bar"],
+    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Coffee and Tea Bar", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
     maxGuests: 2,
     bedType: "King",
     size: "45 sq.m",
-    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Seating Area", "Complimentary Breakfast"]
+    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
   },
   {
     type: "Suite",
@@ -80,11 +82,11 @@ const suiteCategories = [
     description: "Premium suites with opulent furnishings and expansive living areas.",
     price: 75000,
     roomNumbers: ["Gold 01", "Gold 02"],
-    amenities: ["Ultra-Fast Wi-Fi", "60\" Smart TV", "Kitchenette", "Marble Bathroom with Dual Sinks", "Smart Climate Control", "Premium Mini Bar", "Dining Area"],
+    amenities: ["Ultra-Fast Wi-Fi", "60\" Smart TV", "Kitchenette", "Marble Bathroom with Dual Sinks", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
     maxGuests: 3,
     bedType: "King",
     size: "60 sq.m",
-    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Living Room", "Complimentary Breakfast"]
+    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
   },
   {
     type: "Suite",
@@ -94,11 +96,11 @@ const suiteCategories = [
     description: "Exclusive suite offering the ultimate in luxury and personalized service.",
     price: 90000,
     roomNumbers: ["Pearl 01"],
-    amenities: ["Ultra-Fast Wi-Fi", "75\" Smart TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi and Steam Shower", "Smart Climate Control", "Premium Stocked Bar", "Dining Area"],
+    amenities: ["Ultra-Fast Wi-Fi", "75\" Smart TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi and Steam Shower", "Smart Climate Control", "Premium Stocked Bar", "Dining Area", "Free Breakfast"],
     maxGuests: 4,
     bedType: "Emperor King",
     size: "85 sq.m",
-    features: ["Dedicated 24/7 Butler Service", "Private Chef Available", "Electronic Safe", "Executive Office Area", "Separate Living Room", "Complimentary Breakfast and Evening Canapés", "Airport Transfer"]
+    features: ["Dedicated 24/7 Butler Service", "Private Chef Available", "Electronic Safe", "Executive Office Area", "Luxurious Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast and Evening Canapés"]
   },
   {
     type: "Suite",
@@ -108,11 +110,11 @@ const suiteCategories = [
     description: "Double bed suites perfect for couples or families, with deluxe amenities.",
     price: 70000,
     roomNumbers: ["Ruby 01", "Ruby 02", "Ruby 03"],
-    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Kitchenette", "Luxury Bathroom", "Climate Control", "Mini Bar"],
+    amenities: ["High-Speed Wi-Fi", "55\" Smart TV", "Kitchenette", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
     maxGuests: 4,
     bedType: "Two Queen Beds",
     size: "55 sq.m",
-    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Seating Area", "Complimentary Breakfast"]
+    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Separate Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
   }
 ];
 
@@ -250,7 +252,7 @@ const Suites = () => {
             <div className="max-w-7xl mx-auto">
               <h2 className="hotel-title text-center mb-8">Premium Suite Amenities</h2>
               <p className="text-center mb-12 max-w-3xl mx-auto text-gray-700">
-                Our suites feature exclusive amenities designed to provide the ultimate luxury experience during your stay.
+                All our suites feature these exclusive amenities designed to provide the ultimate luxury experience during your stay.
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -266,20 +268,20 @@ const Suites = () => {
                 
                 <Card className="bg-white/80 backdrop-blur">
                   <CardContent className="flex items-start gap-4 p-6">
-                    <Tv className="text-hotel-gold" />
+                    <AirVent className="text-hotel-gold" />
                     <div>
-                      <h3 className="font-medium mb-1">Large Smart TVs</h3>
-                      <p className="text-sm text-gray-600">60"+ screens with streaming services</p>
+                      <h3 className="font-medium mb-1">Climate Control</h3>
+                      <p className="text-sm text-gray-600">Personalized temperature settings</p>
                     </div>
                   </CardContent>
                 </Card>
                 
                 <Card className="bg-white/80 backdrop-blur">
                   <CardContent className="flex items-start gap-4 p-6">
-                    <AirVent className="text-hotel-gold" />
+                    <Tv className="text-hotel-gold" />
                     <div>
-                      <h3 className="font-medium mb-1">Smart Climate Control</h3>
-                      <p className="text-sm text-gray-600">Personalized temperature settings</p>
+                      <h3 className="font-medium mb-1">Large Smart TVs</h3>
+                      <p className="text-sm text-gray-600">60"+ screens with streaming services</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -308,8 +310,28 @@ const Suites = () => {
                   <CardContent className="flex items-start gap-4 p-6">
                     <Refrigerator className="text-hotel-gold" />
                     <div>
-                      <h3 className="font-medium mb-1">Stocked Mini Bar</h3>
-                      <p className="text-sm text-gray-600">Premium beverages and snacks</p>
+                      <h3 className="font-medium mb-1">Refrigerator</h3>
+                      <p className="text-sm text-gray-600">Full-sized with premium beverages and snacks</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-white/80 backdrop-blur">
+                  <CardContent className="flex items-start gap-4 p-6">
+                    <Sofa className="text-hotel-gold" />
+                    <div>
+                      <h3 className="font-medium mb-1">Sitting Area</h3>
+                      <p className="text-sm text-gray-600">Separate living space to relax and entertain</p>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-white/80 backdrop-blur">
+                  <CardContent className="flex items-start gap-4 p-6">
+                    <Dumbbell className="text-hotel-gold" />
+                    <div>
+                      <h3 className="font-medium mb-1">Gym Access</h3>
+                      <p className="text-sm text-gray-600">Complimentary access to our premium fitness center</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -328,8 +350,8 @@ const Suites = () => {
                   <CardContent className="flex items-start gap-4 p-6">
                     <Utensils className="text-hotel-gold" />
                     <div>
-                      <h3 className="font-medium mb-1">In-Suite Dining</h3>
-                      <p className="text-sm text-gray-600">Exclusive menu options delivered to your suite</p>
+                      <h3 className="font-medium mb-1">Free Breakfast</h3>
+                      <p className="text-sm text-gray-600">Complimentary gourmet breakfast included</p>
                     </div>
                   </CardContent>
                 </Card>
