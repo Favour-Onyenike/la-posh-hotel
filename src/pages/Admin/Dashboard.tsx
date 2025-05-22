@@ -18,6 +18,7 @@ import { Booking, Room } from '@/types/supabase';
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { Toggle } from '@/components/ui/toggle';
 import { Switch } from '@/components/ui/switch';
+import { useToast } from '@/hooks/use-toast';
 
 type BookingsByMonth = {
   month: string;
@@ -71,6 +72,7 @@ const Dashboard = () => {
   const [bookingsByMonth, setBookingsByMonth] = useState<BookingsByMonth[]>([]);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { toast } = useToast();
   
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -87,35 +89,30 @@ const Dashboard = () => {
           return;
         }
         
+        // Ensure all rooms have a valid availability_status property that matches our type
+        const typedRoomsData = (roomsData || []).map(room => ({
+          ...room,
+          // Force the availability_status to be one of the allowed values
+          availability_status: room.availability_status === 'available' ? 'available' : 'taken' 
+        } as Room));
+        
         // Store rooms for availability toggle functionality
-        setRooms(roomsData || []);
+        setRooms(typedRoomsData);
         
         // Count rooms and suites
-        const standardRooms = roomsData?.filter(room => room.room_type === 'room') || [];
-        const suites = roomsData?.filter(room => room.room_type === 'suite') || [];
+        const standardRooms = typedRoomsData.filter(room => room.room_type === 'room') || [];
+        const suites = typedRoomsData.filter(room => room.room_type === 'suite') || [];
         
         setTotalRooms(standardRooms.length);
         setTotalSuites(suites.length);
         
+        // Count available rooms (rooms with availability_status = 'available')
+        const availableCount = typedRoomsData.filter(room => room.availability_status === 'available').length || 0;
+        setAvailableRooms(availableCount);
+        
         // Get today's date
         const today = new Date();
         const todayString = format(today, 'yyyy-MM-dd');
-        
-        // Fetch active bookings to calculate available rooms
-        const { data: activeBookings, error: activeBookingsError } = await supabase
-          .from('bookings')
-          .select('*')
-          .lte('check_in_date', todayString)
-          .gte('check_out_date', todayString)
-          .in('status', ['confirmed', 'checked_in']);
-        
-        if (activeBookingsError) {
-          console.error('Error fetching active bookings:', activeBookingsError);
-        }
-        
-        // Count available rooms (rooms with availability_status = 'available')
-        const availableCount = roomsData?.filter(room => room.availability_status === 'available').length || 0;
-        setAvailableRooms(availableCount);
         
         // Fetch pending bookings
         const { data: pendingBookingsData, error: pendingBookingsError } = await supabase
@@ -224,7 +221,7 @@ const Dashboard = () => {
   }, []);
 
   // Toggle room availability
-  const toggleRoomAvailability = async (roomId: string, currentStatus: string) => {
+  const toggleRoomAvailability = async (roomId: string, currentStatus: 'available' | 'taken') => {
     const newStatus = currentStatus === 'available' ? 'taken' : 'available';
     
     try {
@@ -235,6 +232,11 @@ const Dashboard = () => {
         
       if (error) {
         console.error('Error updating room status:', error);
+        toast({
+          title: "Update failed",
+          description: "Could not update room availability. Please try again.",
+          variant: "destructive"
+        });
         return;
       }
       
@@ -257,8 +259,18 @@ const Dashboard = () => {
         .length;
         
       setAvailableRooms(updatedAvailableRooms);
+      
+      toast({
+        title: "Status updated",
+        description: `Room status changed to ${newStatus}`,
+      });
     } catch (error) {
       console.error('Error toggling room availability:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive"
+      });
     }
   };
   
