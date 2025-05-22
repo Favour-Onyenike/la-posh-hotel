@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -121,7 +120,7 @@ const suiteCategories = [
 const SuiteCard = ({ category }) => {
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
-      <div className="relative h-64 overflow-hidden">
+      <div className="relative h-48 overflow-hidden">
         <img 
           src={category.image} 
           alt={`${category.name} ${category.type}`}
@@ -135,7 +134,7 @@ const SuiteCard = ({ category }) => {
           <p className="text-white/90 text-sm">₦{category.price.toLocaleString()}/night</p>
         </div>
       </div>
-      <CardHeader>
+      <CardHeader className="py-3">
         <CardTitle className="flex justify-between items-center">
           <span>{category.name}</span>
           <Badge variant="hotel" className="bg-hotel-gold/10 text-hotel-gold border-hotel-gold">
@@ -147,23 +146,19 @@ const SuiteCard = ({ category }) => {
           <span>{category.count} {category.count > 1 ? 'units' : 'unit'} ({category.roomNumbers.join(", ")})</span>
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow">
-        <p className="text-gray-700 mb-4">{category.description}</p>
+      <CardContent className="flex-grow py-2">
+        <p className="text-gray-700 mb-3 line-clamp-2">{category.description}</p>
         
-        <div className="mb-4">
+        <div>
           <h4 className="text-sm font-medium mb-2 text-gray-700">Key Features</h4>
-          <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
+          <div className="grid grid-cols-3 gap-2 text-sm text-gray-600">
             <div className="flex items-center gap-1">
               <Users size={16} />
-              <span>Up to {category.maxGuests} Guests</span>
+              <span>{category.maxGuests} Guests</span>
             </div>
             <div className="flex items-center gap-1">
               <Bed size={16} />
               <span>{category.bedType}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock size={16} />
-              <span>24h Check-in</span>
             </div>
             <div className="flex items-center gap-1">
               <Award size={16} />
@@ -171,23 +166,12 @@ const SuiteCard = ({ category }) => {
             </div>
           </div>
         </div>
-        
-        <div>
-          <h4 className="text-sm font-medium mb-2 text-gray-700">Amenities</h4>
-          <div className="flex flex-wrap gap-2">
-            {category.amenities.slice(0, 6).map((amenity, index) => (
-              <Badge key={index} variant="outline" className="bg-gray-50">
-                {amenity}
-              </Badge>
-            ))}
-          </div>
-        </div>
       </CardContent>
-      <CardFooter className="flex justify-between items-center border-t pt-4">
+      <CardFooter className="flex justify-between items-center border-t pt-3 pb-3">
         <div className="text-hotel-gold font-bold">
           ₦{category.price.toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
         </div>
-        <Button variant="hotel" onClick={() => window.scrollTo(0, 0)}>Book Now</Button>
+        <Button variant="hotel" size="sm" onClick={() => window.scrollTo(0, 0)}>Book Now</Button>
       </CardFooter>
     </Card>
   );
@@ -237,7 +221,7 @@ const Suites = () => {
           <div className="hotel-container">
             <div className="max-w-7xl mx-auto">
               <h2 className="hotel-title text-center mb-12">Available Suites</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {suiteCategories.map((category, index) => (
                   <SuiteCard key={index} category={category} />
                 ))}
