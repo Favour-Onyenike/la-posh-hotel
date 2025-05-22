@@ -20,7 +20,7 @@ const Feature = ({ icon: Icon, title, description }) => {
   );
 };
 
-const RoomPreview = ({ image, title, price, description }) => {
+const RoomPreview = ({ image, title, price, description, currency = "₦" }) => {
   return (
     <div className="group">
       <div className="relative overflow-hidden mb-4">
@@ -32,7 +32,7 @@ const RoomPreview = ({ image, title, price, description }) => {
         <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-all duration-300"></div>
       </div>
       <h3 className="font-serif text-xl font-semibold mb-2 text-black">{title}</h3>
-      <p className="text-hotel-gold font-medium mb-2">From ${price} per night</p>
+      <p className="text-hotel-gold font-medium mb-2">{currency}{price.toLocaleString()} per night</p>
       <p className="text-black mb-4">{description}</p>
       <button className="bg-transparent text-hotel-gold font-medium border-2 border-hotel-gold px-4 py-2 hover:bg-hotel-gold hover:text-white transition-colors">
         Book Now
@@ -156,19 +156,19 @@ const Index = () => {
             <RoomPreview
               image="https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
               title="Executive Room"
-              price={199}
+              price={40000}
               description="Elegant room with king-size bed, city views, and modern amenities"
             />
             <RoomPreview
               image="https://images.unsplash.com/photo-1591088398332-8a7791972843?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
               title="Standard Suite"
-              price={299}
+              price={80000}
               description="Spacious suite with separate living area and premium amenities"
             />
             <RoomPreview
               image="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
               title="Mini Suite"
-              price={499}
+              price={45000}
               description="Our finest accommodation with panoramic views and luxurious features"
             />
           </div>
