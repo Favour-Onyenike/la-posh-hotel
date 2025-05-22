@@ -16,6 +16,8 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTo
 import { supabase } from '@/integrations/supabase/client';
 import { Booking, Room } from '@/types/supabase';
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
+import { Toggle } from '@/components/ui/toggle';
+import { Switch } from '@/components/ui/switch';
 
 type BookingsByMonth = {
   month: string;
@@ -67,6 +69,7 @@ const Dashboard = () => {
   const [checkInsToday, setCheckInsToday] = useState<number>(0);
   const [checkOutsToday, setCheckOutsToday] = useState<number>(0);
   const [bookingsByMonth, setBookingsByMonth] = useState<BookingsByMonth[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   
   useEffect(() => {
@@ -75,7 +78,7 @@ const Dashboard = () => {
         setLoading(true);
         
         // Fetch rooms data
-        const { data: rooms, error: roomsError } = await supabase
+        const { data: roomsData, error: roomsError } = await supabase
           .from('rooms')
           .select('*');
         
@@ -84,9 +87,12 @@ const Dashboard = () => {
           return;
         }
         
-        // Count standard rooms and suites
-        const standardRooms = rooms?.filter(room => room.room_type === 'room') || [];
-        const suites = rooms?.filter(room => room.room_type === 'suite') || [];
+        // Store rooms for availability toggle functionality
+        setRooms(roomsData || []);
+        
+        // Count rooms and suites
+        const standardRooms = roomsData?.filter(room => room.room_type === 'room') || [];
+        const suites = roomsData?.filter(room => room.room_type === 'suite') || [];
         
         setTotalRooms(standardRooms.length);
         setTotalSuites(suites.length);
@@ -107,9 +113,9 @@ const Dashboard = () => {
           console.error('Error fetching active bookings:', activeBookingsError);
         }
         
-        // Calculate available rooms (total rooms + suites minus active bookings)
-        const totalAccommodations = (rooms?.length || 0);
-        setAvailableRooms(Math.max(0, totalAccommodations - (activeBookings?.length || 0)));
+        // Count available rooms (rooms with availability_status = 'available')
+        const availableCount = roomsData?.filter(room => room.availability_status === 'available').length || 0;
+        setAvailableRooms(availableCount);
         
         // Fetch pending bookings
         const { data: pendingBookingsData, error: pendingBookingsError } = await supabase
@@ -216,10 +222,49 @@ const Dashboard = () => {
     
     fetchDashboardData();
   }, []);
+
+  // Toggle room availability
+  const toggleRoomAvailability = async (roomId: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'available' ? 'taken' : 'available';
+    
+    try {
+      const { error } = await supabase
+        .from('rooms')
+        .update({ availability_status: newStatus })
+        .eq('id', roomId);
+        
+      if (error) {
+        console.error('Error updating room status:', error);
+        return;
+      }
+      
+      // Update local state to reflect the change
+      setRooms(prevRooms => 
+        prevRooms.map(room => 
+          room.id === roomId 
+            ? { ...room, availability_status: newStatus } 
+            : room
+        )
+      );
+      
+      // Update available rooms count
+      const updatedAvailableRooms = rooms
+        .map(room => room.id === roomId 
+          ? { ...room, availability_status: newStatus } 
+          : room
+        )
+        .filter(room => room.availability_status === 'available')
+        .length;
+        
+      setAvailableRooms(updatedAvailableRooms);
+    } catch (error) {
+      console.error('Error toggling room availability:', error);
+    }
+  };
   
   return (
     <AdminLayout>
-      <div className="space-y-8">
+      <div className="space-y-8 mt-4 lg:mt-0">
         <div className="mt-2">
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           <p className="text-muted-foreground">Admin overview of bookings and hotel statistics.</p>
@@ -227,17 +272,17 @@ const Dashboard = () => {
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <StatCard 
-            title="Standard Rooms" 
+            title="Rooms" 
             value={totalRooms}
             icon={<Hotel size={20} />}
           />
           <StatCard 
-            title="Premium Suites" 
+            title="Suites" 
             value={totalSuites}
             icon={<Star size={20} />}
           />
           <StatCard 
-            title="Available Rooms" 
+            title="Available Accommodations" 
             value={availableRooms}
             description={`${Math.round(((totalRooms + totalSuites) > 0 ? (availableRooms / (totalRooms + totalSuites)) * 100 : 0) || 0)}% occupancy rate`}
             icon={<Hotel size={20} />}
@@ -325,6 +370,40 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Room & Suite Availability</CardTitle>
+            <p className="text-sm text-muted-foreground">Manage room and suite availability status</p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {rooms.length === 0 ? (
+                <p>No rooms or suites found</p>
+              ) : (
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {rooms.map((room) => (
+                    <div key={room.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <div>
+                        <p className="font-medium">{room.name}</p>
+                        <p className="text-xs text-muted-foreground">{room.room_type === 'suite' ? 'Suite' : 'Room'}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm ${room.availability_status === 'available' ? 'text-green-600' : 'text-red-600'}`}>
+                          {room.availability_status === 'available' ? 'Available' : 'Reserved'}
+                        </span>
+                        <Switch 
+                          checked={room.availability_status === 'available'}
+                          onCheckedChange={() => toggleRoomAvailability(room.id, room.availability_status)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </AdminLayout>
   );
