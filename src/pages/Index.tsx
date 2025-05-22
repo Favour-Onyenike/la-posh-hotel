@@ -3,7 +3,7 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
-import { Star, Utensils, Wifi, Concierge, MapPin, Clock } from "lucide-react";
+import { Star, Utensils, Wifi, Users, MapPin, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Feature = ({ icon: Icon, title, description }) => {
@@ -112,7 +112,7 @@ const Index = () => {
               description="High-speed internet connectivity throughout the hotel premises"
             />
             <Feature
-              icon={Concierge}
+              icon={Users}
               title="24/7 Concierge"
               description="Personalized assistance for all your needs during your stay with us"
             />
