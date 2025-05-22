@@ -56,15 +56,15 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin size={18} className="mr-3 mt-1 text-hotel-gold" />
-                <span className="text-gray-300">123 Luxury Avenue, Downtown, City 10001</span>
+                <span className="text-gray-300">5 Poultry Road by Labrix, Abraka, Delta State</span>
               </li>
               <li className="flex items-center">
                 <Phone size={18} className="mr-3 text-hotel-gold" />
-                <span className="text-gray-300">+1 (555) 123-4567</span>
+                <span className="text-gray-300">+234 905 212 9939</span>
               </li>
               <li className="flex items-center">
                 <Mail size={18} className="mr-3 text-hotel-gold" />
-                <span className="text-gray-300">info@luxehaven.com</span>
+                <span className="text-gray-300">laposhsignaturesuites@gmail.com</span>
               </li>
             </ul>
           </div>
