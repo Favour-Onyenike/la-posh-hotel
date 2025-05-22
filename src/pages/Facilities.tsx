@@ -36,21 +36,6 @@ const Facilities = () => {
     }
   ];
 
-  const services = [
-    {
-      title: "24/7 Room Service",
-      description: "Our dedicated staff is available around the clock to cater to your needs, ensuring a comfortable and hassle-free stay, day or night."
-    },
-    {
-      title: "Business Lounge",
-      description: "A fully-equipped business center with modern facilities for meetings, conferences, and events, catering to all your professional needs."
-    },
-    {
-      title: "Local Tours",
-      description: "Explore the beauty and culture of Abraka with our curated local tours, providing an authentic experience of the region's attractions."
-    }
-  ];
-
   return (
     <>
       <Navbar />
@@ -142,29 +127,6 @@ const Facilities = () => {
                     </>
                   )}
                 </React.Fragment>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Services Section */}
-        <section className="bg-white py-20">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
-              <Star className="text-hotel-gold mx-auto mb-4" size={32} />
-              <h2 className="hotel-title text-black mb-4">ADDITIONAL SERVICES</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Enhancing your experience with premium offerings
-              </p>
-              <div className="h-1 w-24 bg-hotel-gold mx-auto mt-6"></div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {services.map((service, index) => (
-                <div key={index} className="bg-white p-8 shadow-md border-t-4 border-hotel-gold">
-                  <h3 className="text-xl font-serif font-bold mb-4">{service.title}</h3>
-                  <p className="text-gray-700">{service.description}</p>
-                </div>
               ))}
             </div>
           </div>
