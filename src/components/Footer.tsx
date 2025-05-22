@@ -39,13 +39,13 @@ const Footer = () => {
                 <Link to="/rooms" className="text-gray-300 hover:text-hotel-gold transition-colors">Rooms & Suites</Link>
               </li>
               <li>
-                <Link to="/dining" className="text-gray-300 hover:text-hotel-gold transition-colors">Dining</Link>
-              </li>
-              <li>
-                <Link to="/amenities" className="text-gray-300 hover:text-hotel-gold transition-colors">Amenities</Link>
+                <Link to="/facilities" className="text-gray-300 hover:text-hotel-gold transition-colors">Facilities</Link>
               </li>
               <li>
                 <Link to="/gallery" className="text-gray-300 hover:text-hotel-gold transition-colors">Gallery</Link>
+              </li>
+              <li>
+                <Link to="/dining" className="text-gray-300 hover:text-hotel-gold transition-colors">Dining</Link>
               </li>
             </ul>
           </div>
