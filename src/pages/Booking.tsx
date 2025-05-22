@@ -757,7 +757,7 @@ const Booking = () => {
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Types</SelectItem>
+                      <SelectItem value="all">All Types</SelectItem>
                       <SelectItem value="Room">Room</SelectItem>
                       <SelectItem value="Suite">Suite</SelectItem>
                     </SelectContent>
