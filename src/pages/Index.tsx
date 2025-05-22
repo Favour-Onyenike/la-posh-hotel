@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import CounterBar from "@/components/CounterBar";
 import { Star, Utensils, Wifi, Car, Clock, Glasses, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const Feature = ({ icon: Icon, title, description }) => {
   return (
@@ -184,7 +185,7 @@ const Index = () => {
           className="absolute inset-0 bg-cover bg-center bg-fixed opacity-20"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1519690889869-e705e59f72e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
+              "url('/lovable-uploads/b0b33b9b-6fb9-4d30-836e-20c55bc93064.png')",
           }}
         />
         <div className="hotel-container relative z-10">
@@ -221,6 +222,12 @@ const Index = () => {
                 </div>
               </div>
             ))}
+          </div>
+          
+          <div className="flex justify-center mt-10">
+            <Button className="bg-hotel-gold hover:bg-hotel-navy text-white font-medium px-6 py-3">
+              Add Your Review
+            </Button>
           </div>
         </div>
       </section>
