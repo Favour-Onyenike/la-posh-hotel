@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Wifi, Utensils, Conciergebell, Shower, Hotel, Car, Clock, Map, Coffee } from "lucide-react";
+import { Wifi, Utensils, ConciergeBell, ShowerHead, Hotel, Car, Clock, Map, Coffee } from "lucide-react";
 
 const Facilities = () => {
   // Facility items with icons and descriptions
@@ -24,13 +24,13 @@ const Facilities = () => {
     {
       title: "Concierge Service",
       description: "Our attentive concierge team is available 24/7 to assist with all your needs and requests.",
-      icon: Conciergebell,
+      icon: ConciergeBell,
       imageSrc: "/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png"
     },
     {
       title: "Luxury Spa",
       description: "Rejuvenate your body and mind at our state-of-the-art spa offering a range of treatments.",
-      icon: Shower,
+      icon: ShowerHead,
       imageSrc: "/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png"
     },
     {
