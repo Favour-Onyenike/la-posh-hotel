@@ -34,9 +34,9 @@ const RoomPreview = ({ image, title, price, description, currency = "₦" }) => 
       <h3 className="font-serif text-xl font-semibold mb-2 text-black">{title}</h3>
       <p className="text-hotel-gold font-medium mb-2">{currency}{price.toLocaleString()} per night</p>
       <p className="text-black mb-4">{description}</p>
-      <button className="bg-transparent text-hotel-gold font-medium border-2 border-hotel-gold px-4 py-2 hover:bg-hotel-gold hover:text-white transition-colors">
+      <Button variant="hotel" size="default">
         Book Now
-      </button>
+      </Button>
     </div>
   );
 };
@@ -74,9 +74,9 @@ const Index = () => {
                 <hr className="w-12 border-t-2 border-hotel-gold mr-4" />
                 <span className="font-serif italic text-lg text-black">Experience the difference</span>
               </div>
-              <button className="bg-transparent text-hotel-gold font-medium border-2 border-hotel-gold px-6 py-3 hover:bg-hotel-gold hover:text-white transition-colors">
+              <Button variant="hotel" size="lg">
                 Discover Our Story
-              </button>
+              </Button>
             </div>
             <div className="lg:w-1/2 flex flex-row gap-4 items-center justify-center">
               <img
@@ -174,9 +174,9 @@ const Index = () => {
           </div>
 
           <div className="text-center mt-12">
-            <button className="bg-transparent text-hotel-gold font-medium border-2 border-hotel-gold px-6 py-3 hover:bg-hotel-gold hover:text-white transition-colors">
+            <Button variant="hotel" size="lg">
               View All Rooms & Suites
-            </button>
+            </Button>
           </div>
         </div>
       </section>
@@ -227,7 +227,7 @@ const Index = () => {
           </div>
           
           <div className="flex justify-center mt-10">
-            <Button className="bg-transparent text-hotel-gold border-2 border-hotel-gold hover:bg-hotel-gold hover:text-white font-medium px-6 py-3">
+            <Button variant="hotel" size="lg">
               Add Your Review
             </Button>
           </div>
@@ -244,12 +244,12 @@ const Index = () => {
               exceptional service and unparalleled comfort.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button className="bg-transparent text-hotel-gold font-medium border-2 border-hotel-gold px-6 py-3 hover:bg-hotel-gold hover:text-white transition-colors">
+              <Button variant="hotel" size="lg">
                 Book Your Stay
-              </button>
-              <button className="bg-transparent text-hotel-gold font-medium border-2 border-hotel-gold px-6 py-3 hover:bg-hotel-gold hover:text-white transition-colors">
+              </Button>
+              <Button variant="hotel" size="lg">
                 Contact Us
-              </button>
+              </Button>
             </div>
           </div>
         </div>
