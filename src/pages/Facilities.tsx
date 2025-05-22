@@ -4,18 +4,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Wifi, Utensils, ConciergeBell, ShowerHead, Hotel, Car, Clock, Map, Coffee, Star, Sparkles, Power, Dumbbell, Gamepad } from "lucide-react";
+import { Utensils, Hotel, Clock, Map, Coffee, Star, Power, Dumbbell, Gamepad } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Facilities = () => {
-  // Facility items with icons and descriptions
+  // Updated facility items with removed spa, airport transfer, concierge service, and high-speed WiFi
   const facilityItems = [
-    {
-      title: "High-Speed WiFi",
-      description: "Complimentary high-speed internet access throughout the hotel premises for seamless connectivity.",
-      icon: Wifi,
-      imageSrc: "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png"
-    },
     {
       title: "Fine Dining Restaurant",
       description: "Experience exquisite cuisine at our in-house restaurant offering a blend of local delicacies and international dishes prepared by our expert chefs.",
@@ -23,28 +18,10 @@ const Facilities = () => {
       imageSrc: "/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png"
     },
     {
-      title: "Concierge Service",
-      description: "Our attentive concierge team is available 24/7 to assist with all your needs and requests.",
-      icon: ConciergeBell,
-      imageSrc: "/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png"
-    },
-    {
-      title: "Luxury Spa",
-      description: "Rejuvenate your body and mind at our state-of-the-art spa offering a range of treatments.",
-      icon: ShowerHead,
-      imageSrc: "/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png"
-    },
-    {
       title: "Executive Suites",
       description: "Spacious and elegantly furnished suites designed for ultimate comfort and relaxation.",
       icon: Hotel,
       imageSrc: "/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png"
-    },
-    {
-      title: "Airport Transfer",
-      description: "Convenient airport shuttle service for hassle-free transportation to and from the airport.",
-      icon: Car,
-      imageSrc: "/lovable-uploads/b0b33b9b-6fb9-4d30-836e-20c55bc93064.png"
     },
     {
       title: "24/7 Power Supply",
@@ -103,7 +80,7 @@ const Facilities = () => {
                   premium facilities designed to enhance your stay and provide the utmost comfort and convenience.
                 </p>
                 <p className="mb-6 text-black text-lg leading-relaxed">
-                  From high-speed WiFi throughout the premises to our exquisite dining options, 
+                  From our exquisite dining options to our modern fitness center, 
                   every amenity has been carefully crafted to exceed your expectations and create memorable experiences.
                 </p>
               </div>
@@ -111,36 +88,37 @@ const Facilities = () => {
           </div>
         </section>
 
-        {/* Facilities Grid */}
+        {/* Facilities List - Changed from cards to a different format */}
         <section className="section-padding bg-gray-50 py-20">
           <div className="hotel-container">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {facilityItems.map((item, index) => (
-                <div 
-                  key={index}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden border border-hotel-gold/10 hover:shadow-xl transition-all duration-300 hover:border-hotel-gold/30 group"
-                >
-                  <div className="h-[200px] overflow-hidden">
+            {facilityItems.map((item, index) => (
+              <div 
+                key={index}
+                className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 items-center mb-16 last:mb-0`}
+              >
+                <div className="w-full md:w-1/2">
+                  <div className="rounded-lg overflow-hidden shadow-md">
                     <AspectRatio ratio={16/9}>
                       <img 
                         src={item.imageSrc} 
                         alt={item.title} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full object-cover"
                       />
                     </AspectRatio>
                   </div>
-                  <div className="p-6">
-                    <div className="flex items-center mb-4">
-                      <div className="h-10 w-10 bg-hotel-gold rounded-full flex items-center justify-center mr-3">
-                        <item.icon className="text-white" size={20} />
-                      </div>
-                      <h3 className="hotel-subtitle text-xl font-bold">{item.title}</h3>
-                    </div>
-                    <p className="text-gray-700 mb-4">{item.description}</p>
-                  </div>
                 </div>
-              ))}
-            </div>
+                <div className="w-full md:w-1/2">
+                  <div className="flex items-center mb-4">
+                    <div className="h-12 w-12 bg-hotel-gold rounded-full flex items-center justify-center mr-4">
+                      <item.icon className="text-white" size={24} />
+                    </div>
+                    <h3 className="hotel-subtitle text-2xl font-bold">{item.title}</h3>
+                  </div>
+                  <p className="text-gray-700 text-lg mb-6">{item.description}</p>
+                  <Separator className="my-4 bg-hotel-gold/20" />
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
