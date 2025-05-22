@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Star, StarHalf, Sparkles } from "lucide-react";
+import { Star, StarHalf, Sparkles, History, Clock, Users, Award, Target, CheckCircle } from "lucide-react";
 
 const About = () => {
   return (
@@ -36,52 +35,138 @@ const About = () => {
           </div>
         </section>
 
-        {/* About Us Content */}
+        {/* About Us Content - Updated with new design */}
         <section className="section-padding bg-white py-20">
           <div className="hotel-container">
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-center mb-8">
-                <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
-                <h2 className="hotel-subtitle text-black text-3xl uppercase font-bold">ABOUT US</h2>
-                <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                <div className="prose prose-lg max-w-none">
-                  <p className="mb-6 text-black text-lg leading-relaxed">
-                    Welcome to La Posh Signature Hotel & Suites, where luxury meets elegance and
-                    sophistication. Located in the heart of the Abraka Town, our hotel offers an
-                    unparalleled hospitality experience, blending modern amenities with timeless
-                    charm.
+            <div className="text-center mb-16">
+              <Sparkles className="text-hotel-gold mx-auto mb-4" size={32} />
+              <h2 className="hotel-title text-black mb-4">Our Journey</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                From humble beginnings to becoming a premier destination for luxury accommodation
+              </p>
+              <div className="h-1 w-24 bg-hotel-gold mx-auto mt-6"></div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="bg-hotel-beige/30">
+                  <div className="flex items-center">
+                    <History className="text-hotel-gold mr-3" />
+                    <CardTitle>Our Beginning</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <p className="text-black">
+                    La Posh Signature Hotel & Suites was founded in 2015 with a vision to create an oasis of luxury 
+                    and comfort in the heart of Abraka Town. What started as a small boutique hotel has grown into 
+                    a premier destination for discerning travelers seeking exceptional service and accommodations.
                   </p>
-                  <p className="mb-6 text-black text-lg leading-relaxed">
-                    Our story began with a passion for creating unforgettable experiences, and a
-                    commitment to excellence in every detail. From our lavish rooms and suites, to
-                    our world-class dining and entertainment options, every aspect of our hotel is
-                    designed to exceed your expectations.
-                  </p>
-                </div>
-                <div className="rounded-lg overflow-hidden shadow-xl border-2 border-hotel-gold/20 hover:shadow-2xl transition-all duration-300 hover-scale h-[300px]">
-                  <img 
-                    src="/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png" 
-                    alt="Hotel Luxury Experience" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
+                </CardContent>
+              </Card>
               
-              <div className="bg-hotel-beige p-8 rounded-lg shadow-md border-l-4 border-hotel-gold mb-12">
-                <p className="text-black text-lg italic">
-                  "Whether you're a discerning business traveler, a romantic couple, or a family
-                  on vacation, we invite you to experience the La Posh difference. Let us pamper
-                  you with our signature blend of luxury, comfort, and genuine hospitality."
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="bg-hotel-beige/30">
+                  <div className="flex items-center">
+                    <Award className="text-hotel-gold mr-3" />
+                    <CardTitle>Our Achievement</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <p className="text-black">
+                    Over the years, La Posh has earned numerous accolades and recognition for our commitment 
+                    to excellence. We've been awarded the prestigious 5-star rating and have consistently ranked 
+                    among the top luxury hotels in the region, reflecting our dedication to exceptional hospitality.
+                  </p>
+                </CardContent>
+              </Card>
+              
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader className="bg-hotel-beige/30">
+                  <div className="flex items-center">
+                    <Target className="text-hotel-gold mr-3" />
+                    <CardTitle>Our Future</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <p className="text-black">
+                    Looking ahead, we are committed to continuous improvement and innovation. Our plans include 
+                    expanding our facilities, enhancing our sustainability practices, and introducing new services 
+                    to further elevate the guest experience while maintaining our signature blend of luxury and comfort.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div className="mt-20">
+              <div className="text-center mb-12">
+                <h2 className="hotel-title text-black mb-4">What Sets Us Apart</h2>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  Discover the unique elements that define the La Posh experience
                 </p>
+                <div className="h-1 w-24 bg-hotel-gold mx-auto mt-6"></div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+                <div className="flex">
+                  <div className="mr-4 bg-hotel-beige p-3 rounded-full h-min">
+                    <CheckCircle className="text-hotel-gold" size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2 text-black">Unparalleled Luxury</h3>
+                    <p className="text-black">
+                      Every aspect of our hotel is designed with luxury in mind, from our elegant furnishings to our 
+                      premium amenities and personalized services. We spare no expense in creating an atmosphere of 
+                      refined sophistication.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex">
+                  <div className="mr-4 bg-hotel-beige p-3 rounded-full h-min">
+                    <CheckCircle className="text-hotel-gold" size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2 text-black">Strategic Location</h3>
+                    <p className="text-black">
+                      Situated in the heart of Abraka Town, La Posh offers convenient access to major attractions, 
+                      business districts, and transport hubs. Our location combines accessibility with tranquility, 
+                      providing a peaceful retreat in the midst of urban activity.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex">
+                  <div className="mr-4 bg-hotel-beige p-3 rounded-full h-min">
+                    <CheckCircle className="text-hotel-gold" size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2 text-black">Exceptional Dining</h3>
+                    <p className="text-black">
+                      Our restaurants and bars offer a culinary journey that satisfies the most discerning palates. 
+                      With a focus on fresh, locally-sourced ingredients and innovative culinary techniques, our chefs 
+                      create memorable dining experiences.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex">
+                  <div className="mr-4 bg-hotel-beige p-3 rounded-full h-min">
+                    <CheckCircle className="text-hotel-gold" size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2 text-black">Personalized Service</h3>
+                    <p className="text-black">
+                      We pride ourselves on our attentive and personalized service. Our team is dedicated to anticipating 
+                      and exceeding our guests' needs, ensuring that every stay at La Posh is as unique as our guests themselves.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Vision & Mission Section Side by Side */}
+        {/* Vision & Mission Section - Keep as is */}
         <section className="section-padding bg-gradient-to-b from-white to-gray-50 py-20">
           <div className="hotel-container">
             <div className="text-center mb-16">

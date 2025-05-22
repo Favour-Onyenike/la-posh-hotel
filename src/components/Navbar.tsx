@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import AdminLoginLink from "@/components/AdminLoginLink";
 
 const Navbar = () => {
   const location = useLocation();
@@ -85,6 +86,7 @@ const Navbar = () => {
 
           {/* Buttons on the right */}
           <div className="hidden md:flex items-center space-x-4">
+            <AdminLoginLink />
             <Button 
               className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white"
               variant="default"
@@ -120,9 +122,10 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <div className="px-4 py-3">
+              <div className="flex items-center justify-between px-4 py-3">
+                <AdminLoginLink />
                 <Button 
-                  className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white w-full"
+                  className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white"
                   onClick={handleNavClick}
                 >
                   Book Now
