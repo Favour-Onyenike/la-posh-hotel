@@ -34,7 +34,7 @@ const RoomPreview = ({ image, title, price, description }) => {
       <p className="text-hotel-gold font-medium mb-2">From ${price} per night</p>
       <p className="text-black mb-4">{description}</p>
       <button className="text-hotel-navy font-medium border-b-2 border-hotel-gold pb-1 hover:text-hotel-gold transition-colors">
-        View Details
+        Book Now
       </button>
     </div>
   );
@@ -154,19 +154,19 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <RoomPreview
               image="https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-              title="Deluxe Room"
+              title="Executive Room"
               price={199}
               description="Elegant room with king-size bed, city views, and modern amenities"
             />
             <RoomPreview
               image="https://images.unsplash.com/photo-1591088398332-8a7791972843?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-              title="Executive Suite"
+              title="Standard Suite"
               price={299}
               description="Spacious suite with separate living area and premium amenities"
             />
             <RoomPreview
               image="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-              title="Presidential Suite"
+              title="Mini Suite"
               price={499}
               description="Our finest accommodation with panoramic views and luxurious features"
             />
