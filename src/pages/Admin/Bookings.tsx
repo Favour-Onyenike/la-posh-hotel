@@ -58,7 +58,7 @@ const Bookings = () => {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isEditStatusDialogOpen, setIsEditStatusDialogOpen] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [selectedStatus, setSelectedStatus] = useState<Booking['status']>('pending');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [updating, setUpdating] = useState(false);
   const { toast } = useToast();
@@ -86,7 +86,13 @@ const Bookings = () => {
         throw error;
       }
 
-      setBookings(data || []);
+      // Cast the data to the Booking type since we know it conforms to our schema
+      const typedBookings = data.map(booking => ({
+        ...booking,
+        status: booking.status as Booking['status']
+      }));
+
+      setBookings(typedBookings);
     } catch (error) {
       console.error('Error fetching bookings:', error);
       toast({
