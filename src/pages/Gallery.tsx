@@ -19,7 +19,15 @@ const Gallery = () => {
     "/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png",
     "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png",
     "/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png",
-    "/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png"
+    "/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png",
+    // New images
+    "/lovable-uploads/8625d04c-54ec-4d6c-83b7-3a1081dac086.png",
+    "/lovable-uploads/c5b0e6f8-b1da-4fc2-ae09-35e930422a81.png",
+    "/lovable-uploads/4768b213-3554-45db-b44b-86f04c720eae.png",
+    "/lovable-uploads/7d3b8634-80e9-4dc1-ba22-be8f76121c97.png",
+    "/lovable-uploads/28419863-c4a4-4fb6-a14e-c864333d1966.png",
+    "/lovable-uploads/84758c2a-d279-4a63-ba5d-9df205cdec90.png",
+    "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png"
   ];
 
   // State to track the currently enlarged image
