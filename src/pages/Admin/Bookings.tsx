@@ -394,7 +394,10 @@ const Bookings = () => {
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
-              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+              <Select 
+                value={selectedStatus} 
+                onValueChange={(value: string) => setSelectedStatus(value as Booking['status'])}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
