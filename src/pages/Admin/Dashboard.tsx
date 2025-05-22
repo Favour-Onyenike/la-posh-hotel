@@ -59,6 +59,7 @@ const StatCard = ({ title, value, description, icon, trend, className }: StatCar
 
 const Dashboard = () => {
   const [totalRooms, setTotalRooms] = useState<number>(0);
+  const [totalSuites, setTotalSuites] = useState<number>(0);
   const [availableRooms, setAvailableRooms] = useState<number>(0);
   const [pendingBookings, setPendingBookings] = useState<number>(0);
   const [confirmedBookings, setConfirmedBookings] = useState<number>(0);
@@ -73,68 +74,102 @@ const Dashboard = () => {
       try {
         setLoading(true);
         
-        // Fetch total rooms
-        const { data: rooms } = await supabase
+        // Fetch rooms data
+        const { data: rooms, error: roomsError } = await supabase
           .from('rooms')
           .select('*');
         
-        setTotalRooms(rooms?.length || 0);
+        if (roomsError) {
+          console.error('Error fetching rooms:', roomsError);
+          return;
+        }
+        
+        // Count standard rooms and suites
+        const standardRooms = rooms?.filter(room => room.room_type === 'standard') || [];
+        const suites = rooms?.filter(room => room.room_type === 'suite') || [];
+        
+        setTotalRooms(standardRooms.length);
+        setTotalSuites(suites.length);
         
         // Get today's date
         const today = new Date();
         const todayString = format(today, 'yyyy-MM-dd');
         
         // Fetch active bookings to calculate available rooms
-        const { data: activeBookings } = await supabase
+        const { data: activeBookings, error: activeBookingsError } = await supabase
           .from('bookings')
           .select('*')
           .lte('check_in_date', todayString)
           .gte('check_out_date', todayString)
           .in('status', ['confirmed', 'checked_in']);
         
+        if (activeBookingsError) {
+          console.error('Error fetching active bookings:', activeBookingsError);
+        }
+        
         setAvailableRooms(Math.max(0, (rooms?.length || 0) - (activeBookings?.length || 0)));
         
         // Fetch pending bookings
-        const { data: pendingBookingsData } = await supabase
+        const { data: pendingBookingsData, error: pendingBookingsError } = await supabase
           .from('bookings')
           .select('*')
           .eq('status', 'pending');
         
+        if (pendingBookingsError) {
+          console.error('Error fetching pending bookings:', pendingBookingsError);
+        }
+        
         setPendingBookings(pendingBookingsData?.length || 0);
         
         // Fetch confirmed bookings
-        const { data: confirmedBookingsData } = await supabase
+        const { data: confirmedBookingsData, error: confirmedBookingsError } = await supabase
           .from('bookings')
           .select('*')
           .in('status', ['confirmed', 'checked_in']);
         
+        if (confirmedBookingsError) {
+          console.error('Error fetching confirmed bookings:', confirmedBookingsError);
+        }
+        
         setConfirmedBookings(confirmedBookingsData?.length || 0);
         
         // Calculate total revenue from all bookings
-        const { data: allBookings } = await supabase
+        const { data: allBookings, error: allBookingsError } = await supabase
           .from('bookings')
           .select('*');
         
+        if (allBookingsError) {
+          console.error('Error fetching all bookings:', allBookingsError);
+        }
+        
         const totalRevenue = (allBookings || []).reduce(
-          (sum: number, booking: Booking) => sum + Number(booking.total_price),
+          (sum: number, booking: Booking) => sum + Number(booking.total_price || 0),
           0
         );
         
         setRevenue(totalRevenue);
         
         // Fetch check-ins for today
-        const { data: todayCheckIns } = await supabase
+        const { data: todayCheckIns, error: todayCheckInsError } = await supabase
           .from('bookings')
           .select('*')
           .eq('check_in_date', todayString);
         
+        if (todayCheckInsError) {
+          console.error('Error fetching today check-ins:', todayCheckInsError);
+        }
+        
         setCheckInsToday(todayCheckIns?.length || 0);
         
         // Fetch check-outs for today
-        const { data: todayCheckOuts } = await supabase
+        const { data: todayCheckOuts, error: todayCheckOutsError } = await supabase
           .from('bookings')
           .select('*')
           .eq('check_out_date', todayString);
+        
+        if (todayCheckOutsError) {
+          console.error('Error fetching today check-outs:', todayCheckOutsError);
+        }
         
         setCheckOutsToday(todayCheckOuts?.length || 0);
         
@@ -146,14 +181,18 @@ const Dashboard = () => {
           const endDate = format(endOfMonth(month), 'yyyy-MM-dd');
           const monthName = format(month, 'MMM');
           
-          const { data: monthBookings } = await supabase
+          const { data: monthBookings, error: monthBookingsError } = await supabase
             .from('bookings')
             .select('*')
             .gte('check_in_date', startDate)
             .lte('check_in_date', endDate);
           
+          if (monthBookingsError) {
+            console.error('Error fetching month bookings:', monthBookingsError);
+          }
+          
           const monthRevenue = (monthBookings || []).reduce(
-            (sum: number, booking: Booking) => sum + Number(booking.total_price),
+            (sum: number, booking: Booking) => sum + Number(booking.total_price || 0),
             0
           );
           
@@ -186,14 +225,19 @@ const Dashboard = () => {
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <StatCard 
-            title="Total Rooms" 
+            title="Standard Rooms" 
             value={totalRooms}
+            icon={<Hotel size={20} />}
+          />
+          <StatCard 
+            title="Premium Suites" 
+            value={totalSuites}
             icon={<Hotel size={20} />}
           />
           <StatCard 
             title="Available Rooms" 
             value={availableRooms}
-            description={`${Math.round((availableRooms / totalRooms) * 100) || 0}% occupancy rate`}
+            description={`${Math.round(((totalRooms + totalSuites) > 0 ? (availableRooms / (totalRooms + totalSuites)) * 100 : 0) || 0)}% occupancy rate`}
             icon={<Hotel size={20} />}
           />
           <StatCard 
@@ -201,12 +245,6 @@ const Dashboard = () => {
             value={`$${revenue.toLocaleString()}`}
             icon={<DollarSign size={20} />}
             trend={12}
-          />
-          <StatCard 
-            title="Confirmed Bookings" 
-            value={confirmedBookings}
-            description={`${pendingBookings} pending reservations`}
-            icon={<CalendarDays size={20} />}
           />
         </div>
         
@@ -267,8 +305,8 @@ const Dashboard = () => {
                     <Users size={18} className="text-amber-700" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Total Guests</p>
-                    <p className="text-2xl font-bold">{confirmedBookings}</p>
+                    <p className="text-sm font-medium">Pending Bookings</p>
+                    <p className="text-2xl font-bold">{pendingBookings}</p>
                   </div>
                 </div>
                 
@@ -277,8 +315,8 @@ const Dashboard = () => {
                     <Star size={18} className="text-purple-700" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Occupancy Rate</p>
-                    <p className="text-2xl font-bold">{Math.round((confirmedBookings / totalRooms) * 100) || 0}%</p>
+                    <p className="text-sm font-medium">Confirmed Bookings</p>
+                    <p className="text-2xl font-bold">{confirmedBookings}</p>
                   </div>
                 </div>
               </div>
