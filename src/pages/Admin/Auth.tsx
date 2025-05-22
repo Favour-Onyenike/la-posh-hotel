@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Home, Shield, User, Key, LogIn } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -190,11 +190,13 @@ const Auth = () => {
                             <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                             <FormControl>
                               <Input
+                                placeholder="Enter your email"
                                 className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
                                 {...field}
                               />
                             </FormControl>
                           </div>
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -209,11 +211,13 @@ const Auth = () => {
                             <FormControl>
                               <Input
                                 type="password"
+                                placeholder="Enter your password"
                                 className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-amber-500"
                                 {...field}
                               />
                             </FormControl>
                           </div>
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
