@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -81,7 +80,7 @@ const Index = () => {
                 </Button>
               </Link>
             </div>
-            <div className="lg:w-1/2 flex flex-row gap-4 items-center justify-center">
+            <div className="hidden md:flex lg:w-1/2 flex-row gap-4 items-center justify-center">
               <img
                 src="/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png"
                 alt="Luxury Hotel Room"

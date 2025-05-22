@@ -6,7 +6,7 @@ import { Calendar, MapPin } from "lucide-react";
 
 const Hero = () => {
   return (
-    <div className="relative h-screen w-full">
+    <div className="relative h-[85vh] md:h-screen w-full">
       {/* Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center"
