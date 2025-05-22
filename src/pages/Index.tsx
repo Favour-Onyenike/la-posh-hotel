@@ -7,6 +7,7 @@ import CounterBar from "@/components/CounterBar";
 import { Star, Utensils, Wifi, Car, Clock, Glasses, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Feature = ({ icon: Icon, title, description }) => {
   return (
@@ -74,9 +75,11 @@ const Index = () => {
                 <hr className="w-12 border-t-2 border-hotel-gold mr-4" />
                 <span className="font-serif italic text-lg text-black">Experience the difference</span>
               </div>
-              <Button variant="hotel" size="lg">
-                Discover Our Story
-              </Button>
+              <Link to="/about">
+                <Button variant="hotel" size="lg">
+                  Discover Our Story
+                </Button>
+              </Link>
             </div>
             <div className="lg:w-1/2 flex flex-row gap-4 items-center justify-center">
               <img
@@ -247,9 +250,11 @@ const Index = () => {
               <Button variant="hotel" size="lg">
                 Book Your Stay
               </Button>
-              <Button variant="hotel" size="lg">
-                Contact Us
-              </Button>
+              <Link to="/contact">
+                <Button variant="hotel" size="lg">
+                  Contact Us
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

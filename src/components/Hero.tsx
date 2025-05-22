@@ -28,11 +28,11 @@ const Hero = () => {
             Discover a blend of exquisite amenities and personalized service at Luxe Haven
           </p>
           <div className="flex flex-row justify-start gap-4">
-            <Link to="/rooms" className="hotel-button">
+            <Link to="/gallery" className="hotel-button">
               Explore Rooms
             </Link>
             <Link
-              to="/book"
+              to="/contact"
               className="px-6 py-3 bg-transparent border-2 border-white text-white font-sans font-medium transition-all duration-300 hover:bg-white hover:text-hotel-navy"
             >
               Book Now
@@ -74,4 +74,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
