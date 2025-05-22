@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -43,13 +42,7 @@ const NavItem = ({ to, icon, label, onClick }: NavItemProps) => (
 const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { signOut, profile } = useAuth();
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/admin/auth');
-  };
-
+  
   const navItems = [
     { to: "/admin/dashboard", icon: <LayoutDashboard size={18} />, label: "Dashboard" },
     { to: "/admin/rooms", icon: <Hotel size={18} />, label: "Rooms & Suites" },
@@ -92,7 +85,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             variant="outline"
             size="sm"
             className="w-full justify-start gap-2"
-            onClick={handleSignOut}
+            onClick={signOut}
           >
             <LogOut size={16} />
             Sign Out
@@ -152,7 +145,10 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 variant="outline"
                 size="sm"
                 className="w-full justify-start gap-2"
-                onClick={handleSignOut}
+                onClick={() => {
+                  setOpen(false);
+                  signOut();
+                }}
               >
                 <LogOut size={16} />
                 Sign Out

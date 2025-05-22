@@ -4,6 +4,7 @@ import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { Profile } from '@/types/supabase';
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from 'react-router-dom';
 
 type AuthContextType = {
   session: Session | null;
@@ -22,6 +23,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+
+  // Note: useNavigate cannot be used directly in AuthProvider since it's not inside a Router
+  // Instead, we'll modify the signOut function in useAuth to handle navigation
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -87,6 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         title: "Logged out",
         description: "You have been successfully logged out",
       });
+      // Note: We can't use navigation directly here, will be handled in the useAuth hook
     } catch (error) {
       console.error('Error in signOut:', error);
       toast({
@@ -117,8 +122,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
+  const navigate = useNavigate();
+  
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  return context;
+  
+  // Override the original signOut function to include navigation
+  const signOutWithRedirect = async () => {
+    await context.signOut();
+    navigate('/');  // Redirect to homepage after signing out
+  };
+  
+  return {
+    ...context,
+    signOut: signOutWithRedirect
+  };
 };
