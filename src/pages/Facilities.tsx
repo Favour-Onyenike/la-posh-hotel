@@ -7,31 +7,31 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Star } from "lucide-react";
 
 const Facilities = () => {
-  // Updated facility items with removed spa, airport transfer, concierge service, and high-speed WiFi
+  // Updated facility items with more detailed descriptions
   const facilityItems = [
     {
       title: "Fine Dining Restaurant",
-      description: "Experience exquisite cuisine at our in-house restaurant offering a blend of local delicacies and international dishes prepared by our expert chefs.",
+      description: "Experience exquisite cuisine at our in-house restaurant offering a blend of local delicacies and international dishes prepared by our expert chefs. Our restaurant features an elegant ambiance with both indoor and outdoor seating options, a carefully curated wine list, and seasonal menus that showcase the freshest local ingredients. Whether you're enjoying a romantic dinner or hosting a business lunch, our attentive staff ensures an unforgettable dining experience.",
       imageSrc: "/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png"
     },
     {
       title: "Executive Suites",
-      description: "Spacious and elegantly furnished suites designed for ultimate comfort and relaxation.",
+      description: "Spacious and elegantly furnished suites designed for ultimate comfort and relaxation. Each suite features a separate living area, premium king-sized beds with luxury linens, a work desk with ergonomic chair, high-definition smart TVs, custom bathroom amenities, and complimentary high-speed WiFi. The thoughtful design incorporates both modern convenience and classic elegance, with soundproofed walls ensuring a peaceful atmosphere throughout your stay.",
       imageSrc: "/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png"
     },
     {
       title: "24/7 Power Supply",
-      description: "Uninterrupted power supply through our integrated system of solar inverters, state-of-the-art generators and a dedicated transformer.",
+      description: "Uninterrupted power supply through our integrated system of solar inverters, state-of-the-art generators and a dedicated transformer. Our eco-friendly power solution ensures that all hotel facilities operate seamlessly, with automatic switching between power sources that is virtually undetectable to guests. This reliable infrastructure powers everything from climate control systems to electronic door locks, providing peace of mind regardless of external power conditions.",
       imageSrc: "/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png"
     },
     {
       title: "Modern Fitness Center",
-      description: "Stay fit during your stay with our fully-equipped gym featuring cardio machines, weight training equipment, and personal training options.",
+      description: "Stay fit during your stay with our fully-equipped gym featuring cardio machines, weight training equipment, and personal training options. The fitness center includes the latest Technogym equipment, dedicated areas for stretching and functional training, complimentary towel service, purified water station, and personal TV screens on each cardio machine. Professional trainers are available by appointment for customized workout programs and fitness assessments.",
       imageSrc: "/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png"
     },
     {
       title: "Outdoor Recreation Area",
-      description: "Enjoy our outdoor seating area with various entertainment options including a professional pool table and other games for your leisure.",
+      description: "Enjoy our outdoor seating area with various entertainment options including a professional pool table and other games for your leisure. The beautifully landscaped space features comfortable lounge furniture, ambient lighting for evening relaxation, a covered gazebo area for shade during hot days, and multiple activity zones including table tennis and lawn chess. It's the perfect setting for casual gatherings or simply unwinding with a book from our reading collection.",
       imageSrc: "/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png"
     }
   ];
@@ -90,8 +90,8 @@ const Facilities = () => {
                   {/* For even items: image on left, text on right */}
                   {index % 2 === 0 ? (
                     <>
-                      <div className="bg-white p-0 overflow-hidden shadow-md">
-                        <AspectRatio ratio={4/3}>
+                      <div className="bg-white p-0 overflow-hidden shadow-md max-w-md mx-auto md:max-w-none">
+                        <AspectRatio ratio={16/9}>
                           <img 
                             src={item.imageSrc} 
                             alt={item.title} 
@@ -102,7 +102,7 @@ const Facilities = () => {
                       <div className="bg-white p-8 flex flex-col justify-center shadow-md">
                         <div className="border-l-4 border-hotel-gold pl-4">
                           <h3 className="text-2xl font-serif font-bold mb-4">{item.title}</h3>
-                          <p className="text-gray-700">{item.description}</p>
+                          <p className="text-gray-700 leading-relaxed">{item.description}</p>
                         </div>
                       </div>
                     </>
@@ -112,11 +112,11 @@ const Facilities = () => {
                       <div className="bg-white p-8 flex flex-col justify-center shadow-md">
                         <div className="border-l-4 border-hotel-gold pl-4">
                           <h3 className="text-2xl font-serif font-bold mb-4">{item.title}</h3>
-                          <p className="text-gray-700">{item.description}</p>
+                          <p className="text-gray-700 leading-relaxed">{item.description}</p>
                         </div>
                       </div>
-                      <div className="bg-white p-0 overflow-hidden shadow-md">
-                        <AspectRatio ratio={4/3}>
+                      <div className="bg-white p-0 overflow-hidden shadow-md max-w-md mx-auto md:max-w-none">
+                        <AspectRatio ratio={16/9}>
                           <img 
                             src={item.imageSrc} 
                             alt={item.title} 
