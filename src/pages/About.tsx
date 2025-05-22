@@ -95,22 +95,25 @@ const About = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
               {/* Vision Card */}
-              <Card className="shadow-lg border-hotel-gold/20 overflow-hidden hover:shadow-xl transition-all duration-300 hover:border-hotel-gold/50">
+              <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-hotel-gold/20 hover:shadow-xl transition-all duration-300">
                 <div className="h-2 bg-hotel-gold w-full"></div>
-                <CardHeader className="bg-white">
-                  <CardTitle className="hotel-subtitle text-black flex items-center">
-                    <Star className="text-hotel-gold mr-2" size={20} />
-                    OUR VISION
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                <div className="p-8">
+                  <div className="flex items-center mb-6">
+                    <div className="h-0.5 bg-hotel-gold w-8 mr-4"></div>
+                    <h3 className="hotel-subtitle text-black uppercase font-bold flex items-center">
+                      <Star className="text-hotel-gold mr-2" size={20} />
+                      OUR VISION
+                    </h3>
+                    <div className="h-0.5 bg-hotel-gold w-8 ml-4"></div>
+                  </div>
+                  
                   <div className="prose prose-lg max-w-none">
-                    <p className="mb-6 text-black">
+                    <p className="mb-6 text-black text-lg leading-relaxed">
                       At La Posh Signature Hotel & Suites, our vision is to become the premier luxury
                       destination in the hospitality industry, renowned for our exceptional service,
                       opulent amenities, and unparalleled guest experiences.
                     </p>
-                    <p className="mb-6 text-black">
+                    <p className="mb-6 text-black text-lg leading-relaxed">
                       We strive to create a haven of elegance and sophistication, where every guest
                       feels valued, pampered, and inspired.
                     </p>
@@ -130,21 +133,24 @@ const About = () => {
                       ))}
                     </ul>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
               {/* Mission Card */}
-              <Card className="shadow-lg border-hotel-gold/20 overflow-hidden hover:shadow-xl transition-all duration-300 hover:border-hotel-gold/50">
+              <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-hotel-gold/20 hover:shadow-xl transition-all duration-300">
                 <div className="h-2 bg-hotel-gold w-full"></div>
-                <CardHeader>
-                  <CardTitle className="hotel-subtitle text-black flex items-center">
-                    <Star className="text-hotel-gold mr-2" size={20} />
-                    OUR MISSION
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+                <div className="p-8">
+                  <div className="flex items-center mb-6">
+                    <div className="h-0.5 bg-hotel-gold w-8 mr-4"></div>
+                    <h3 className="hotel-subtitle text-black uppercase font-bold flex items-center">
+                      <Star className="text-hotel-gold mr-2" size={20} />
+                      OUR MISSION
+                    </h3>
+                    <div className="h-0.5 bg-hotel-gold w-8 ml-4"></div>
+                  </div>
+                  
                   <div className="prose prose-lg max-w-none">
-                    <p className="mb-6 text-black">
+                    <p className="mb-6 text-black text-lg leading-relaxed">
                       At La Posh Signature Hotel & Suites, our mission is to provide exceptional
                       hospitality experiences that exceed our guests' expectations, while fostering a
                       culture of excellence, innovation, and sustainability.
@@ -165,8 +171,8 @@ const About = () => {
                       ))}
                     </ul>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           </div>
         </section>
