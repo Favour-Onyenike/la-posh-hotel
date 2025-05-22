@@ -1,8 +1,8 @@
-
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
+import CounterBar from "@/components/CounterBar";
 import { Star, Utensils, Wifi, Car, Clock, Glasses, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -91,6 +91,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Counter Bar */}
+      <CounterBar />
 
       {/* Features Section */}
       <section className="section-padding bg-white">
