@@ -77,7 +77,7 @@ const Navbar = () => {
           {/* Buttons on the right */}
           <div className="hidden md:flex items-center space-x-4">
             <Button 
-              className="bg-hotel-gold hover:bg-hotel-gold/90 text-white"
+              className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white"
               variant="default"
             >
               Book Now
@@ -109,7 +109,7 @@ const Navbar = () => {
               ))}
               <div className="px-4 py-3">
                 <Button 
-                  className="bg-hotel-gold hover:bg-hotel-gold/90 text-white w-full"
+                  className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Book Now
