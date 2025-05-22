@@ -16,7 +16,6 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTo
 import { supabase } from '@/integrations/supabase/client';
 import { Booking, Room } from '@/types/supabase';
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
-import { Toggle } from '@/components/ui/toggle';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 
@@ -89,12 +88,16 @@ const Dashboard = () => {
           return;
         }
         
-        // Ensure all rooms have a valid availability_status property that matches our type
-        const typedRoomsData = (roomsData || []).map(room => ({
-          ...room,
-          // Force the availability_status to be one of the allowed values
-          availability_status: room.availability_status === 'available' ? 'available' : 'taken' 
-        } as Room));
+        // Transform rooms data to match the expected Room type
+        const typedRoomsData = (roomsData || []).map(room => {
+          // Ensure availability_status is strictly 'available' or 'taken'
+          const validStatus = room.availability_status === 'available' ? 'available' : 'taken';
+          
+          return {
+            ...room,
+            availability_status: validStatus
+          } as Room;
+        });
         
         // Store rooms for availability toggle functionality
         setRooms(typedRoomsData);
