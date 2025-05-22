@@ -170,27 +170,6 @@ const About = () => {
             </div>
           </div>
         </section>
-
-        {/* CTA Section */}
-        <section className="section-padding bg-hotel-navy text-white py-20">
-          <div className="hotel-container">
-            <div className="text-center max-w-3xl mx-auto">
-              <h2 className="hotel-title text-white mb-6">Experience La Posh</h2>
-              <p className="text-white opacity-90 mb-8 text-lg">
-                We invite you to experience the luxury and elegance of La Posh Signature Hotel & Suites.
-                Book your stay today and discover why we're the preferred choice for discerning travelers.
-              </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-6">
-                <Button variant="hotel" size="lg" className="text-base">
-                  Explore Our Rooms
-                </Button>
-                <Button variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-hotel-navy text-base">
-                  Contact Us
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
       <Footer />
     </>
