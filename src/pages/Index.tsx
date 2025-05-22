@@ -225,50 +225,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Location Section */}
-      <section className="section-padding bg-hotel-navy">
-        <div className="hotel-container">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-            <div className="lg:w-1/2">
-              <h2 className="hotel-title mb-6 text-white">
-                Prime Location in the City Center
-              </h2>
-              <p className="mb-6 text-white">
-                Located in the heart of the city, Luxe Haven provides easy access to major
-                attractions, business districts, and entertainment venues. Our prime location
-                makes us the ideal choice for both business and leisure travelers.
-              </p>
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start">
-                  <MapPin className="text-hotel-gold mt-1 mr-3" size={18} />
-                  <p className="text-white">123 Luxury Avenue, Downtown, City 10001</p>
-                </div>
-                <div className="flex items-start">
-                  <Clock className="text-hotel-gold mt-1 mr-3" size={18} />
-                  <div>
-                    <p className="text-white font-medium">Check-in / Check-out</p>
-                    <p className="text-white">3:00 PM / 12:00 PM</p>
-                  </div>
-                </div>
-              </div>
-              <button className="px-6 py-3 bg-white text-hotel-navy font-sans font-medium transition-all duration-300 hover:bg-hotel-gold hover:text-white">
-                Get Directions
-              </button>
-            </div>
-            <div className="lg:w-1/2 h-80 lg:h-96">
-              <div className="w-full h-full rounded-lg overflow-hidden">
-                {/* This would typically be a map, but we're using a placeholder image */}
-                <img
-                  src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Hotel Location Map"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="section-padding bg-hotel-beige">
         <div className="hotel-container">
