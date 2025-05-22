@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Home } from "lucide-react";
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -89,7 +89,7 @@ const Auth = () => {
                 />
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-col space-y-4">
               <Button 
                 type="submit" 
                 className="w-full"
@@ -104,6 +104,16 @@ const Auth = () => {
                   'Sign In'
                 )}
               </Button>
+              <Link to="/" className="w-full">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  className="w-full"
+                >
+                  <Home className="mr-2 h-4 w-4" />
+                  Back to Home
+                </Button>
+              </Link>
             </CardFooter>
           </form>
         </Card>
