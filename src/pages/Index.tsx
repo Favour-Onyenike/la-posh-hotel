@@ -154,19 +154,19 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <RoomPreview
-              image="https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+              image="/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png"
               title="Executive Room"
               price={40000}
               description="Elegant room with king-size bed, city views, and modern amenities"
             />
             <RoomPreview
-              image="https://images.unsplash.com/photo-1591088398332-8a7791972843?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+              image="/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png"
               title="Standard Suite"
               price={80000}
               description="Spacious suite with separate living area and premium amenities"
             />
             <RoomPreview
-              image="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+              image="/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png"
               title="Mini Suite"
               price={45000}
               description="Our finest accommodation with panoramic views and luxurious features"
