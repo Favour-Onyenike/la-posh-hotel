@@ -95,7 +95,7 @@ const roomCategories = [
     maxGuests: 2,
     bedType: "King",
     size: "34 sq.m",
-    features: ["Turn-down Service", "24-hour Room Service", "Digital Safe", "Work Desk", "Gym Access"]
+    features: ["Turn-down Service", "24-hour Room Service", "Digital Safe", "Work Desk", "Mini Gym Access"]
   },
   {
     type: "Room",
@@ -109,7 +109,7 @@ const roomCategories = [
     maxGuests: 2,
     bedType: "King",
     size: "36 sq.m",
-    features: ["Turn-down Service", "24-hour Room Service", "Electronic Safe", "Executive Work Desk", "Gym Access"]
+    features: ["Turn-down Service", "24-hour Room Service", "Electronic Safe", "Executive Work Desk", "Mini Gym Access"]
   },
   {
     type: "Room",
@@ -325,7 +325,7 @@ const Rooms = () => {
                   Our Amber and Emerald rooms include additional amenities:
                 </p>
                 <div className="flex flex-wrap justify-center gap-4 max-w-2xl mx-auto">
-                  <Badge variant="outline" className="bg-gray-50 px-3 py-1">Gym Access</Badge>
+                  <Badge variant="outline" className="bg-gray-50 px-3 py-1">Mini Gym Access</Badge>
                   <Badge variant="outline" className="bg-gray-50 px-3 py-1">Mini Refrigerator (Emerald only)</Badge>
                 </div>
               </div>

@@ -42,7 +42,7 @@ const suiteCategories = [
     maxGuests: 2,
     bedType: "King",
     size: "70 sq.m",
-    features: ["Dedicated Butler Service", "Private Dining Options", "Electronic Safe", "Executive Work Area", "Separate Sitting Area", "Gym Access", "Refrigerator", "Evening Turndown Service"]
+    features: ["Dedicated Butler Service", "Private Dining Options", "Electronic Safe", "Executive Work Area", "Separate Sitting Area", "Mini Gym Access", "Refrigerator", "Evening Turndown Service"]
   },
   {
     type: "Suite",
@@ -56,7 +56,7 @@ const suiteCategories = [
     maxGuests: 2,
     bedType: "King",
     size: "65 sq.m",
-    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
+    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Sitting Area", "Mini Gym Access", "Refrigerator", "Complimentary Breakfast"]
   },
   {
     type: "Suite",
@@ -70,7 +70,7 @@ const suiteCategories = [
     maxGuests: 2,
     bedType: "King",
     size: "45 sq.m",
-    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
+    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Sitting Area", "Mini Gym Access", "Refrigerator", "Complimentary Breakfast"]
   },
   {
     type: "Suite",
@@ -84,7 +84,7 @@ const suiteCategories = [
     maxGuests: 2,
     bedType: "King",
     size: "60 sq.m",
-    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
+    features: ["Butler Service on Request", "In-Suite Dining", "Electronic Safe", "Work Area", "Separate Sitting Area", "Mini Gym Access", "Refrigerator", "Complimentary Breakfast"]
   },
   {
     type: "Suite",
@@ -98,7 +98,7 @@ const suiteCategories = [
     maxGuests: 2,
     bedType: "Emperor King",
     size: "85 sq.m",
-    features: ["Dedicated 24/7 Butler Service", "Private Chef Available", "Electronic Safe", "Executive Office Area", "Luxurious Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast and Evening Canapés"]
+    features: ["Dedicated 24/7 Butler Service", "Private Chef Available", "Electronic Safe", "Executive Office Area", "Luxurious Sitting Area", "Mini Gym Access", "Refrigerator", "Complimentary Breakfast and Evening Canapés"]
   },
   {
     type: "Suite",
@@ -112,7 +112,7 @@ const suiteCategories = [
     maxGuests: 2,
     bedType: "Two Queen Beds",
     size: "55 sq.m",
-    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Separate Sitting Area", "Gym Access", "Refrigerator", "Complimentary Breakfast"]
+    features: ["24-hour Room Service", "Electronic Safe", "Work Desk", "Separate Sitting Area", "Mini Gym Access", "Refrigerator", "Complimentary Breakfast"]
   }
 ];
 
@@ -303,7 +303,7 @@ const Suites = () => {
                   <CardContent className="flex items-start gap-4 p-6">
                     <Dumbbell className="text-hotel-gold" />
                     <div>
-                      <h3 className="font-medium mb-1">Gym Access</h3>
+                      <h3 className="font-medium mb-1">Mini Gym Access</h3>
                       <p className="text-sm text-gray-600">Complimentary access to our premium fitness center</p>
                     </div>
                   </CardContent>
