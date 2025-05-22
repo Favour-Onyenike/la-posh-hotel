@@ -25,6 +25,11 @@ const Navbar = () => {
     };
   }, []);
 
+  const handleNavClick = () => {
+    window.scrollTo(0, 0);
+    setIsMenuOpen(false);
+  };
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -51,7 +56,7 @@ const Navbar = () => {
       <div className="hotel-container">
         <div className="flex items-center justify-between">
           {/* Logo on the left */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center" onClick={handleNavClick}>
             <img 
               src="/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png" 
               alt="LA POSH Signature Suites" 
@@ -70,6 +75,7 @@ const Navbar = () => {
                     "font-medium transition-colors duration-300 text-black hover:text-hotel-gold",
                     location.pathname === link.href && "border-b-2 border-hotel-gold"
                   )}
+                  onClick={handleNavClick}
                 >
                   {link.name}
                 </Link>
@@ -82,6 +88,7 @@ const Navbar = () => {
             <Button 
               className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white"
               variant="default"
+              onClick={handleNavClick}
             >
               Book Now
             </Button>
@@ -108,7 +115,7 @@ const Navbar = () => {
                     "py-3 px-4 text-black font-medium hover:text-hotel-gold",
                     location.pathname === link.href && "border-l-4 border-hotel-gold"
                   )}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={handleNavClick}
                 >
                   {link.name}
                 </Link>
@@ -116,7 +123,7 @@ const Navbar = () => {
               <div className="px-4 py-3">
                 <Button 
                   className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white w-full"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={handleNavClick}
                 >
                   Book Now
                 </Button>

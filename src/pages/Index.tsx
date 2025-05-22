@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -42,6 +43,10 @@ const RoomPreview = ({ image, title, price, description, currency = "₦" }) => 
 };
 
 const Index = () => {
+  const handleNavClick = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <Navbar />
@@ -74,7 +79,7 @@ const Index = () => {
                 <hr className="w-12 border-t-2 border-hotel-gold mr-4" />
                 <span className="font-serif italic text-lg text-black">Experience the difference</span>
               </div>
-              <Link to="/about">
+              <Link to="/about" onClick={handleNavClick}>
                 <Button variant="hotel" size="lg">
                   Discover Our Story
                 </Button>
@@ -246,10 +251,10 @@ const Index = () => {
               exceptional service and unparalleled comfort.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button variant="hotel" size="lg">
+              <Button variant="hotel" size="lg" onClick={handleNavClick}>
                 Book Your Stay
               </Button>
-              <Link to="/contact">
+              <Link to="/contact" onClick={handleNavClick}>
                 <Button variant="hotel" size="lg">
                   Contact Us
                 </Button>
