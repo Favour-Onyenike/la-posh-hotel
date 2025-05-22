@@ -4,7 +4,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Wifi, Utensils, ConciergeBell, ShowerHead, Hotel, Car, Clock, Map, Coffee } from "lucide-react";
+import { Wifi, Utensils, ConciergeBell, ShowerHead, Hotel, Car, Clock, Map, Coffee, Star, Sparkles } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const Facilities = () => {
   // Facility items with icons and descriptions
@@ -63,6 +64,13 @@ const Facilities = () => {
               <p className="text-xl md:text-2xl text-white">
                 Luxury amenities for an unforgettable stay
               </p>
+              <div className="flex justify-center gap-2 mt-8">
+                <Star className="text-hotel-gold" size={24} />
+                <Star className="text-hotel-gold" size={24} />
+                <Star className="text-hotel-gold" size={24} />
+                <Star className="text-hotel-gold" size={24} />
+                <Star className="text-hotel-gold" size={24} />
+              </div>
             </div>
           </div>
         </section>
@@ -71,10 +79,13 @@ const Facilities = () => {
         <section className="section-padding bg-white py-20">
           <div className="hotel-container">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center mb-8">
-                <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
-                <h2 className="hotel-subtitle text-black text-3xl uppercase font-bold">WORLD-CLASS AMENITIES</h2>
-                <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
+              <div className="text-center mb-16">
+                <Sparkles className="text-hotel-gold mx-auto mb-4" size={32} />
+                <h2 className="hotel-title text-black mb-4">WORLD-CLASS AMENITIES</h2>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  Experience the height of luxury and convenience
+                </p>
+                <div className="h-1 w-24 bg-hotel-gold mx-auto mt-6"></div>
               </div>
               
               <div className="prose prose-lg max-w-none text-center mb-12">
@@ -127,12 +138,13 @@ const Facilities = () => {
         {/* Services Section */}
         <section className="section-padding bg-white py-20">
           <div className="hotel-container">
-            <div className="max-w-4xl mx-auto mb-12">
-              <div className="flex items-center mb-8 justify-center">
-                <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
-                <h2 className="hotel-subtitle text-black text-3xl uppercase font-bold">ADDITIONAL SERVICES</h2>
-                <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
-              </div>
+            <div className="text-center mb-16">
+              <Star className="text-hotel-gold mx-auto mb-4" size={32} />
+              <h2 className="hotel-title text-black mb-4">ADDITIONAL SERVICES</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Enhancing your experience with premium offerings
+              </p>
+              <div className="h-1 w-24 bg-hotel-gold mx-auto mt-6"></div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
