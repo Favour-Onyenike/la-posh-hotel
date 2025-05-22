@@ -40,10 +40,10 @@ const Navbar = () => {
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white",
         isScrolled
-          ? "bg-white shadow-md py-2"
-          : "bg-transparent py-4"
+          ? "shadow-md py-2"
+          : "py-4"
       )}
     >
       <div className="hotel-container">
@@ -65,8 +65,7 @@ const Navbar = () => {
                   key={link.name}
                   to={link.href}
                   className={cn(
-                    "font-medium transition-colors duration-300 hover:text-hotel-gold",
-                    isScrolled ? "text-hotel-navy" : "text-white"
+                    "font-medium transition-colors duration-300 hover:text-hotel-gold text-hotel-navy"
                   )}
                 >
                   {link.name}
@@ -87,10 +86,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className={cn(
-              "md:hidden p-2 focus:outline-none",
-              isScrolled ? "text-hotel-navy" : "text-white"
-            )}
+            className="md:hidden p-2 focus:outline-none text-hotel-navy"
             onClick={toggleMenu}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
