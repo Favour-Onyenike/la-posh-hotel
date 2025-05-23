@@ -40,7 +40,8 @@ const Hero = () => {
           </p>
           <div className="flex flex-row justify-start gap-4">
             <Button
-              className="px-6 py-3 bg-transparent border-2 border-white text-white font-sans font-medium transition-all duration-300 hover:bg-white hover:text-hotel-navy"
+              variant="hotel"
+              size="lg"
               onClick={handleExploreRooms}
             >
               Explore Rooms
