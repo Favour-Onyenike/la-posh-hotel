@@ -38,7 +38,7 @@ const Hero = () => {
           <p className="hotel-subtitle mb-8 opacity-90 text-xl md:text-2xl text-white">
             we are focused on providing clients with the highest level of comfort and excellent at affordable rates
           </p>
-          <div className="flex flex-row justify-start gap-4">
+          <div className="flex flex-wrap justify-start gap-4">
             <Button
               variant="hotel" 
               size="lg"

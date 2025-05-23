@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import Rooms from "./pages/Rooms";
 import Suites from "./pages/Suites";
 import Booking from "./pages/Booking";
+import AddReview from "./pages/AddReview";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Admin/Dashboard";
 import AdminRooms from "./pages/Admin/Rooms";
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/rooms" element={<Rooms />} />
             <Route path="/suites" element={<Suites />} />
             <Route path="/booking" element={<Booking />} />
+            <Route path="/add-review" element={<AddReview />} />
             
             {/* Admin Auth Redirect - directly to dashboard since we removed auth */}
             <Route path="/admin/auth" element={<Navigate to="/admin/dashboard" replace />} />

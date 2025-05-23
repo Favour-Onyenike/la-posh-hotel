@@ -1,9 +1,9 @@
-
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import CounterBar from "@/components/CounterBar";
+import RecentReviews from "@/components/RecentReviews";
 import { Star, Utensils, Wifi, Car, Clock, Glasses, MapPin, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -192,7 +192,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Testimonials - Updated to display real reviews */}
       <section className="relative section-padding">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed opacity-20"
@@ -209,38 +209,14 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white p-8 rounded-lg shadow-md">
-                <div className="flex text-hotel-gold mb-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} size={16} fill="currentColor" />
-                  ))}
-                </div>
-                <p className="text-black mb-6">
-                  "An exceptional experience from start to finish. The staff was attentive,
-                  the room was immaculate, and the amenities were top-notch. Will definitely return."
-                </p>
-                <div className="flex items-center">
-                  <div
-                    className="w-12 h-12 rounded-full bg-cover bg-center mr-4"
-                    style={{
-                      backgroundImage: `url(https://randomuser.me/api/portraits/${i % 2 === 0 ? "women" : "men"}/${i + 20}.jpg)`,
-                    }}
-                  />
-                  <div>
-                    <h4 className="font-semibold text-black">John Doe</h4>
-                    <p className="text-black text-sm">Business Traveler</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <RecentReviews />
           
           <div className="flex justify-center mt-10">
-            <Button variant="hotel" size="lg">
-              Add Your Review
-            </Button>
+            <Link to="/add-review">
+              <Button variant="hotel" size="lg">
+                Add Your Review
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
