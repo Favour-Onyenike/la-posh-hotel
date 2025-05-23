@@ -40,7 +40,7 @@ const Hero = () => {
             Welcome to La-posh Signature Suites
           </h1>
           <p className="hotel-subtitle mb-8 opacity-90 text-xl md:text-2xl text-white">
-            we are focused on providing clients with the highest level of comfort and excellent at affordable rates
+            we are focused on providing clients with the highest level of comfort and excellence at affordable rates
           </p>
           <div className="flex flex-wrap justify-start gap-4">
             <Button
@@ -56,13 +56,7 @@ const Hero = () => {
             >
               Book Now
             </Button>
-            <Button
-              variant="hotel"
-              size="lg"
-              onClick={handleAddReview}
-            >
-              Share Review
-            </Button>
+            
           </div>
         </div>
       </div>
@@ -74,20 +68,20 @@ const Hero = () => {
             <Calendar className="text-hotel-gold mr-4" size={24} />
             <div>
               <h3 className="font-semibold text-hotel-navy">Check-in / Check-out</h3>
-              <p className="text-gray-600 text-sm">Select your dates</p>
+              <p className="text-gray-600 text-sm">select your dates</p>
             </div>
           </div>
           <div className="p-6 flex items-center border-b md:border-b-0 md:border-r border-gray-200">
             <MapPin className="text-hotel-gold mr-4" size={24} />
             <div>
               <h3 className="font-semibold text-hotel-navy">Destination</h3>
-              <p className="text-gray-600 text-sm">Luxe Haven Hotel</p>
+              <p className="text-gray-600 text-sm">La-posh signature suites</p>
             </div>
           </div>
           <div className="p-6 flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-hotel-navy">Special Offers</h3>
-              <p className="text-gray-600 text-sm">View current promotions</p>
+              <h3 className="font-semibold text-hotel-navy">Book your stay</h3>
+              <p className="text-gray-600 text-sm">luxury experiencer</p>
             </div>
             <button className="text-hotel-gold font-medium hover:text-hotel-navy transition-colors"
               onClick={handleBookNow}>
