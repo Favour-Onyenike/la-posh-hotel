@@ -27,7 +27,11 @@ const Gallery = () => {
     "/lovable-uploads/7d3b8634-80e9-4dc1-ba22-be8f76121c97.png",
     "/lovable-uploads/28419863-c4a4-4fb6-a14e-c864333d1966.png",
     "/lovable-uploads/84758c2a-d279-4a63-ba5d-9df205cdec90.png",
-    "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png"
+    "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png",
+    // Additional newly uploaded images
+    "/lovable-uploads/617a21f8-9201-46a3-9e35-b4eb1aa09b55.png",
+    "/lovable-uploads/facdb1e7-195d-4081-8bd0-04bb731ba3ab.png",
+    "/lovable-uploads/442a4b2f-8a6f-4bd7-9c4d-a0a37dfb8260.png"
   ];
 
   // State to track the currently enlarged image

@@ -17,7 +17,7 @@ const Hero = () => {
   };
   
   return (
-    <div className="relative h-[90vh] md:h-screen w-full">
+    <div className="relative h-[95vh] md:h-screen w-full">
       {/* Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -40,7 +40,7 @@ const Hero = () => {
           </p>
           <div className="flex flex-row justify-start gap-4">
             <Button
-              variant="hotel"
+              variant="hotel" 
               size="lg"
               onClick={handleExploreRooms}
             >

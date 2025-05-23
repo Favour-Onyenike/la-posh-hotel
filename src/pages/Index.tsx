@@ -52,18 +52,18 @@ const Index = () => {
       <Navbar />
       <Hero />
 
-      {/* About Section - Updated to match the About page style */}
+      {/* About Section - Updated to center align on mobile */}
       <section className="section-padding bg-white py-20 mt-24">
         <div className="hotel-container">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center mb-8">
+            <div className="flex items-center justify-center mb-8">
               <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
               <h2 className="hotel-subtitle text-black text-3xl uppercase font-bold">OUR STORY</h2>
               <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              <div className="prose prose-lg max-w-none">
+              <div className="prose prose-lg max-w-none text-center md:text-left">
                 <p className="mb-6 text-black text-lg leading-relaxed">
                   Welcome to La Posh Signature Hotel & Suites, where luxury meets elegance and
                   sophistication. Located in the heart of the Abraka Town, our hotel offers an
@@ -79,15 +79,15 @@ const Index = () => {
               </div>
               <div className="rounded-lg overflow-hidden shadow-xl border-2 border-hotel-gold/20 hover:shadow-2xl transition-all duration-300 hover-scale h-[300px]">
                 <img 
-                  src="/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png" 
-                  alt="Hotel Luxury Experience" 
+                  src="/lovable-uploads/442a4b2f-8a6f-4bd7-9c4d-a0a37dfb8260.png" 
+                  alt="Hotel Exterior" 
                   className="w-full h-full object-cover"
                 />
               </div>
             </div>
             
             <div className="bg-hotel-beige p-8 rounded-lg shadow-md border-l-4 border-hotel-gold mb-8">
-              <p className="text-black text-lg italic">
+              <p className="text-black text-lg italic text-center">
                 "Whether you're a discerning business traveler, a romantic couple, or a family
                 on vacation, we invite you to experience the La Posh difference. Let us pamper
                 you with our signature blend of luxury, comfort, and genuine hospitality."
