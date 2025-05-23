@@ -15,6 +15,10 @@ const Hero = () => {
   const handleBookNow = () => {
     navigate('/booking');
   };
+
+  const handleAddReview = () => {
+    navigate('/add-review');
+  };
   
   return (
     <div className="relative h-[95vh] md:h-screen w-full">
@@ -51,6 +55,13 @@ const Hero = () => {
               onClick={handleBookNow}
             >
               Book Now
+            </Button>
+            <Button
+              variant="hotel"
+              size="lg"
+              onClick={handleAddReview}
+            >
+              Share Review
             </Button>
           </div>
         </div>

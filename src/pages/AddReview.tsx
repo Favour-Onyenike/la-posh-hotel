@@ -8,7 +8,7 @@ const AddReview = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-hotel-beige min-h-screen py-20">
+      <div className="bg-hotel-beige min-h-screen pt-32 pb-20">
         <div className="container mx-auto px-4 max-w-3xl">
           <h1 className="text-4xl font-serif text-center mb-8">Share Your Experience</h1>
           <p className="text-center mb-12 max-w-2xl mx-auto">
