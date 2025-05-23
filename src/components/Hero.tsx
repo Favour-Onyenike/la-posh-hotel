@@ -69,6 +69,10 @@ const Hero = () => {
             <div>
               <h3 className="font-semibold text-hotel-navy">Check-in / Check-out</h3>
               <p className="text-gray-600 text-sm">select your dates</p>
+              <button className="text-hotel-gold font-medium hover:text-hotel-navy transition-colors"
+              onClick={handleBookNow}>
+              select your dates
+            </button>
             </div>
           </div>
           <div className="p-6 flex items-center border-b md:border-b-0 md:border-r border-gray-200">
