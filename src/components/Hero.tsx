@@ -17,7 +17,7 @@ const Hero = () => {
   };
   
   return (
-    <div className="relative h-[85vh] md:h-screen w-full">
+    <div className="relative h-[90vh] md:h-screen w-full">
       {/* Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -39,8 +39,8 @@ const Hero = () => {
             we are focused on providing clients with the highest level of comfort and excellent at affordable rates
           </p>
           <div className="flex flex-row justify-start gap-4">
-            <Button 
-              className="hotel-button" 
+            <Button
+              className="px-6 py-3 bg-transparent border-2 border-white text-white font-sans font-medium transition-all duration-300 hover:bg-white hover:text-hotel-navy"
               onClick={handleExploreRooms}
             >
               Explore Rooms
