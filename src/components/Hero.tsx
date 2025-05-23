@@ -68,7 +68,7 @@ const Hero = () => {
             <Calendar className="text-hotel-gold mr-4" size={24} />
             <div>
               <h3 className="font-semibold text-hotel-navy">Check-in / Check-out</h3>
-              <p className="text-gray-600 text-sm">select your dates</p>
+             
               <button className="text-hotel-gold font-medium hover:text-hotel-navy transition-colors"
               onClick={handleBookNow}>
               select your dates
@@ -84,8 +84,8 @@ const Hero = () => {
           </div>
           <div className="p-6 flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-hotel-navy">Book your stay</h3>
-              <p className="text-gray-600 text-sm">luxury experiencer</p>
+              <h3 className="font-semibold text-hotel-navy">Book Your Stay Now</h3>
+              
             </div>
             <button className="text-hotel-gold font-medium hover:text-hotel-navy transition-colors"
               onClick={handleBookNow}>
