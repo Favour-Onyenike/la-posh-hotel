@@ -52,9 +52,7 @@ const RecentReviews: React.FC = () => {
     return (
       <div className="text-center p-8">
         <p className="text-lg text-gray-600 mb-6">No reviews available yet. Be the first to share your experience!</p>
-        <Link to="/add-review">
-          <Button variant="hotel">Write a Review</Button>
-        </Link>
+        
       </div>
     );
   }
