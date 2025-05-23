@@ -33,10 +33,10 @@ const Hero = () => {
       <div className="relative h-full flex flex-col justify-center px-4">
         <div className="max-w-4xl animate-fade-in ml-8 md:ml-16 lg:ml-24 text-left">
           <h1 className="hotel-title mb-4 text-5xl md:text-6xl lg:text-7xl tracking-tight text-white">
-            Experience Luxury & Comfort
+            Welcome to La-posh Signature Suites
           </h1>
           <p className="hotel-subtitle mb-8 opacity-90 text-xl md:text-2xl text-white">
-            Discover a blend of exquisite amenities and personalized service at Luxe Haven
+            we are focused on providing clients with the highest level of comfort and excellent at affordable rates
           </p>
           <div className="flex flex-row justify-start gap-4">
             <Button 
