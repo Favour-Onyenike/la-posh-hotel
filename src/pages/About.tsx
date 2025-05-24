@@ -35,66 +35,34 @@ const About = () => {
           </div>
         </section>
 
-        {/* About Us Content - Updated with new design */}
+        {/* About Us Content - Updated with new text */}
         <section className="section-padding bg-white py-20">
           <div className="hotel-container">
             <div className="text-center mb-16">
               <Sparkles className="text-hotel-gold mx-auto mb-4" size={32} />
-              <h2 className="hotel-title text-black mb-4">Our Journey</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                From humble beginnings to becoming a premier destination for luxury accommodation
-              </p>
+              <h2 className="hotel-title text-black mb-4">About La Posh</h2>
               <div className="h-1 w-24 bg-hotel-gold mx-auto mt-6"></div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="bg-hotel-beige/30">
-                  <div className="flex items-center">
-                    <History className="text-hotel-gold mr-3" />
-                    <CardTitle>Our Beginning</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <p className="text-black">
-                    La Posh Signature Hotel & Suites was founded in 2015 with a vision to create an oasis of luxury 
-                    and comfort in the heart of Abraka Town. What started as a small boutique hotel has grown into 
-                    a premier destination for discerning travelers seeking exceptional service and accommodations.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="bg-hotel-beige/30">
-                  <div className="flex items-center">
-                    <Award className="text-hotel-gold mr-3" />
-                    <CardTitle>Our Achievement</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <p className="text-black">
-                    Over the years, La Posh has earned numerous accolades and recognition for our commitment 
-                    to excellence. We've been awarded the prestigious 5-star rating and have consistently ranked 
-                    among the top luxury hotels in the region, reflecting our dedication to exceptional hospitality.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader className="bg-hotel-beige/30">
-                  <div className="flex items-center">
-                    <Target className="text-hotel-gold mr-3" />
-                    <CardTitle>Our Future</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <p className="text-black">
-                    Looking ahead, we are committed to continuous improvement and innovation. Our plans include 
-                    expanding our facilities, enhancing our sustainability practices, and introducing new services 
-                    to further elevate the guest experience while maintaining our signature blend of luxury and comfort.
-                  </p>
-                </CardContent>
-              </Card>
+            <div className="max-w-4xl mx-auto text-center mb-20">
+              <div className="prose prose-lg max-w-none">
+                <p className="mb-6 text-black text-lg leading-relaxed">
+                  Welcome to La Posh Signature Hotel & Suites, where luxury meets elegance and 
+                  sophistication. Located in the heart of the Abraka Town, our hotel offers an 
+                  unparalleled hospitality experience, blending modern amenities with timeless charm.
+                </p>
+                <p className="mb-6 text-black text-lg leading-relaxed">
+                  Our story began with a passion for creating unforgettable experiences, and a 
+                  commitment to excellence in every detail. From our lavish rooms and suites, to 
+                  our world-class dining and entertainment options, every aspect of our hotel is 
+                  designed to exceed your expectations.
+                </p>
+                <p className="mb-6 text-black text-lg leading-relaxed">
+                  Whether you're a discerning business traveler, a romantic couple, or a family 
+                  on vacation, we invite you to experience the La Posh difference. Let us pamper 
+                  you with our signature blend of luxury, comfort, and genuine hospitality.
+                </p>
+              </div>
             </div>
             
             <div className="mt-20">
