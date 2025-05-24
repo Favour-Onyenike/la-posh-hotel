@@ -56,9 +56,16 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {/* Desktop Sidebar */}
       <aside className="hidden w-64 flex-col border-r bg-card lg:flex">
         <div className="p-6">
-          <Link to="/admin/dashboard" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-primary">La Posh</span>
-            <span className="text-sm font-medium">Admin</span>
+          <Link to="/admin/dashboard" className="flex items-center gap-3">
+            <img 
+              src="/lovable-uploads/442a4b2f-8a6f-4bd7-9c4d-a0a37dfb8260.png" 
+              alt="La Posh Logo" 
+              className="h-10 w-auto"
+            />
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-primary">La Posh</span>
+              <span className="text-xs font-medium text-muted-foreground">Admin Panel</span>
+            </div>
           </Link>
         </div>
         <nav className="flex-1 space-y-1 px-3">
@@ -107,9 +114,16 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <SheetContent side="left" className="w-64 p-0">
           <div className="flex h-full flex-col">
             <div className="flex items-center justify-between p-6">
-              <Link to="/admin/dashboard" className="flex items-center gap-2">
-                <span className="text-xl font-bold text-primary">La Posh</span>
-                <span className="text-sm font-medium">Admin</span>
+              <Link to="/admin/dashboard" className="flex items-center gap-3">
+                <img 
+                  src="/lovable-uploads/442a4b2f-8a6f-4bd7-9c4d-a0a37dfb8260.png" 
+                  alt="La Posh Logo" 
+                  className="h-8 w-auto"
+                />
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold text-primary">La Posh</span>
+                  <span className="text-xs font-medium text-muted-foreground">Admin Panel</span>
+                </div>
               </Link>
               <Button
                 variant="ghost"
