@@ -14,7 +14,7 @@ const About = () => {
       <div className="pt-24 md:pt-28 lg:pt-32 pb-16">
         {/* Hero Section with Background Image */}
         <section 
-          className="py-24 md:py-32 lg:py-40 bg-cover bg-center relative overflow-hidden"
+          className="py-32 md:py-40 lg:py-48 bg-cover bg-center relative overflow-hidden"
           style={{ backgroundImage: "url('/lovable-uploads/e9be561a-1ed6-476f-aab8-fd04aaef0620.png')" }}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
