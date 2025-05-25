@@ -62,7 +62,7 @@ const Hero = () => {
       </div>
 
       {/* Booking Banner */}
-      <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 w-full max-w-5xl">
+      <div className="absolute -bottom-24 md:-bottom-16 left-1/2 transform -translate-x-1/2 w-full max-w-5xl">
         <div className="mx-4 md:mx-6 bg-white rounded-lg shadow-xl grid grid-cols-1 md:grid-cols-3 overflow-hidden">
           <div className="p-6 flex items-center border-b md:border-b-0 md:border-r border-gray-200">
             <Calendar className="text-hotel-gold mr-4" size={24} />
