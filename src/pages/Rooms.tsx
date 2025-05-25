@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -25,154 +25,54 @@ import {
   Utensils
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
+import { Room } from "@/types/supabase";
 
-// Room classifications data
-const roomCategories = [
-  {
-    type: "Room",
-    name: "Opal",
-    count: 2,
-    image: "/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png",
-    description: "Comfortable rooms offering essential amenities with elegant designs.",
-    price: 35000,
-    roomNumbers: ["Opal 01", "Opal 02"],
-    amenities: ["Free Wi-Fi", "TV", "Private Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Queen",
-    size: "24 sq.m",
-    features: ["Daily Housekeeping", "Room Service Available", "In-room Safe"]
-  },
-  {
-    type: "Room",
-    name: "Topaz",
-    count: 3,
-    image: "/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png",
-    description: "Spacious rooms with enhanced comfort and modern furnishings.",
-    price: 40000,
-    roomNumbers: ["Topaz 01", "Topaz 02", "Topaz 03"],
-    amenities: ["High-Speed Wi-Fi", "43\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Queen",
-    size: "28 sq.m",
-    features: ["Daily Housekeeping", "24-hour Room Service", "In-room Safe", "Work Desk"]
-  },
-  {
-    type: "Room",
-    name: "Onyx",
-    count: 5,
-    image: "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png",
-    description: "Elegant rooms featuring premium amenities and sophisticated decor.",
-    price: 45000,
-    roomNumbers: ["Onyx 01", "Onyx 02", "Onyx 03", "Onyx 04", "Onyx 05"],
-    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Luxury Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    size: "32 sq.m",
-    features: ["Turn-down Service", "24-hour Room Service", "Electronic Safe", "Work Desk"]
-  },
-  {
-    type: "Room",
-    name: "Ivory",
-    count: 6,
-    image: "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png",
-    description: "Bright and airy rooms with luxurious touches and ample space.",
-    price: 42000,
-    roomNumbers: ["Ivory 01", "Ivory 02", "Ivory 03", "Ivory 04", "Ivory 05", "Ivory 06"],
-    amenities: ["High-Speed Wi-Fi", "48\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King/Twin",
-    size: "30 sq.m",
-    features: ["Daily Housekeeping", "24-hour Room Service", "In-room Safe", "Ergonomic Work Area"]
-  },
-  {
-    type: "Room",
-    name: "Amber",
-    count: 5,
-    image: "/lovable-uploads/8625d04c-54ec-4d6c-83b7-3a1081dac086.png",
-    description: "Warm and inviting executive rooms with premium bedding and stylish furnishings.",
-    price: 48000,
-    roomNumbers: ["Amber 01", "Amber 02", "Amber 03", "Amber 04", "Amber 05"],
-    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Marble Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    size: "34 sq.m",
-    features: ["Turn-down Service", "24-hour Room Service", "Digital Safe", "Work Desk", "Mini Gym Access"]
-  },
-  {
-    type: "Room",
-    name: "Emerald",
-    count: 2,
-    image: "/lovable-uploads/84758c2a-d279-4a63-ba5d-9df205cdec90.png",
-    description: "Mini suite offering exceptional comfort and luxury amenities.",
-    price: 50000,
-    roomNumbers: ["Emerald 01", "Emerald 02"],
-    amenities: ["High-Speed Wi-Fi", "55\" TV", "Nespresso Machine", "Luxury Bathroom with Rain Shower", "Air Conditioning", "Mini Refrigerator", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    size: "36 sq.m",
-    features: ["Turn-down Service", "24-hour Room Service", "Electronic Safe", "Executive Work Desk", "Mini Gym Access"]
-  },
-  {
-    type: "Room",
-    name: "Beryl",
-    count: 1,
-    image: "/lovable-uploads/4768b213-3554-45db-b44b-86f04c720eae.png",
-    description: "Exclusive single room with premium features and personalized service.",
-    price: 55000,
-    roomNumbers: ["Beryl 01"],
-    amenities: ["High-Speed Wi-Fi", "55\" TV", "Nespresso Machine", "Luxury Bathroom with Soaking Tub", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    size: "40 sq.m",
-    features: ["Personalized Turn-down Service", "Priority Room Service", "Electronic Safe", "Executive Work Area", "Free Breakfast"]
-  }
-];
-
-const RoomCard = ({ category }) => {
+const RoomCard = ({ room }: { room: Room }) => {
   const navigate = useNavigate();
   
   const handleBookNow = () => {
-    navigate('/booking', { state: { roomType: category.name, roomPrice: category.price } });
+    navigate('/booking', { state: { roomType: room.name, roomPrice: room.price_per_night } });
   };
   
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
       <div className="relative h-48 overflow-hidden">
         <img 
-          src={category.image} 
-          alt={`${category.name} ${category.type}`}
+          src={room.image_url || '/placeholder.svg'} 
+          alt={room.name}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
         />
         <div className="absolute top-0 right-0 bg-hotel-gold text-white px-3 py-1 m-2 rounded-md text-sm font-medium">
-          {category.type}
+          Room
         </div>
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-          <p className="text-white font-bold text-xl">{category.name}</p>
-          <p className="text-white/90 text-sm">₦{category.price.toLocaleString()}/night</p>
+          <p className="text-white font-bold text-xl">{room.name}</p>
+          <p className="text-white/90 text-sm">₦{room.price_per_night.toLocaleString()}/night</p>
         </div>
       </div>
       <CardHeader className="py-3">
         <CardTitle className="flex justify-between items-center">
-          <span>{category.name}</span>
+          <span>{room.name}</span>
         </CardTitle>
         <CardDescription className="flex items-center gap-2">
           <DoorClosed size={16} />
-          <span>{category.count} {category.count > 1 ? 'units' : 'unit'} ({category.roomNumbers.join(", ")})</span>
+          <span>Capacity: {room.capacity} guests</span>
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow py-2">
-        <p className="text-gray-700 mb-3 line-clamp-2">{category.description}</p>
+        <p className="text-gray-700 mb-3 line-clamp-2">{room.description}</p>
         
         <div>
           <h4 className="text-sm font-medium mb-2 text-gray-700">Key Features</h4>
           <div className="grid grid-cols-3 gap-2 text-sm text-gray-600">
             <div className="flex items-center gap-1">
               <Users size={16} />
-              <span>{category.maxGuests} Guests</span>
+              <span>{room.capacity} Guests</span>
             </div>
             <div className="flex items-center gap-1">
               <Bed size={16} />
-              <span>{category.bedType}</span>
+              <span>Premium Bed</span>
             </div>
             <div className="flex items-center gap-1">
               <Clock size={16} />
@@ -183,7 +83,7 @@ const RoomCard = ({ category }) => {
       </CardContent>
       <CardFooter className="flex justify-between items-center border-t pt-3 pb-3">
         <div className="text-hotel-gold font-bold">
-          ₦{category.price.toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
+          ₦{room.price_per_night.toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
         </div>
         <Button variant="hotel" size="sm" onClick={handleBookNow}>Book Now</Button>
       </CardFooter>
@@ -192,11 +92,54 @@ const RoomCard = ({ category }) => {
 };
 
 const Rooms = () => {
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  const fetchRooms = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('rooms')
+        .select('*')
+        .eq('room_type', 'room')
+        .order('price_per_night', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching rooms:', error);
+        return;
+      }
+
+      setRooms(data || []);
+    } catch (error) {
+      console.error('Error fetching rooms:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   const handleBookNow = () => {
     navigate('/booking');
   };
+  
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="pt-24 md:pt-28 lg:pt-32 pb-16 flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hotel-gold mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading rooms...</p>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
   
   return (
     <>
@@ -250,11 +193,17 @@ const Rooms = () => {
           <div className="hotel-container">
             <div className="max-w-7xl mx-auto">
               <h2 className="hotel-title text-center mb-12">Our Luxurious Rooms</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {roomCategories.map((category, index) => (
-                  <RoomCard key={index} category={category} />
-                ))}
-              </div>
+              {rooms.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-gray-600">No rooms available at the moment.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {rooms.map((room) => (
+                    <RoomCard key={room.id} room={room} />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>
