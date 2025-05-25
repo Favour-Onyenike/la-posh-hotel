@@ -117,7 +117,13 @@ const Suites = () => {
         return;
       }
 
-      setSuites(data || []);
+      // Ensure all suites have proper typing for availability_status
+      const suitesWithProperTypes = (data || []).map(suite => ({
+        ...suite,
+        availability_status: suite.availability_status as Room['availability_status']
+      }));
+
+      setSuites(suitesWithProperTypes as Room[]);
     } catch (error) {
       console.error('Error fetching suites:', error);
     } finally {
