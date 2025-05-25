@@ -1,41 +1,41 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Star, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { GalleryItem } from "@/types/supabase";
 
 const Gallery = () => {
-  // All uploaded images for the gallery
-  const galleryImages = [
-    "/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png",
-    "/lovable-uploads/2041bcf9-cce4-478f-95c0-b002a66664b5.png",
-    "/lovable-uploads/5554f5f5-c5dc-46b2-b735-61e278864872.png",
-    "/lovable-uploads/9423b162-188e-46ac-a0ac-33fbdf219e2c.png",
-    "/lovable-uploads/253c3040-a0de-47cd-b074-06c86921d8e7.png",
-    "/lovable-uploads/d9d5cdb1-1c16-4557-8c64-39e713537d74.png",
-    "/lovable-uploads/e9be561a-1ed6-476f-aab8-fd04aaef0620.png",
-    "/lovable-uploads/b0b33b9b-6fb9-4d30-836e-20c55bc93064.png",
-    "/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png",
-    "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png",
-    "/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png",
-    "/lovable-uploads/8160dfdf-2bee-40e2-b129-c74aaea6a773.png",
-    // New images
-    "/lovable-uploads/8625d04c-54ec-4d6c-83b7-3a1081dac086.png",
-    "/lovable-uploads/c5b0e6f8-b1da-4fc2-ae09-35e930422a81.png",
-    "/lovable-uploads/4768b213-3554-45db-b44b-86f04c720eae.png",
-    "/lovable-uploads/7d3b8634-80e9-4dc1-ba22-be8f76121c97.png",
-    "/lovable-uploads/28419863-c4a4-4fb6-a14e-c864333d1966.png",
-    "/lovable-uploads/84758c2a-d279-4a63-ba5d-9df205cdec90.png",
-    "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png",
-    // Additional newly uploaded images
-    "/lovable-uploads/617a21f8-9201-46a3-9e35-b4eb1aa09b55.png",
-    "/lovable-uploads/facdb1e7-195d-4081-8bd0-04bb731ba3ab.png",
-    "/lovable-uploads/442a4b2f-8a6f-4bd7-9c4d-a0a37dfb8260.png"
-  ];
-
-  // State to track the currently enlarged image
+  const [galleryImages, setGalleryImages] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchGalleryImages();
+  }, []);
+
+  const fetchGalleryImages = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('gallery')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching gallery images:', error);
+        return;
+      }
+
+      setGalleryImages(data || []);
+    } catch (error) {
+      console.error('Error fetching gallery images:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Handler to open the enlarged image modal
   const handleImageClick = (image: string) => {
@@ -46,6 +46,21 @@ const Gallery = () => {
   const closeEnlargedImage = () => {
     setEnlargedImage(null);
   };
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="pt-24 md:pt-28 lg:pt-32 pb-16 flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hotel-gold mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading gallery...</p>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -83,21 +98,27 @@ const Gallery = () => {
               <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
             </div>
             
-            <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
-              {galleryImages.map((image, index) => (
-                <div 
-                  key={index}
-                  className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-24 sm:h-48 md:h-64 cursor-pointer"
-                  onClick={() => handleImageClick(image)}
-                >
-                  <img 
-                    src={image} 
-                    alt={`Gallery image ${index + 1}`} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-              ))}
-            </div>
+            {galleryImages.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-600">No images available at the moment.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
+                {galleryImages.map((item) => (
+                  <div 
+                    key={item.id}
+                    className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-24 sm:h-48 md:h-64 cursor-pointer"
+                    onClick={() => handleImageClick(item.image_url)}
+                  >
+                    <img 
+                      src={item.image_url} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
         
