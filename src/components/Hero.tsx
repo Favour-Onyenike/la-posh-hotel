@@ -21,7 +21,7 @@ const Hero = () => {
   };
   
   return (
-    <div className="relative h-[95vh] md:h-screen w-full">
+    <div className="relative h-screen md:h-screen w-full">
       {/* Background Image with Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center"
