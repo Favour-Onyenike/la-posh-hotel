@@ -18,6 +18,7 @@ import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Admin/Dashboard";
 import AdminRooms from "./pages/Admin/Rooms";
 import AdminBookings from "./pages/Admin/Bookings";
+import AdminEvents from "./pages/Admin/Events";
 import AdminReviews from "./pages/Admin/Reviews";
 import AdminGallery from "./pages/Admin/Gallery";
 import ProtectedRoute from "@/components/Admin/ProtectedRoute";
@@ -51,6 +52,7 @@ const App = () => (
               <Route path="/admin/dashboard" element={<Dashboard />} />
               <Route path="/admin/rooms" element={<AdminRooms />} />
               <Route path="/admin/bookings" element={<AdminBookings />} />
+              <Route path="/admin/events" element={<AdminEvents />} />
               <Route path="/admin/reviews" element={<AdminReviews />} />
               <Route path="/admin/gallery" element={<AdminGallery />} />
             </Route>
