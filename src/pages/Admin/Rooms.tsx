@@ -52,6 +52,7 @@ const Rooms = () => {
   const [pricePerNight, setPricePerNight] = useState('');
   const [capacity, setCapacity] = useState('');
   const [roomType, setRoomType] = useState('room');
+  const [roomNumber, setRoomNumber] = useState('');
   const [availabilityStatus, setAvailabilityStatus] = useState<Room['availability_status']>('available');
   const [imageUrl, setImageUrl] = useState('');
   const [featuresArray, setFeaturesArray] = useState<string[]>([]);
@@ -103,12 +104,37 @@ const Rooms = () => {
     }
   };
 
+  const generateRoomNumber = async (roomType: string) => {
+    try {
+      const { data: existingRooms, error } = await supabase
+        .from('rooms')
+        .select('room_number')
+        .eq('room_type', roomType)
+        .order('room_number', { ascending: false })
+        .limit(1);
+
+      if (error) throw error;
+
+      if (!existingRooms || existingRooms.length === 0) {
+        return '01';
+      }
+
+      const lastRoomNumber = existingRooms[0].room_number;
+      const nextNumber = parseInt(lastRoomNumber) + 1;
+      return nextNumber.toString().padStart(2, '0');
+    } catch (error) {
+      console.error('Error generating room number:', error);
+      return '01'; // fallback to 01 if there's an error
+    }
+  };
+
   const resetForm = () => {
     setName('');
     setDescription('');
     setPricePerNight('');
     setCapacity('');
     setRoomType('room');
+    setRoomNumber('');
     setAvailabilityStatus('available');
     setImageUrl('');
     setFeaturesArray([]);
@@ -146,6 +172,12 @@ const Rooms = () => {
     try {
       setUploading(true);
       let finalImageUrl = imageUrl;
+      let finalRoomNumber = roomNumber;
+
+      // Auto-generate room number if not provided
+      if (!finalRoomNumber) {
+        finalRoomNumber = await generateRoomNumber(roomType);
+      }
 
       // If there's a file to upload
       if (imageFile) {
@@ -181,6 +213,7 @@ const Rooms = () => {
           price_per_night: parseFloat(pricePerNight),
           capacity: parseInt(capacity),
           room_type: roomType,
+          room_number: finalRoomNumber,
           availability_status: availabilityStatus,
           image_url: finalImageUrl || null,
           features: featuresArray,
@@ -217,6 +250,12 @@ const Rooms = () => {
     try {
       setUploading(true);
       let finalImageUrl = imageUrl;
+      let finalRoomNumber = roomNumber;
+
+      // Auto-generate room number if not provided
+      if (!finalRoomNumber) {
+        finalRoomNumber = await generateRoomNumber(roomType);
+      }
 
       // If there's a file to upload
       if (imageFile) {
@@ -252,6 +291,7 @@ const Rooms = () => {
           price_per_night: parseFloat(pricePerNight),
           capacity: parseInt(capacity),
           room_type: roomType,
+          room_number: finalRoomNumber,
           availability_status: availabilityStatus,
           image_url: finalImageUrl || null,
           features: featuresArray,
@@ -433,6 +473,7 @@ const Rooms = () => {
     setPricePerNight(String(room.price_per_night));
     setCapacity(String(room.capacity));
     setRoomType(room.room_type);
+    setRoomNumber(room.room_number);
     setAvailabilityStatus(room.availability_status || 'available');
     setImageUrl(room.image_url || '');
     setFeaturesArray(room.features || []);
@@ -504,6 +545,18 @@ const Rooms = () => {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="roomNumber">
+                Room Number (leave blank to auto-generate)
+              </Label>
+              <Input
+                id="roomNumber"
+                value={roomNumber}
+                onChange={(e) => setRoomNumber(e.target.value)}
+                placeholder="01, 02, 03..."
+              />
             </div>
             
             <div className="space-y-2">
@@ -715,7 +768,7 @@ const Rooms = () => {
                       }}
                     />
                     <div className="absolute right-2 top-2 rounded-md bg-white px-2 py-1 text-xs font-medium shadow">
-                      {room.room_type === 'suite' ? 'Suite' : 'Room'}
+                      {room.room_type === 'suite' ? 'Suite' : 'Room'} {room.room_number}
                     </div>
                     <div className="absolute left-2 top-2">
                       <Badge className={room.availability_status === 'available' ? 'bg-green-500' : 'bg-red-500'}>
@@ -751,7 +804,6 @@ const Rooms = () => {
                       )}
                     </div>
                     
-                    {/* Quick Actions */}
                     <div className="mt-4 grid grid-cols-2 gap-2">
                       <div className="space-y-1">
                         <Label htmlFor={`price-${room.id}`} className="text-xs">Update Price (₦)</Label>
