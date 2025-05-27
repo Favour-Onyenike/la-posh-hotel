@@ -1,4 +1,5 @@
 
+import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import RecentReviews from "@/components/RecentReviews";
 import CounterBar from "@/components/CounterBar";
@@ -10,6 +11,7 @@ import { Star, Users, Award, Clock } from "lucide-react";
 const Index = () => {
   return (
     <>
+      <Navbar />
       <Hero />
       <CounterBar />
       
