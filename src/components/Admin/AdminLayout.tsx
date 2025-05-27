@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,8 +11,7 @@ import {
   LogOut,
   Menu,
   X,
-  User,
-  Calendar
+  User
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -49,7 +47,6 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { to: "/admin/dashboard", icon: <LayoutDashboard size={18} />, label: "Dashboard" },
     { to: "/admin/rooms", icon: <Hotel size={18} />, label: "Rooms & Suites" },
     { to: "/admin/bookings", icon: <CalendarDays size={18} />, label: "Bookings" },
-    { to: "/admin/events", icon: <Calendar size={18} />, label: "Events" },
     { to: "/admin/reviews", icon: <MessageSquare size={18} />, label: "Reviews" },
     { to: "/admin/gallery", icon: <ImageIcon size={18} />, label: "Gallery" },
   ];

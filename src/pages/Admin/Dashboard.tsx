@@ -5,13 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Hotel, 
   CalendarDays, 
+  DollarSign, 
   Star,
   TrendingUp,
   Users,
   ArrowRightLeft,
-  CheckSquare,
-  Home,
-  Building
+  CheckSquare
 } from "lucide-react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip } from "recharts";
 import { supabase } from '@/integrations/supabase/client';
@@ -64,11 +63,9 @@ const Dashboard = () => {
   const [totalRooms, setTotalRooms] = useState<number>(0);
   const [totalSuites, setTotalSuites] = useState<number>(0);
   const [availableRooms, setAvailableRooms] = useState<number>(0);
-  const [availableSuites, setAvailableSuites] = useState<number>(0);
-  const [bookedRooms, setBookedRooms] = useState<number>(0);
-  const [bookedSuites, setBookedSuites] = useState<number>(0);
   const [pendingBookings, setPendingBookings] = useState<number>(0);
   const [confirmedBookings, setConfirmedBookings] = useState<number>(0);
+  const [revenue, setRevenue] = useState<number>(0);
   const [checkInsToday, setCheckInsToday] = useState<number>(0);
   const [checkOutsToday, setCheckOutsToday] = useState<number>(0);
   const [bookingsByMonth, setBookingsByMonth] = useState<BookingsByMonth[]>([]);
@@ -112,16 +109,9 @@ const Dashboard = () => {
         setTotalRooms(standardRooms.length);
         setTotalSuites(suites.length);
         
-        // Count available and booked accommodations
-        const availableStandardRooms = standardRooms.filter(room => room.availability_status === 'available').length || 0;
-        const availableSuitesCount = suites.filter(suite => suite.availability_status === 'available').length || 0;
-        const bookedStandardRooms = standardRooms.filter(room => room.availability_status === 'taken').length || 0;
-        const bookedSuitesCount = suites.filter(suite => suite.availability_status === 'taken').length || 0;
-        
-        setAvailableRooms(availableStandardRooms);
-        setAvailableSuites(availableSuitesCount);
-        setBookedRooms(bookedStandardRooms);
-        setBookedSuites(bookedSuitesCount);
+        // Count available rooms (rooms with availability_status = 'available')
+        const availableCount = typedRoomsData.filter(room => room.availability_status === 'available').length || 0;
+        setAvailableRooms(availableCount);
         
         // Get today's date
         const today = new Date();
@@ -150,6 +140,22 @@ const Dashboard = () => {
         }
         
         setConfirmedBookings(confirmedBookingsData?.length || 0);
+        
+        // Calculate total revenue from all bookings
+        const { data: allBookings, error: allBookingsError } = await supabase
+          .from('bookings')
+          .select('*');
+        
+        if (allBookingsError) {
+          console.error('Error fetching all bookings:', allBookingsError);
+        }
+        
+        const totalRevenue = (allBookings || []).reduce(
+          (sum: number, booking: Booking) => sum + Number(booking.total_price || 0),
+          0
+        );
+        
+        setRevenue(totalRevenue);
         
         // Fetch check-ins for today
         const { data: todayCheckIns, error: todayCheckInsError } = await supabase
@@ -246,20 +252,16 @@ const Dashboard = () => {
         )
       );
       
-      // Update statistics
-      const updatedRooms = rooms.map(room => 
-        room.id === roomId 
+      // Update available rooms count
+      const updatedAvailableRooms = rooms
+        .map(room => room.id === roomId 
           ? { ...room, availability_status: newStatus } 
           : room
-      );
-      
-      const standardRooms = updatedRooms.filter(room => room.room_type === 'room');
-      const suites = updatedRooms.filter(room => room.room_type === 'suite');
-      
-      setAvailableRooms(standardRooms.filter(room => room.availability_status === 'available').length);
-      setAvailableSuites(suites.filter(suite => suite.availability_status === 'available').length);
-      setBookedRooms(standardRooms.filter(room => room.availability_status === 'taken').length);
-      setBookedSuites(suites.filter(suite => suite.availability_status === 'taken').length);
+        )
+        .filter(room => room.availability_status === 'available')
+        .length;
+        
+      setAvailableRooms(updatedAvailableRooms);
       
       toast({
         title: "Status updated",
@@ -284,40 +286,28 @@ const Dashboard = () => {
         </div>
         
         {/* Stats Cards */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard 
-            title="Available Rooms" 
-            value={availableRooms}
-            description={`${totalRooms} total rooms`}
-            icon={<Home size={20} />}
-          />
-          <StatCard 
-            title="Booked Rooms" 
-            value={bookedRooms}
-            description={`${Math.round(totalRooms > 0 ? (bookedRooms / totalRooms) * 100 : 0)}% occupancy`}
+            title="Rooms" 
+            value={totalRooms}
             icon={<Hotel size={20} />}
           />
           <StatCard 
-            title="Available Suites" 
-            value={availableSuites}
-            description={`${totalSuites} total suites`}
-            icon={<Building size={20} />}
-          />
-          <StatCard 
-            title="Booked Suites" 
-            value={bookedSuites}
-            description={`${Math.round(totalSuites > 0 ? (bookedSuites / totalSuites) * 100 : 0)}% occupancy`}
+            title="Suites" 
+            value={totalSuites}
             icon={<Star size={20} />}
           />
           <StatCard 
-            title="Pending Bookings" 
-            value={pendingBookings}
-            icon={<Users size={20} />}
+            title="Available Accommodations" 
+            value={availableRooms}
+            description={`${Math.round(((totalRooms + totalSuites) > 0 ? (availableRooms / (totalRooms + totalSuites)) * 100 : 0) || 0)}% occupancy rate`}
+            icon={<Hotel size={20} />}
           />
           <StatCard 
-            title="Confirmed Bookings" 
-            value={confirmedBookings}
-            icon={<CheckSquare size={20} />}
+            title="Total Revenue" 
+            value={`$${revenue.toLocaleString()}`}
+            icon={<DollarSign size={20} />}
+            trend={12}
           />
         </div>
         
@@ -371,6 +361,26 @@ const Dashboard = () => {
                   <div>
                     <p className="text-sm font-medium">Check-outs Today</p>
                     <p className="text-2xl font-bold">{checkOutsToday}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100">
+                    <Users size={18} className="text-amber-700" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Pending Bookings</p>
+                    <p className="text-2xl font-bold">{pendingBookings}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100">
+                    <Star size={18} className="text-purple-700" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Confirmed Bookings</p>
+                    <p className="text-2xl font-bold">{confirmedBookings}</p>
                   </div>
                 </div>
               </div>

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { GalleryItem } from '@/types/supabase';
 import AdminLayout from '@/components/Admin/AdminLayout';
-import BulkUploadDialog from '@/components/Admin/BulkUploadDialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -33,7 +32,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Loader2, Plus, Trash2, Image as ImageIcon, Upload } from 'lucide-react';
+import { Loader2, Plus, Trash2, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Gallery = () => {
@@ -45,7 +44,6 @@ const Gallery = () => {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isBulkUploadOpen, setIsBulkUploadOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -96,10 +94,10 @@ const Gallery = () => {
   };
 
   const handleAddGalleryItem = async () => {
-    if (!imageFile) {
+    if (!title || !imageFile) {
       toast({
-        title: 'Missing image',
-        description: 'Please upload an image',
+        title: 'Missing fields',
+        description: 'Please provide a title and upload an image',
         variant: 'destructive',
       });
       return;
@@ -134,7 +132,7 @@ const Gallery = () => {
       const { error: insertError } = await supabase
         .from('gallery')
         .insert({
-          title: title || imageFile.name.split('.')[0],
+          title,
           description: description || null,
           image_url: publicURL.publicUrl,
           category: category || null,
@@ -319,11 +317,8 @@ const Gallery = () => {
                 <Button onClick={() => setBulkDeleteMode(true)} variant="outline">
                   Bulk Delete
                 </Button>
-                <Button onClick={() => setIsBulkUploadOpen(true)} variant="outline">
-                  <Upload className="mr-2 h-4 w-4" /> Bulk Upload
-                </Button>
                 <Button onClick={() => setIsAddDialogOpen(true)}>
-                  <Plus className="mr-2 h-4 w-4" /> Add Single Image
+                  <Plus className="mr-2 h-4 w-4" /> Add New Image
                 </Button>
               </>
             )}
@@ -407,13 +402,6 @@ const Gallery = () => {
         )}
       </div>
 
-      {/* Bulk Upload Dialog */}
-      <BulkUploadDialog
-        open={isBulkUploadOpen}
-        onOpenChange={setIsBulkUploadOpen}
-        onSuccess={fetchGalleryItems}
-      />
-
       {/* Add Gallery Item Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={(open) => {
         if (!open) resetForm();
@@ -423,26 +411,26 @@ const Gallery = () => {
           <DialogHeader>
             <DialogTitle>Add Gallery Image</DialogTitle>
             <DialogDescription>
-              Upload a new image to the hotel gallery. Title and description are optional.
+              Upload a new image to the hotel gallery.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="title" className="text-right">
-                Title (optional)
+                Title <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Leave empty to use filename"
+                placeholder="Enter image title"
               />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="description" className="text-right">
-                Description (optional)
+                Description
               </Label>
               <Textarea
                 id="description"
@@ -454,7 +442,7 @@ const Gallery = () => {
             
             <div className="space-y-2">
               <Label htmlFor="category" className="text-right">
-                Category (optional)
+                Category
               </Label>
               <Input
                 id="category"

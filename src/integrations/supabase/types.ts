@@ -95,36 +95,6 @@ export type Database = {
         }
         Relationships: []
       }
-      events: {
-        Row: {
-          created_at: string
-          description: string | null
-          event_date: string
-          id: string
-          image_url: string | null
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          event_date: string
-          id?: string
-          image_url?: string | null
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          event_date?: string
-          id?: string
-          image_url?: string | null
-          title?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       gallery: {
         Row: {
           category: string | null
