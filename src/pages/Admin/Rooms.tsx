@@ -104,12 +104,12 @@ const Rooms = () => {
     }
   };
 
-  const generateRoomNumber = async (roomType: string) => {
+  const generateRoomNumber = async (roomName: string) => {
     try {
       const { data: existingRooms, error } = await supabase
         .from('rooms')
         .select('room_number')
-        .eq('room_type', roomType)
+        .eq('name', roomName)
         .order('room_number', { ascending: false })
         .limit(1);
 
@@ -174,9 +174,9 @@ const Rooms = () => {
       let finalImageUrl = imageUrl;
       let finalRoomNumber = roomNumber;
 
-      // Auto-generate room number if not provided
+      // Auto-generate room number if not provided - based on room name
       if (!finalRoomNumber) {
-        finalRoomNumber = await generateRoomNumber(roomType);
+        finalRoomNumber = await generateRoomNumber(name);
       }
 
       // If there's a file to upload
@@ -252,9 +252,9 @@ const Rooms = () => {
       let finalImageUrl = imageUrl;
       let finalRoomNumber = roomNumber;
 
-      // Auto-generate room number if not provided
+      // Auto-generate room number if not provided - based on room name
       if (!finalRoomNumber) {
-        finalRoomNumber = await generateRoomNumber(roomType);
+        finalRoomNumber = await generateRoomNumber(name);
       }
 
       // If there's a file to upload
@@ -768,7 +768,7 @@ const Rooms = () => {
                       }}
                     />
                     <div className="absolute right-2 top-2 rounded-md bg-white px-2 py-1 text-xs font-medium shadow">
-                      {room.room_type === 'suite' ? 'Suite' : 'Room'} {room.room_number}
+                      {room.name} {room.room_number}
                     </div>
                     <div className="absolute left-2 top-2">
                       <Badge className={room.availability_status === 'available' ? 'bg-green-500' : 'bg-red-500'}>
