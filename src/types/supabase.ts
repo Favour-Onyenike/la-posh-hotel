@@ -15,6 +15,7 @@ export type Room = {
   price_per_night: number;
   capacity: number;
   room_type: string;
+  room_number: string;
   image_url: string | null;
   features: string[];
   availability_status: 'available' | 'taken';
