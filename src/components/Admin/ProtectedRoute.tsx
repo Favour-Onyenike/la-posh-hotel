@@ -1,10 +1,13 @@
 
 import React from 'react';
-import { Outlet } from 'react-router-dom';
 import { Loader2 } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
 
-const ProtectedRoute: React.FC = () => {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isLoading } = useAuth();
   
   // Show loading state
@@ -17,7 +20,7 @@ const ProtectedRoute: React.FC = () => {
   }
 
   // Always allow access to admin routes as requested by the user
-  return <Outlet />;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
