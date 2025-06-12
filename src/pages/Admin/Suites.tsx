@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Room } from '@/types/supabase';
@@ -22,6 +23,13 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -35,8 +43,8 @@ import { Badge } from '@/components/ui/badge';
 import { Loader2, Plus, Trash2, Edit, Hotel, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-const Rooms = () => {
-  const [rooms, setRooms] = useState<Room[]>([]);
+const Suites = () => {
+  const [suites, setSuites] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Form fields
@@ -56,40 +64,40 @@ const Rooms = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  const [selectedSuite, setSelectedSuite] = useState<Room | null>(null);
   const [uploading, setUploading] = useState(false);
   
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchRooms();
+    fetchSuites();
   }, []);
 
-  const fetchRooms = async () => {
+  const fetchSuites = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
         .from('rooms')
         .select('*')
-        .eq('room_type', 'room')
+        .eq('room_type', 'suite')
         .order('name', { ascending: true });
 
       if (error) {
         throw error;
       }
 
-      // Ensure all rooms have an availability_status property
-      const roomsWithDefaultStatus = (data || []).map(room => ({
-        ...room,
-        availability_status: room.availability_status || 'available' as Room['availability_status']
+      // Ensure all suites have an availability_status property
+      const suitesWithDefaultStatus = (data || []).map(suite => ({
+        ...suite,
+        availability_status: suite.availability_status || 'available' as Room['availability_status']
       }));
 
-      setRooms(roomsWithDefaultStatus as Room[]);
+      setSuites(suitesWithDefaultStatus as Room[]);
     } catch (error) {
-      console.error('Error fetching rooms:', error);
+      console.error('Error fetching suites:', error);
       toast({
         title: 'Error',
-        description: 'Failed to fetch rooms',
+        description: 'Failed to fetch suites',
         variant: 'destructive',
       });
     } finally {
@@ -97,27 +105,27 @@ const Rooms = () => {
     }
   };
 
-  const generateRoomNumber = async (roomName: string) => {
+  const generateRoomNumber = async (suiteName: string) => {
     try {
-      const { data: existingRooms, error } = await supabase
+      const { data: existingSuites, error } = await supabase
         .from('rooms')
         .select('room_number')
-        .eq('name', roomName)
-        .eq('room_type', 'room')
+        .eq('name', suiteName)
+        .eq('room_type', 'suite')
         .order('room_number', { ascending: false })
         .limit(1);
 
       if (error) throw error;
 
-      if (!existingRooms || existingRooms.length === 0) {
+      if (!existingSuites || existingSuites.length === 0) {
         return '01';
       }
 
-      const lastRoomNumber = existingRooms[0].room_number;
+      const lastRoomNumber = existingSuites[0].room_number;
       const nextNumber = parseInt(lastRoomNumber) + 1;
       return nextNumber.toString().padStart(2, '0');
     } catch (error) {
-      console.error('Error generating room number:', error);
+      console.error('Error generating suite number:', error);
       return '01'; // fallback to 01 if there's an error
     }
   };
@@ -159,7 +167,7 @@ const Rooms = () => {
     setFeaturesArray(featuresArray.filter((_, i) => i !== index));
   };
 
-  const handleAddRoom = async () => {
+  const handleAddSuite = async () => {
     if (!validateForm()) return;
 
     try {
@@ -167,7 +175,7 @@ const Rooms = () => {
       let finalImageUrl = imageUrl;
       let finalRoomNumber = roomNumber;
 
-      // Auto-generate room number if not provided - based on room name
+      // Auto-generate suite number if not provided - based on suite name
       if (!finalRoomNumber) {
         finalRoomNumber = await generateRoomNumber(name);
       }
@@ -176,7 +184,7 @@ const Rooms = () => {
       if (imageFile) {
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
-        const filePath = `rooms/${fileName}`;
+        const filePath = `suites/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('gallery')
@@ -197,7 +205,7 @@ const Rooms = () => {
         finalImageUrl = publicURL.publicUrl;
       }
 
-      // Add the room to the database
+      // Add the suite to the database
       const { error: insertError } = await supabase
         .from('rooms')
         .insert({
@@ -205,7 +213,7 @@ const Rooms = () => {
           description,
           price_per_night: parseFloat(pricePerNight),
           capacity: parseInt(capacity),
-          room_type: 'room',
+          room_type: 'suite',
           room_number: finalRoomNumber,
           availability_status: availabilityStatus,
           image_url: finalImageUrl || null,
@@ -218,18 +226,18 @@ const Rooms = () => {
 
       toast({
         title: 'Success',
-        description: 'Room added successfully',
+        description: 'Suite added successfully',
       });
 
-      // Refresh the rooms list
-      fetchRooms();
+      // Refresh the suites list
+      fetchSuites();
       resetForm();
       setIsAddDialogOpen(false);
     } catch (error) {
-      console.error('Error adding room:', error);
+      console.error('Error adding suite:', error);
       toast({
         title: 'Error',
-        description: 'Failed to add room',
+        description: 'Failed to add suite',
         variant: 'destructive',
       });
     } finally {
@@ -237,15 +245,15 @@ const Rooms = () => {
     }
   };
 
-  const handleEditRoom = async () => {
-    if (!validateForm() || !selectedRoom) return;
+  const handleEditSuite = async () => {
+    if (!validateForm() || !selectedSuite) return;
 
     try {
       setUploading(true);
       let finalImageUrl = imageUrl;
       let finalRoomNumber = roomNumber;
 
-      // Auto-generate room number if not provided - based on room name
+      // Auto-generate suite number if not provided - based on suite name
       if (!finalRoomNumber) {
         finalRoomNumber = await generateRoomNumber(name);
       }
@@ -254,7 +262,7 @@ const Rooms = () => {
       if (imageFile) {
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
-        const filePath = `rooms/${fileName}`;
+        const filePath = `suites/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('gallery')
@@ -275,7 +283,7 @@ const Rooms = () => {
         finalImageUrl = publicURL.publicUrl;
       }
 
-      // Update the room in the database
+      // Update the suite in the database
       const { error: updateError } = await supabase
         .from('rooms')
         .update({
@@ -283,13 +291,13 @@ const Rooms = () => {
           description,
           price_per_night: parseFloat(pricePerNight),
           capacity: parseInt(capacity),
-          room_type: 'room',
+          room_type: 'suite',
           room_number: finalRoomNumber,
           availability_status: availabilityStatus,
           image_url: finalImageUrl || null,
           features: featuresArray,
         })
-        .eq('id', selectedRoom.id);
+        .eq('id', selectedSuite.id);
 
       if (updateError) {
         throw updateError;
@@ -297,18 +305,18 @@ const Rooms = () => {
 
       toast({
         title: 'Success',
-        description: 'Room updated successfully',
+        description: 'Suite updated successfully',
       });
 
-      // Refresh the rooms list
-      fetchRooms();
+      // Refresh the suites list
+      fetchSuites();
       resetForm();
       setIsEditDialogOpen(false);
     } catch (error) {
-      console.error('Error updating room:', error);
+      console.error('Error updating suite:', error);
       toast({
         title: 'Error',
-        description: 'Failed to update room',
+        description: 'Failed to update suite',
         variant: 'destructive',
       });
     } finally {
@@ -316,37 +324,37 @@ const Rooms = () => {
     }
   };
 
-  const handleQuickStatusUpdate = async (roomId: string, newStatus: Room['availability_status']) => {
+  const handleQuickStatusUpdate = async (suiteId: string, newStatus: Room['availability_status']) => {
     try {
       const { error } = await supabase
         .from('rooms')
         .update({ availability_status: newStatus })
-        .eq('id', roomId);
+        .eq('id', suiteId);
 
       if (error) throw error;
 
       // Update local state
-      setRooms(prevRooms => 
-        prevRooms.map(room => 
-          room.id === roomId ? { ...room, availability_status: newStatus } : room
+      setSuites(prevSuites => 
+        prevSuites.map(suite => 
+          suite.id === suiteId ? { ...suite, availability_status: newStatus } : suite
         )
       );
 
       toast({
         title: 'Status Updated',
-        description: `Room marked as ${newStatus}`,
+        description: `Suite marked as ${newStatus}`,
       });
     } catch (error) {
-      console.error('Error updating room status:', error);
+      console.error('Error updating suite status:', error);
       toast({
         title: 'Error',
-        description: 'Failed to update room status',
+        description: 'Failed to update suite status',
         variant: 'destructive',
       });
     }
   };
 
-  const handleQuickPriceUpdate = async (roomId: string, newPrice: number) => {
+  const handleQuickPriceUpdate = async (suiteId: string, newPrice: number) => {
     if (isNaN(newPrice) || newPrice <= 0) {
       toast({
         title: 'Invalid Price',
@@ -360,62 +368,62 @@ const Rooms = () => {
       const { error } = await supabase
         .from('rooms')
         .update({ price_per_night: newPrice })
-        .eq('id', roomId);
+        .eq('id', suiteId);
 
       if (error) throw error;
 
       // Update local state
-      setRooms(prevRooms => 
-        prevRooms.map(room => 
-          room.id === roomId ? { ...room, price_per_night: newPrice } : room
+      setSuites(prevSuites => 
+        prevSuites.map(suite => 
+          suite.id === suiteId ? { ...suite, price_per_night: newPrice } : suite
         )
       );
 
       toast({
         title: 'Price Updated',
-        description: `Room price updated to $${newPrice.toFixed(2)}`,
+        description: `Suite price updated to $${newPrice.toFixed(2)}`,
       });
     } catch (error) {
-      console.error('Error updating room price:', error);
+      console.error('Error updating suite price:', error);
       toast({
         title: 'Error',
-        description: 'Failed to update room price',
+        description: 'Failed to update suite price',
         variant: 'destructive',
       });
     }
   };
 
-  const handleDeleteRoom = async () => {
-    if (!selectedRoom) return;
+  const handleDeleteSuite = async () => {
+    if (!selectedSuite) return;
 
     try {
       const { error } = await supabase
         .from('rooms')
         .delete()
-        .eq('id', selectedRoom.id);
+        .eq('id', selectedSuite.id);
 
       if (error) {
         throw error;
       }
 
-      setRooms((prevRooms) => 
-        prevRooms.filter((room) => room.id !== selectedRoom.id)
+      setSuites((prevSuites) => 
+        prevSuites.filter((suite) => suite.id !== selectedSuite.id)
       );
       
       toast({
         title: 'Success',
-        description: 'Room deleted successfully',
+        description: 'Suite deleted successfully',
       });
     } catch (error) {
-      console.error('Error deleting room:', error);
+      console.error('Error deleting suite:', error);
       toast({
         title: 'Error',
-        description: 'Failed to delete room',
+        description: 'Failed to delete suite',
         variant: 'destructive',
       });
     } finally {
       setIsDeleteDialogOpen(false);
-      setSelectedRoom(null);
+      setSelectedSuite(null);
     }
   };
 
@@ -423,7 +431,7 @@ const Rooms = () => {
     if (!name) {
       toast({
         title: 'Missing fields',
-        description: 'Please provide a room name',
+        description: 'Please provide a suite name',
         variant: 'destructive',
       });
       return false;
@@ -432,7 +440,7 @@ const Rooms = () => {
     if (!description) {
       toast({
         title: 'Missing fields',
-        description: 'Please provide a room description',
+        description: 'Please provide a suite description',
         variant: 'destructive',
       });
       return false;
@@ -450,7 +458,7 @@ const Rooms = () => {
     if (!capacity || isNaN(parseInt(capacity))) {
       toast({
         title: 'Invalid capacity',
-        description: 'Please provide a valid room capacity',
+        description: 'Please provide a valid suite capacity',
         variant: 'destructive',
       });
       return false;
@@ -459,26 +467,26 @@ const Rooms = () => {
     return true;
   };
 
-  const openEditDialog = (room: Room) => {
-    setSelectedRoom(room);
-    setName(room.name);
-    setDescription(room.description);
-    setPricePerNight(String(room.price_per_night));
-    setCapacity(String(room.capacity));
-    setRoomNumber(room.room_number);
-    setAvailabilityStatus(room.availability_status || 'available');
-    setImageUrl(room.image_url || '');
-    setFeaturesArray(room.features || []);
-    setImagePreview(room.image_url || null);
+  const openEditDialog = (suite: Room) => {
+    setSelectedSuite(suite);
+    setName(suite.name);
+    setDescription(suite.description);
+    setPricePerNight(String(suite.price_per_night));
+    setCapacity(String(suite.capacity));
+    setRoomNumber(suite.room_number);
+    setAvailabilityStatus(suite.availability_status || 'available');
+    setImageUrl(suite.image_url || '');
+    setFeaturesArray(suite.features || []);
+    setImagePreview(suite.image_url || null);
     setIsEditDialogOpen(true);
   };
 
-  const confirmDelete = (room: Room) => {
-    setSelectedRoom(room);
+  const confirmDelete = (suite: Room) => {
+    setSelectedSuite(suite);
     setIsDeleteDialogOpen(true);
   };
 
-  const renderRoomDialog = (isEdit: boolean) => {
+  const renderSuiteDialog = (isEdit: boolean) => {
     const dialogProps = isEdit
       ? {
           open: isEditDialogOpen,
@@ -486,9 +494,9 @@ const Rooms = () => {
             if (!open) resetForm();
             setIsEditDialogOpen(open);
           },
-          title: 'Edit Room',
-          description: 'Update the room details.',
-          onSubmit: handleEditRoom,
+          title: 'Edit Suite',
+          description: 'Update the suite details.',
+          onSubmit: handleEditSuite,
         }
       : {
           open: isAddDialogOpen,
@@ -496,9 +504,9 @@ const Rooms = () => {
             if (!open) resetForm();
             setIsAddDialogOpen(open);
           },
-          title: 'Add New Room',
-          description: 'Add a new room to the hotel.',
-          onSubmit: handleAddRoom,
+          title: 'Add New Suite',
+          description: 'Add a new suite to the hotel.',
+          onSubmit: handleAddSuite,
         };
 
     return (
@@ -512,19 +520,19 @@ const Rooms = () => {
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="name">
-                Room Name <span className="text-destructive">*</span>
+                Suite Name <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Deluxe King Room"
+                placeholder="Presidential Suite"
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="roomNumber">
-                Room Number (leave blank to auto-generate)
+                Suite Number (leave blank to auto-generate)
               </Label>
               <Input
                 id="roomNumber"
@@ -542,7 +550,7 @@ const Rooms = () => {
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Write a detailed description of the room"
+                placeholder="Write a detailed description of the suite"
                 className="min-h-[150px]"
               />
             </div>
@@ -559,7 +567,7 @@ const Rooms = () => {
                   min="0"
                   value={pricePerNight}
                   onChange={(e) => setPricePerNight(e.target.value)}
-                  placeholder="299.99"
+                  placeholder="599.99"
                 />
               </div>
               
@@ -573,7 +581,7 @@ const Rooms = () => {
                   min="1"
                   value={capacity}
                   onChange={(e) => setCapacity(e.target.value)}
-                  placeholder="2"
+                  placeholder="4"
                 />
               </div>
             </div>
@@ -582,14 +590,18 @@ const Rooms = () => {
               <Label htmlFor="availability">
                 Availability Status <span className="text-destructive">*</span>
               </Label>
-              <select 
+              <Select 
                 value={availabilityStatus} 
-                onChange={(e) => setAvailabilityStatus(e.target.value as Room['availability_status'])}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                onValueChange={(value) => setAvailabilityStatus(value as Room['availability_status'])}
               >
-                <option value="available">Available</option>
-                <option value="taken">Taken</option>
-              </select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select availability" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="available">Available</SelectItem>
+                  <SelectItem value="taken">Taken</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             
             <div className="space-y-2">
@@ -599,7 +611,7 @@ const Rooms = () => {
                   id="newFeature"
                   value={newFeature}
                   onChange={(e) => setNewFeature(e.target.value)}
-                  placeholder="Add a feature (e.g., WiFi, Mini Bar)"
+                  placeholder="Add a feature (e.g., Jacuzzi, Private Balcony)"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
@@ -642,7 +654,7 @@ const Rooms = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="image">Room Image</Label>
+              <Label htmlFor="image">Suite Image</Label>
               <div className="flex flex-col items-center justify-center">
                 {imagePreview ? (
                   <div className="mb-4 overflow-hidden rounded-md">
@@ -690,7 +702,7 @@ const Rooms = () => {
                   {isEdit ? 'Updating...' : 'Adding...'}
                 </>
               ) : (
-                isEdit ? 'Update Room' : 'Add Room'
+                isEdit ? 'Update Suite' : 'Add Suite'
               )}
             </Button>
           </DialogFooter>
@@ -704,11 +716,11 @@ const Rooms = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Rooms</h2>
-            <p className="text-muted-foreground">Manage hotel rooms content.</p>
+            <h2 className="text-3xl font-bold tracking-tight">Suites</h2>
+            <p className="text-muted-foreground">Manage hotel suites content.</p>
           </div>
           <Button onClick={() => setIsAddDialogOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" /> Add New Room
+            <Plus className="mr-2 h-4 w-4" /> Add New Suite
           </Button>
         </div>
 
@@ -718,103 +730,103 @@ const Rooms = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {rooms.length === 0 ? (
+            {suites.length === 0 ? (
               <div className="col-span-full flex h-[200px] items-center justify-center rounded-lg border border-dashed text-center">
                 <div className="space-y-2">
                   <Hotel className="mx-auto h-8 w-8 text-muted-foreground" />
-                  <h3 className="text-lg font-medium">No rooms yet</h3>
-                  <p className="text-sm text-muted-foreground">Add rooms to your hotel</p>
+                  <h3 className="text-lg font-medium">No suites yet</h3>
+                  <p className="text-sm text-muted-foreground">Add suites to your hotel</p>
                 </div>
               </div>
             ) : (
-              rooms.map((room) => (
-                <Card key={room.id} className="overflow-hidden">
+              suites.map((suite) => (
+                <Card key={suite.id} className="overflow-hidden">
                   <div className="relative aspect-video">
                     <img
-                      src={room.image_url || '/placeholder.svg'}
-                      alt={room.name}
+                      src={suite.image_url || '/placeholder.svg'}
+                      alt={suite.name}
                       className="h-full w-full object-cover"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/placeholder.svg';
                       }}
                     />
                     <div className="absolute right-2 top-2 rounded-md bg-white px-2 py-1 text-xs font-medium shadow">
-                      {room.name} {room.room_number}
+                      {suite.name} {suite.room_number}
                     </div>
                     <div className="absolute left-2 top-2">
-                      <Badge className={room.availability_status === 'available' ? 'bg-green-500' : 'bg-red-500'}>
-                        {room.availability_status === 'available' ? 'Available' : 'Taken'}
+                      <Badge className={suite.availability_status === 'available' ? 'bg-green-500' : 'bg-red-500'}>
+                        {suite.availability_status === 'available' ? 'Available' : 'Taken'}
                       </Badge>
                     </div>
                   </div>
                   <CardHeader className="p-4">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="line-clamp-1 text-lg">{room.name}</CardTitle>
+                      <CardTitle className="line-clamp-1 text-lg">{suite.name}</CardTitle>
                       <div className="flex items-center gap-2">
-                        <p className="font-bold text-primary">${Number(room.price_per_night).toFixed(2)}</p>
+                        <p className="font-bold text-primary">${Number(suite.price_per_night).toFixed(2)}</p>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent className="p-4 pt-0">
                     <p className="line-clamp-2 text-sm text-muted-foreground">
-                      {room.description}
+                      {suite.description}
                     </p>
                     <div className="mt-2 flex items-center">
-                      <p className="text-sm">Capacity: <span className="font-medium">{room.capacity} guests</span></p>
+                      <p className="text-sm">Capacity: <span className="font-medium">{suite.capacity} guests</span></p>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1">
-                      {room.features && room.features.slice(0, 3).map((feature, index) => (
+                      {suite.features && suite.features.slice(0, 3).map((feature, index) => (
                         <span key={index} className="rounded-full bg-muted px-2 py-1 text-xs">
                           {feature}
                         </span>
                       ))}
-                      {room.features && room.features.length > 3 && (
+                      {suite.features && suite.features.length > 3 && (
                         <span className="rounded-full bg-muted px-2 py-1 text-xs">
-                          +{room.features.length - 3} more
+                          +{suite.features.length - 3} more
                         </span>
                       )}
                     </div>
                     
                     <div className="mt-4 grid grid-cols-2 gap-2">
                       <div className="space-y-1">
-                        <Label htmlFor={`price-${room.id}`} className="text-xs">Update Price (₦)</Label>
+                        <Label htmlFor={`price-${suite.id}`} className="text-xs">Update Price (₦)</Label>
                         <div className="flex gap-1">
                           <Input 
-                            id={`price-${room.id}`} 
+                            id={`price-${suite.id}`} 
                             type="number" 
                             min="0" 
                             step="0.01"
-                            defaultValue={room.price_per_night}
+                            defaultValue={suite.price_per_night}
                             className="h-8 text-xs"
                             onBlur={(e) => {
-                              if (e.target.value && parseFloat(e.target.value) !== room.price_per_night) {
-                                handleQuickPriceUpdate(room.id, parseFloat(e.target.value));
+                              if (e.target.value && parseFloat(e.target.value) !== suite.price_per_night) {
+                                handleQuickPriceUpdate(suite.id, parseFloat(e.target.value));
                               }
                             }}
                             onKeyDown={(e) => {
                               if (e.key === 'Enter' && e.currentTarget.value) {
-                                handleQuickPriceUpdate(room.id, parseFloat(e.currentTarget.value));
+                                handleQuickPriceUpdate(suite.id, parseFloat(e.currentTarget.value));
                               }
                             }}
                           />
                         </div>
                       </div>
                       <div className="space-y-1">
-                        <Label htmlFor={`status-${room.id}`} className="text-xs">Availability</Label>
+                        <Label htmlFor={`status-${suite.id}`} className="text-xs">Availability</Label>
                         <div className="flex gap-1">
                           <Button
                             size="sm"
-                            variant={room.availability_status === 'available' ? 'default' : 'outline'} 
-                            className={`h-8 w-full ${room.availability_status === 'available' ? 'bg-green-500 hover:bg-green-600' : ''}`}
-                            onClick={() => handleQuickStatusUpdate(room.id, 'available')}
+                            variant={suite.availability_status === 'available' ? 'default' : 'outline'} 
+                            className={`h-8 w-full ${suite.availability_status === 'available' ? 'bg-green-500 hover:bg-green-600' : ''}`}
+                            onClick={() => handleQuickStatusUpdate(suite.id, 'available')}
                           >
                             Available
                           </Button>
                           <Button 
                             size="sm"
-                            variant={room.availability_status === 'taken' ? 'default' : 'outline'}
-                            className={`h-8 w-full ${room.availability_status === 'taken' ? 'bg-red-500 hover:bg-red-600' : ''}`}
-                            onClick={() => handleQuickStatusUpdate(room.id, 'taken')}
+                            variant={suite.availability_status === 'taken' ? 'default' : 'outline'}
+                            className={`h-8 w-full ${suite.availability_status === 'taken' ? 'bg-red-500 hover:bg-red-600' : ''}`}
+                            onClick={() => handleQuickStatusUpdate(suite.id, 'taken')}
                           >
                             Taken
                           </Button>
@@ -827,14 +839,14 @@ const Rooms = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => openEditDialog(room)}
+                        onClick={() => openEditDialog(suite)}
                       >
                         <Edit size={16} className="mr-1" /> Edit
                       </Button>
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => confirmDelete(room)}
+                        onClick={() => confirmDelete(suite)}
                       >
                         <Trash2 size={16} className="mr-1" /> Delete
                       </Button>
@@ -847,24 +859,24 @@ const Rooms = () => {
         )}
       </div>
 
-      {/* Add Room Dialog */}
-      {renderRoomDialog(false)}
+      {/* Add Suite Dialog */}
+      {renderSuiteDialog(false)}
 
-      {/* Edit Room Dialog */}
-      {renderRoomDialog(true)}
+      {/* Edit Suite Dialog */}
+      {renderSuiteDialog(true)}
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Room</AlertDialogTitle>
+            <AlertDialogTitle>Delete Suite</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{selectedRoom?.name}"? This action cannot be undone, and any associated bookings may be affected.
+              Are you sure you want to delete "{selectedSuite?.name}"? This action cannot be undone, and any associated bookings may be affected.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteRoom} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogAction onClick={handleDeleteSuite} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -874,4 +886,4 @@ const Rooms = () => {
   );
 };
 
-export default Rooms;
+export default Suites;
