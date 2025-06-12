@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { QueryClient } from 'react-query';
+import { Toaster } from '@/components/ui/toaster';
 
 // Public Pages
 import Index from '@/pages/Index';
@@ -25,13 +26,15 @@ import AdminReviews from '@/pages/Admin/Reviews';
 import AdminGallery from '@/pages/Admin/Gallery';
 
 // Components
-import ProtectedRoute from '@/components/ProtectedRoute';
+import ProtectedRoute from '@/components/Admin/ProtectedRoute';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <QueryClient>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
           <div className="w-full">
             <Toaster />
             <Routes>
@@ -80,8 +83,8 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
-        </QueryClient>
-      </AuthProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   );
 }
