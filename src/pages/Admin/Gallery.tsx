@@ -26,6 +26,7 @@ const Gallery = () => {
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -58,13 +59,15 @@ const Gallery = () => {
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
 
-    if (!file.type.startsWith('image/')) {
+    // Validate all files are images
+    const invalidFiles = Array.from(files).filter(file => !file.type.startsWith('image/'));
+    if (invalidFiles.length > 0) {
       toast({
         title: 'Error',
-        description: 'Please select an image file',
+        description: 'Please select only image files',
         variant: 'destructive',
       });
       return;
@@ -72,40 +75,48 @@ const Gallery = () => {
 
     try {
       setUploading(true);
+      setUploadProgress({ current: 0, total: files.length });
 
-      // Upload to Supabase storage (if configured) or use a direct URL
-      // For now, we'll create a URL for the file
-      const fileUrl = URL.createObjectURL(file);
+      const uploadPromises = Array.from(files).map(async (file, index) => {
+        // Create a URL for the file
+        const fileUrl = URL.createObjectURL(file);
 
-      const { error } = await supabase.from('gallery').insert({
-        image_url: fileUrl,
-        title: '', // Empty title
-        description: '', // Empty description
+        const { error } = await supabase.from('gallery').insert({
+          image_url: fileUrl,
+          title: '', // Empty title
+          description: '', // Empty description
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        // Update progress
+        setUploadProgress(prev => ({ ...prev, current: index + 1 }));
       });
 
-      if (error) {
-        throw error;
-      }
+      await Promise.all(uploadPromises);
 
       await fetchGalleryItems();
       setIsUploadDialogOpen(false);
       
       toast({
         title: 'Success',
-        description: 'Image uploaded successfully',
+        description: `${files.length} image${files.length > 1 ? 's' : ''} uploaded successfully`,
       });
 
       // Reset the file input
       event.target.value = '';
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error uploading images:', error);
       toast({
         title: 'Error',
-        description: 'Failed to upload image',
+        description: 'Failed to upload images',
         variant: 'destructive',
       });
     } finally {
       setUploading(false);
+      setUploadProgress({ current: 0, total: 0 });
     }
   };
 
@@ -160,26 +171,35 @@ const Gallery = () => {
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Upload Image
+                Upload Images
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Upload New Image</DialogTitle>
+                <DialogTitle>Upload New Images</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div>
                   <Input
                     type="file"
                     accept="image/*"
+                    multiple
                     onChange={handleFileUpload}
                     disabled={uploading}
                   />
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Select multiple images to upload at once
+                  </p>
                 </div>
                 {uploading && (
-                  <div className="flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Uploading...</span>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Uploading images...</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Progress: {uploadProgress.current} of {uploadProgress.total}
+                    </div>
                   </div>
                 )}
               </div>
@@ -205,7 +225,7 @@ const Gallery = () => {
                 {galleryItems.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
-                      No images found. Upload your first image to get started.
+                      No images found. Upload your first images to get started.
                     </TableCell>
                   </TableRow>
                 ) : (
