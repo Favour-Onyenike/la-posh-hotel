@@ -136,18 +136,18 @@ const Index = () => {
             />
             <Feature
               icon={Utensils}
-              title="Fine Dining Restaurant"
-              description="Savor exquisite cuisine prepared by our master chefs in an elegant setting"
+              title="Restaurant"
+              description="Savor exquisite cuisine prepared by our  chefs in an elegant setting"
             />
             <Feature
               icon={Glasses}
               title="Exclusive Bar"
-              description="Unwind with premium drinks and cocktails in our sophisticated lounge bar"
+              description="Unwind with premium drinks and cocktails in our  lounge bar"
             />
             <Feature
               icon={Car}
               title="Secure Parking"
-              description="Complimentary valet and secure parking facilities for all our guests"
+              description="secure parking facilities for all our guests"
             />
           </div>
         </div>
