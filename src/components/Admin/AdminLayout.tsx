@@ -12,7 +12,6 @@ import {
   Image as ImageIcon,
   LogOut,
   Menu,
-  X,
   User
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -56,13 +55,13 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      {/* Desktop Sidebar */}
+      {/* Desktop Sidebar - Always visible */}
       <aside className="hidden w-64 flex-col border-r bg-card lg:flex">
         <div className="p-6">
           <Link to="/admin/dashboard" className="flex items-center justify-center">
             <img 
               src="/lovable-uploads/24e55c44-3161-4ad5-8149-ffee109ccdae.png" 
-              alt="La Posh Logo" 
+              alt="Admin Logo" 
               className="h-16 w-auto"
             />
           </Link>
@@ -112,22 +111,14 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">
           <div className="flex h-full flex-col">
-            <div className="flex items-center justify-between p-6">
+            <div className="p-6">
               <Link to="/admin/dashboard" className="flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/24e55c44-3161-4ad5-8149-ffee109ccdae.png" 
-                  alt="La Posh Logo" 
+                  alt="Admin Logo" 
                   className="h-12 w-auto"
                 />
               </Link>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden"
-                onClick={() => setOpen(false)}
-              >
-                <X size={18} />
-              </Button>
             </div>
             <nav className="flex-1 space-y-1 px-3">
               {navItems.map((item) => (
@@ -167,7 +158,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </SheetContent>
       </Sheet>
 
-      {/* Main Content - Add padding-top for mobile */}
+      {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-4 pt-14 lg:p-8 lg:pt-8">{children}</main>
     </div>
   );
