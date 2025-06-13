@@ -81,52 +81,77 @@ const Facilities = () => {
           </div>
         </section>
 
-        {/* Grid Layout for Facilities */}
+        {/* Facilities Layout */}
         <section className="bg-gray-50 py-16">
           <div className="container mx-auto px-4 max-w-7xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
+            <div className="space-y-8 md:space-y-12">
               {facilityItems.map((item, index) => (
-                <React.Fragment key={index}>
-                  {/* For even items: image on left, text on right */}
-                  {index % 2 === 0 ? (
-                    <>
-                      <div className="bg-white overflow-hidden shadow-md h-64 md:h-72">
-                        <AspectRatio ratio={4/3} className="h-full">
-                          <img 
-                            src={item.imageSrc} 
-                            alt={item.title} 
-                            className="w-full h-full object-cover"
-                          />
-                        </AspectRatio>
+                <div 
+                  key={index}
+                  className="bg-white rounded-lg shadow-md overflow-hidden"
+                >
+                  {/* Mobile Layout - Always image first, then content */}
+                  <div className="md:hidden">
+                    <div className="h-64">
+                      <AspectRatio ratio={4/3} className="h-full">
+                        <img 
+                          src={item.imageSrc} 
+                          alt={item.title} 
+                          className="w-full h-full object-cover"
+                        />
+                      </AspectRatio>
+                    </div>
+                    <div className="p-6">
+                      <div className="border-l-4 border-hotel-gold pl-4">
+                        <h3 className="text-xl font-serif font-bold mb-3">{item.title}</h3>
+                        <p className="text-gray-700 text-sm leading-relaxed">{item.description}</p>
                       </div>
-                      <div className="bg-white p-6 flex flex-col justify-center shadow-md">
-                        <div className="border-l-4 border-hotel-gold pl-4">
-                          <h3 className="text-xl font-serif font-bold mb-3">{item.title}</h3>
-                          <p className="text-gray-700 text-sm leading-relaxed">{item.description}</p>
+                    </div>
+                  </div>
+
+                  {/* Desktop Layout - Alternating */}
+                  <div className="hidden md:grid md:grid-cols-2">
+                    {index % 2 === 0 ? (
+                      <>
+                        {/* Even items: image on left, text on right */}
+                        <div className="h-64 md:h-72">
+                          <AspectRatio ratio={4/3} className="h-full">
+                            <img 
+                              src={item.imageSrc} 
+                              alt={item.title} 
+                              className="w-full h-full object-cover"
+                            />
+                          </AspectRatio>
                         </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      {/* For odd items: text on left, image on right */}
-                      <div className="bg-white p-6 flex flex-col justify-center shadow-md">
-                        <div className="border-l-4 border-hotel-gold pl-4">
-                          <h3 className="text-xl font-serif font-bold mb-3">{item.title}</h3>
-                          <p className="text-gray-700 text-sm leading-relaxed">{item.description}</p>
+                        <div className="p-6 flex flex-col justify-center">
+                          <div className="border-l-4 border-hotel-gold pl-4">
+                            <h3 className="text-xl font-serif font-bold mb-3">{item.title}</h3>
+                            <p className="text-gray-700 text-sm leading-relaxed">{item.description}</p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="bg-white overflow-hidden shadow-md h-64 md:h-72">
-                        <AspectRatio ratio={4/3} className="h-full">
-                          <img 
-                            src={item.imageSrc} 
-                            alt={item.title} 
-                            className="w-full h-full object-cover"
-                          />
-                        </AspectRatio>
-                      </div>
-                    </>
-                  )}
-                </React.Fragment>
+                      </>
+                    ) : (
+                      <>
+                        {/* Odd items: text on left, image on right */}
+                        <div className="p-6 flex flex-col justify-center">
+                          <div className="border-l-4 border-hotel-gold pl-4">
+                            <h3 className="text-xl font-serif font-bold mb-3">{item.title}</h3>
+                            <p className="text-gray-700 text-sm leading-relaxed">{item.description}</p>
+                          </div>
+                        </div>
+                        <div className="h-64 md:h-72">
+                          <AspectRatio ratio={4/3} className="h-full">
+                            <img 
+                              src={item.imageSrc} 
+                              alt={item.title} 
+                              className="w-full h-full object-cover"
+                            />
+                          </AspectRatio>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
