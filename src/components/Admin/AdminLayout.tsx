@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -53,7 +52,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex items-center justify-between h-16 px-6 bg-gray-800">
-          <h1 className="text-xl font-bold text-white">Admin Panel</h1>
+          <img 
+            src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
+            alt="La Posh Signature Suites" 
+            className="h-10 w-auto"
+          />
           <button
             onClick={() => setSidebarOpen(false)}
             className="lg:hidden text-gray-400 hover:text-white"
