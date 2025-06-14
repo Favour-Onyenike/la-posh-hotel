@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import CounterBar from "@/components/CounterBar";
 import RecentReviews from "@/components/RecentReviews";
+import Events from "@/components/Events";
 import { Star, Utensils, Wifi, Car, Clock, Glasses, MapPin, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -191,6 +192,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Events Section */}
+      <Events />
 
       {/* Testimonials - Updated to display real reviews */}
       <section className="relative section-padding">

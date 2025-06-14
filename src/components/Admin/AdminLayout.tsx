@@ -1,165 +1,139 @@
 
 import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from "@/components/ui/button";
-import {
-  LayoutDashboard,
-  Hotel,
-  Crown,
+import { 
+  LayoutDashboard, 
+  Calendar, 
+  BedDouble, 
+  Star, 
+  MessageSquare, 
+  Images,
   CalendarDays,
-  MessageSquare,
-  Image as ImageIcon,
-  LogOut,
   Menu,
+  X,
+  LogOut,
   User
-} from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+} from 'lucide-react';
 
-type NavItemProps = {
-  to: string;
-  icon: React.ReactNode;
-  label: string;
-  onClick?: () => void;
-};
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  const { signOut, user } = useAuth();
 
-const NavItem = ({ to, icon, label, onClick }: NavItemProps) => (
-  <NavLink
-    to={to}
-    onClick={onClick}
-    className={({ isActive }) =>
-      `flex items-center gap-2 rounded-lg px-3 py-2 transition-all ${
-        isActive
-          ? "bg-primary text-primary-foreground"
-          : "text-muted-foreground hover:bg-muted hover:text-foreground"
-      }`
-    }
-  >
-    {icon}
-    <span>{label}</span>
-  </NavLink>
-);
-
-const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { signOut, profile } = useAuth();
-  const [open, setOpen] = useState(false);
-  
-  const navItems = [
-    { to: "/admin/dashboard", icon: <LayoutDashboard size={18} />, label: "Dashboard" },
-    { to: "/admin/rooms", icon: <Hotel size={18} />, label: "Rooms" },
-    { to: "/admin/suites", icon: <Crown size={18} />, label: "Suites" },
-    { to: "/admin/bookings", icon: <CalendarDays size={18} />, label: "Bookings" },
-    { to: "/admin/reviews", icon: <MessageSquare size={18} />, label: "Reviews" },
-    { to: "/admin/gallery", icon: <ImageIcon size={18} />, label: "Gallery" },
+  const navigation = [
+    { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+    { name: 'Bookings', href: '/admin/bookings', icon: Calendar },
+    { name: 'Rooms', href: '/admin/rooms', icon: BedDouble },
+    { name: 'Suites', href: '/admin/suites', icon: Star },
+    { name: 'Reviews', href: '/admin/reviews', icon: MessageSquare },
+    { name: 'Gallery', href: '/admin/gallery', icon: Images },
+    { name: 'Events', href: '/admin/events', icon: CalendarDays },
   ];
 
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* Desktop Sidebar - Always visible */}
-      <aside className="hidden w-64 flex-col border-r bg-card lg:flex">
-        <div className="p-6">
-          <Link to="/admin/dashboard" className="flex items-center justify-center">
-            <img 
-              src="/lovable-uploads/24e55c44-3161-4ad5-8149-ffee109ccdae.png" 
-              alt="Admin Logo" 
-              className="h-16 w-auto"
-            />
-          </Link>
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile sidebar backdrop */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div className={cn(
+        "fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform duration-300 ease-in-out lg:translate-x-0",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div className="flex items-center justify-between h-16 px-6 bg-gray-800">
+          <h1 className="text-xl font-bold text-white">Admin Panel</h1>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden text-gray-400 hover:text-white"
+          >
+            <X size={24} />
+          </button>
         </div>
-        <nav className="flex-1 space-y-1 px-3">
-          {navItems.map((item) => (
-            <NavItem
-              key={item.to}
-              to={item.to}
-              icon={item.icon}
-              label={item.label}
-            />
-          ))}
+
+        <nav className="mt-8 px-4">
+          <ul className="space-y-2">
+            {navigation.map((item) => {
+              const isActive = location.pathname === item.href;
+              return (
+                <li key={item.name}>
+                  <Link
+                    to={item.href}
+                    onClick={() => setSidebarOpen(false)}
+                    className={cn(
+                      "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors",
+                      isActive
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                    )}
+                  >
+                    <item.icon className="mr-3 h-5 w-5" />
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </nav>
-        <div className="mt-auto border-t p-3">
-          <div className="mb-2 flex items-center gap-2 rounded-lg bg-muted p-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-              <User size={16} className="text-primary-foreground" />
-            </div>
+
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gray-800">
+          <div className="flex items-center mb-4 px-4">
+            <User className="h-8 w-8 text-gray-400 mr-3" />
             <div>
-              <p className="text-sm font-medium">{profile?.full_name || profile?.email}</p>
-              <p className="text-xs text-muted-foreground">Administrator</p>
+              <p className="text-sm font-medium text-white">{user?.email}</p>
+              <p className="text-xs text-gray-400">Administrator</p>
             </div>
           </div>
           <Button
+            onClick={handleSignOut}
             variant="outline"
             size="sm"
-            className="w-full justify-start gap-2"
-            onClick={signOut}
+            className="w-full bg-transparent border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
           >
-            <LogOut size={16} />
+            <LogOut className="mr-2 h-4 w-4" />
             Sign Out
           </Button>
         </div>
-      </aside>
+      </div>
 
-      {/* Mobile Sidebar */}
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="fixed left-4 top-4 z-40 lg:hidden"
+      {/* Header */}
+      <div className="lg:pl-64">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+          <button
+            type="button"
+            className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+            onClick={() => setSidebarOpen(true)}
           >
-            <Menu size={20} />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0">
-          <div className="flex h-full flex-col">
-            <div className="p-6">
-              <Link to="/admin/dashboard" className="flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/24e55c44-3161-4ad5-8149-ffee109ccdae.png" 
-                  alt="Admin Logo" 
-                  className="h-12 w-auto"
-                />
-              </Link>
-            </div>
-            <nav className="flex-1 space-y-1 px-3">
-              {navItems.map((item) => (
-                <NavItem
-                  key={item.to}
-                  to={item.to}
-                  icon={item.icon}
-                  label={item.label}
-                  onClick={() => setOpen(false)}
-                />
-              ))}
-            </nav>
-            <div className="mt-auto border-t p-3">
-              <div className="mb-2 flex items-center gap-2 rounded-lg bg-muted p-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-                  <User size={16} className="text-primary-foreground" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium">{profile?.full_name || profile?.email}</p>
-                  <p className="text-xs text-muted-foreground">Administrator</p>
-                </div>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full justify-start gap-2"
-                onClick={() => {
-                  setOpen(false);
-                  signOut();
-                }}
-              >
-                <LogOut size={16} />
-                Sign Out
-              </Button>
+            <Menu className="h-6 w-6" />
+          </button>
+
+          <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+            <div className="flex items-center gap-x-4 lg:gap-x-6">
+              <h2 className="text-xl font-semibold text-gray-900">
+                La-Posh Admin Dashboard
+              </h2>
             </div>
           </div>
-        </SheetContent>
-      </Sheet>
+        </div>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto p-4 pt-14 lg:p-8 lg:pt-8">{children}</main>
+        {/* Main content */}
+        <main className="py-6">
+          <div className="px-4 sm:px-6 lg:px-8">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

@@ -17,6 +17,7 @@ import AdminRooms from '@/pages/Admin/Rooms';
 import AdminSuites from '@/pages/Admin/Suites';
 import AdminReviews from '@/pages/Admin/Reviews';
 import AdminGallery from '@/pages/Admin/Gallery';
+import AdminEvents from '@/pages/Admin/Events';
 import { AuthProvider } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/Admin/ProtectedRoute';
 import { Toaster } from '@/components/ui/toaster';
@@ -93,6 +94,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminGallery />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/events" 
+            element={
+              <ProtectedRoute>
+                <AdminEvents />
               </ProtectedRoute>
             } 
           />
