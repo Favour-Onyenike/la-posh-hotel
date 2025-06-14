@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -16,7 +15,6 @@ interface ContentItem {
   id: string;
   page: string;
   section: string;
-  title?: string;
   content: string;
   created_at: string;
   updated_at: string;
@@ -27,7 +25,6 @@ const ContentManagement = () => {
   const [newItem, setNewItem] = useState({
     page: '',
     section: '',
-    title: '',
     content: ''
   });
   const [showAddForm, setShowAddForm] = useState(false);
@@ -63,7 +60,7 @@ const ContentManagement = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['content'] });
-      setNewItem({ page: '', section: '', title: '', content: '' });
+      setNewItem({ page: '', section: '', content: '' });
       setShowAddForm(false);
       toast({
         title: "Success",
@@ -87,7 +84,6 @@ const ContentManagement = () => {
         .update({
           page: item.page,
           section: item.section,
-          title: item.title,
           content: item.content
         })
         .eq('id', item.id)
@@ -158,6 +154,31 @@ const ContentManagement = () => {
     }
   };
 
+  // Predefined sections for About and Facilities pages
+  const pageSections = {
+    about: [
+      'hero_description',
+      'main_introduction',
+      'story_paragraph_1',
+      'story_paragraph_2', 
+      'story_paragraph_3',
+      'luxury_description',
+      'location_description',
+      'dining_description',
+      'service_description'
+    ],
+    facilities: [
+      'hero_description',
+      'introduction_text',
+      'restaurant_description',
+      'executive_rooms_description',
+      'power_supply_description',
+      'fitness_center_description',
+      'outdoor_recreation_description',
+      'cta_description'
+    ]
+  };
+
   if (isLoading) {
     return (
       <AdminLayout>
@@ -172,10 +193,13 @@ const ContentManagement = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Content Management</h1>
+          <div>
+            <h1 className="text-3xl font-bold">Content Management</h1>
+            <p className="text-gray-600 mt-2">Manage content for About and Facilities pages</p>
+          </div>
           <Button onClick={() => setShowAddForm(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            Add Content
+            Add Content Section
           </Button>
         </div>
 
@@ -183,7 +207,7 @@ const ContentManagement = () => {
         {showAddForm && (
           <Card>
             <CardHeader>
-              <CardTitle>Add New Content</CardTitle>
+              <CardTitle>Add New Content Section</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -191,37 +215,36 @@ const ContentManagement = () => {
                   <Label htmlFor="new-page">Page</Label>
                   <Select
                     value={newItem.page}
-                    onValueChange={(value) => setNewItem(prev => ({ ...prev, page: value }))}
+                    onValueChange={(value) => setNewItem(prev => ({ ...prev, page: value, section: '' }))}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select page" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="home">Home</SelectItem>
                       <SelectItem value="about">About</SelectItem>
                       <SelectItem value="facilities">Facilities</SelectItem>
-                      <SelectItem value="contact">Contact</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
                   <Label htmlFor="new-section">Section</Label>
-                  <Input
-                    id="new-section"
+                  <Select
                     value={newItem.section}
-                    onChange={(e) => setNewItem(prev => ({ ...prev, section: e.target.value }))}
-                    placeholder="Section name"
-                  />
+                    onValueChange={(value) => setNewItem(prev => ({ ...prev, section: value }))}
+                    disabled={!newItem.page}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select section" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {newItem.page && pageSections[newItem.page as keyof typeof pageSections]?.map((section) => (
+                        <SelectItem key={section} value={section}>
+                          {section.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="new-title">Title (Optional)</Label>
-                <Input
-                  id="new-title"
-                  value={newItem.title}
-                  onChange={(e) => setNewItem(prev => ({ ...prev, title: e.target.value }))}
-                  placeholder="Content title"
-                />
               </div>
               <div>
                 <Label htmlFor="new-content">Content</Label>
@@ -229,8 +252,8 @@ const ContentManagement = () => {
                   id="new-content"
                   value={newItem.content}
                   onChange={(e) => setNewItem(prev => ({ ...prev, content: e.target.value }))}
-                  placeholder="Content text"
-                  rows={6}
+                  placeholder="Enter the content text..."
+                  rows={8}
                 />
               </div>
               <div className="flex gap-2">
@@ -249,112 +272,125 @@ const ContentManagement = () => {
           </Card>
         )}
 
-        {/* Content List */}
-        <div className="grid gap-4">
-          {content?.map((item) => (
-            <Card key={item.id}>
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg">
-                      {item.title || `${item.page} - ${item.section}`}
-                    </CardTitle>
-                    <p className="text-sm text-gray-500">
-                      Page: {item.page} | Section: {item.section}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditingItem(item)}
-                    >
-                      <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(item.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+        {/* Content List organized by page */}
+        <div className="space-y-8">
+          {['about', 'facilities'].map((page) => {
+            const pageContent = content?.filter(item => item.page === page) || [];
+            
+            return (
+              <div key={page}>
+                <h2 className="text-2xl font-semibold mb-4 capitalize">{page} Page Content</h2>
+                <div className="grid gap-4">
+                  {pageContent.map((item) => (
+                    <Card key={item.id}>
+                      <CardHeader>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <CardTitle className="text-lg">
+                              {item.section.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                            </CardTitle>
+                            <p className="text-sm text-gray-500">
+                              {page} page section
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setEditingItem(item)}
+                            >
+                              <Edit2 className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDelete(item.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        {editingItem?.id === item.id ? (
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label>Page</Label>
+                                <Select
+                                  value={editingItem.page}
+                                  onValueChange={(value) => setEditingItem(prev => prev ? { ...prev, page: value } : null)}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="about">About</SelectItem>
+                                    <SelectItem value="facilities">Facilities</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <Label>Section</Label>
+                                <Select
+                                  value={editingItem.section}
+                                  onValueChange={(value) => setEditingItem(prev => prev ? { ...prev, section: value } : null)}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {editingItem.page && pageSections[editingItem.page as keyof typeof pageSections]?.map((section) => (
+                                      <SelectItem key={section} value={section}>
+                                        {section.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </div>
+                            <div>
+                              <Label>Content</Label>
+                              <Textarea
+                                value={editingItem.content}
+                                onChange={(e) => setEditingItem(prev => prev ? { ...prev, content: e.target.value } : null)}
+                                rows={8}
+                              />
+                            </div>
+                            <div className="flex gap-2">
+                              <Button onClick={handleSaveEdit} disabled={updateContent.isPending}>
+                                {updateContent.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                                Save Changes
+                              </Button>
+                              <Button variant="outline" onClick={() => setEditingItem(null)}>
+                                Cancel
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-gray-700 whitespace-pre-wrap">
+                            {item.content.length > 300 
+                              ? `${item.content.substring(0, 300)}...` 
+                              : item.content
+                            }
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                  
+                  {pageContent.length === 0 && (
+                    <Card>
+                      <CardContent className="text-center py-8">
+                        <p className="text-gray-500">No content sections found for the {page} page.</p>
+                      </CardContent>
+                    </Card>
+                  )}
                 </div>
-              </CardHeader>
-              <CardContent>
-                {editingItem?.id === item.id ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label>Page</Label>
-                        <Select
-                          value={editingItem.page}
-                          onValueChange={(value) => setEditingItem(prev => prev ? { ...prev, page: value } : null)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="home">Home</SelectItem>
-                            <SelectItem value="about">About</SelectItem>
-                            <SelectItem value="facilities">Facilities</SelectItem>
-                            <SelectItem value="contact">Contact</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Section</Label>
-                        <Input
-                          value={editingItem.section}
-                          onChange={(e) => setEditingItem(prev => prev ? { ...prev, section: e.target.value } : null)}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label>Title</Label>
-                      <Input
-                        value={editingItem.title || ''}
-                        onChange={(e) => setEditingItem(prev => prev ? { ...prev, title: e.target.value } : null)}
-                      />
-                    </div>
-                    <div>
-                      <Label>Content</Label>
-                      <Textarea
-                        value={editingItem.content}
-                        onChange={(e) => setEditingItem(prev => prev ? { ...prev, content: e.target.value } : null)}
-                        rows={6}
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button onClick={handleSaveEdit} disabled={updateContent.isPending}>
-                        {updateContent.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                        Save Changes
-                      </Button>
-                      <Button variant="outline" onClick={() => setEditingItem(null)}>
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-gray-700">
-                    {item.content.length > 200 
-                      ? `${item.content.substring(0, 200)}...` 
-                      : item.content
-                    }
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            );
+          })}
         </div>
-
-        {content?.length === 0 && (
-          <Card>
-            <CardContent className="text-center py-8">
-              <p className="text-gray-500">No content found. Create your first content item.</p>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </AdminLayout>
   );
