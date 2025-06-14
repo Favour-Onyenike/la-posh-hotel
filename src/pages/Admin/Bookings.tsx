@@ -5,12 +5,6 @@ import { Booking, Room } from '@/types/supabase';
 import AdminLayout from '@/components/Admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
   Table,
   TableBody,
   TableCell,
@@ -45,7 +39,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { Loader2, Calendar, User, Home, CheckCircle, XCircle, CreditCard } from 'lucide-react';
+import { Loader2, Calendar, User, Home, Eye, Trash2, CreditCard } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 
@@ -56,6 +50,7 @@ const Bookings = () => {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [newStatus, setNewStatus] = useState<Booking['status']>('pending');
   
   const { toast } = useToast();
@@ -71,7 +66,7 @@ const Bookings = () => {
       const { data, error } = await supabase
         .from('bookings')
         .select('*')
-        .order('check_in_date', { ascending: true });
+        .order('created_at', { ascending: false });
 
       if (error) {
         throw error;
@@ -100,13 +95,7 @@ const Bookings = () => {
         throw error;
       }
 
-      // Make sure all room data has the availability_status property
-      const roomsWithStatus = (data || []).map(room => ({
-        ...room,
-        availability_status: room.availability_status || 'available' as Room['availability_status']
-      }));
-
-      setRooms(roomsWithStatus as Room[]);
+      setRooms(data as Room[]);
     } catch (error) {
       console.error('Error fetching rooms:', error);
       toast({
@@ -130,7 +119,6 @@ const Bookings = () => {
         throw error;
       }
 
-      // Optimistically update the booking in the local state
       setBookings(bookings.map(booking =>
         booking.id === selectedBooking.id ? { ...booking, status: newStatus } : booking
       ));
@@ -165,7 +153,6 @@ const Bookings = () => {
         throw error;
       }
 
-      // Optimistically delete the booking from the local state
       setBookings(bookings.filter(booking => booking.id !== selectedBooking.id));
 
       toast({
@@ -192,7 +179,7 @@ const Bookings = () => {
   const getStatusBadge = (status: Booking['status']) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="outline">Pending</Badge>;
+        return <Badge variant="outline" className="bg-yellow-50 text-yellow-800 border-yellow-300">Pending</Badge>;
       case 'confirmed':
         return <Badge className="bg-green-500 text-white">Confirmed</Badge>;
       case 'checked_in':
@@ -210,8 +197,8 @@ const Bookings = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Bookings</h2>
-          <p className="text-muted-foreground">Manage hotel bookings.</p>
+          <h2 className="text-3xl font-bold tracking-tight">Bookings Management</h2>
+          <p className="text-muted-foreground">Manage all hotel bookings and reservations.</p>
         </div>
 
         {loading ? (
@@ -223,66 +210,157 @@ const Bookings = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Booking ID</TableHead>
                   <TableHead>Guest Name</TableHead>
                   <TableHead>Room</TableHead>
-                  <TableHead>Check-in Date</TableHead>
-                  <TableHead>Check-out Date</TableHead>
+                  <TableHead>Check-in</TableHead>
+                  <TableHead>Check-out</TableHead>
+                  <TableHead>Total</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {bookings.map((booking) => {
-                  const room = getRoomById(booking.room_id);
-                  return (
-                    <TableRow key={booking.id}>
-                      <TableCell className="font-medium">{booking.id}</TableCell>
-                      <TableCell>{booking.guest_name}</TableCell>
-                      <TableCell>
-                        {room ? (
-                          <div className="flex items-center gap-1">
-                            <Home className="h-4 w-4 text-muted-foreground" />
-                            {room.name}
+                {bookings.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      No bookings found. Bookings will appear here once customers make reservations.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  bookings.map((booking) => {
+                    const room = getRoomById(booking.room_id);
+                    return (
+                      <TableRow key={booking.id}>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <User className="h-4 w-4 text-muted-foreground" />
+                            <div>
+                              <div className="font-medium">{booking.guest_name}</div>
+                              <div className="text-sm text-muted-foreground">{booking.guest_email}</div>
+                            </div>
                           </div>
-                        ) : (
-                          <span className="text-muted-foreground">Room Not Found</span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4 text-muted-foreground" />
-                          {format(new Date(booking.check_in_date), 'PPP')}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4 text-muted-foreground" />
-                          {format(new Date(booking.check_out_date), 'PPP')}
-                        </div>
-                      </TableCell>
-                      <TableCell>{getStatusBadge(booking.status)}</TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedBooking(booking);
-                            setIsStatusDialogOpen(true);
-                            setNewStatus(booking.status);
-                          }}
-                        >
-                          Update Status
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        </TableCell>
+                        <TableCell>
+                          {room ? (
+                            <div className="flex items-center gap-1">
+                              <Home className="h-4 w-4 text-muted-foreground" />
+                              <div>
+                                <div>{room.name}</div>
+                                <div className="text-sm text-muted-foreground">{room.room_number}</div>
+                              </div>
+                            </div>
+                          ) : (
+                            <span className="text-muted-foreground">Room Not Found</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4 text-muted-foreground" />
+                            {format(new Date(booking.check_in_date), 'MMM d, yyyy')}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4 text-muted-foreground" />
+                            {format(new Date(booking.check_out_date), 'MMM d, yyyy')}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <CreditCard className="h-4 w-4 text-muted-foreground" />
+                            ₦{booking.total_price.toLocaleString()}
+                          </div>
+                        </TableCell>
+                        <TableCell>{getStatusBadge(booking.status)}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedBooking(booking);
+                                setIsViewDialogOpen(true);
+                              }}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedBooking(booking);
+                                setIsStatusDialogOpen(true);
+                                setNewStatus(booking.status);
+                              }}
+                            >
+                              Update Status
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedBooking(booking);
+                                setIsDeleteDialogOpen(true);
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
               </TableBody>
             </Table>
           </div>
         )}
       </div>
+
+      {/* View Booking Details Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Booking Details</DialogTitle>
+          </DialogHeader>
+          {selectedBooking && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm font-medium">Guest Name</Label>
+                  <p className="text-sm">{selectedBooking.guest_name}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Email</Label>
+                  <p className="text-sm">{selectedBooking.guest_email}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Phone</Label>
+                  <p className="text-sm">{selectedBooking.guest_phone || 'Not provided'}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Total Price</Label>
+                  <p className="text-sm">₦{selectedBooking.total_price.toLocaleString()}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Check-in</Label>
+                  <p className="text-sm">{format(new Date(selectedBooking.check_in_date), 'PPP')}</p>
+                </div>
+                <div>
+                  <Label className="text-sm font-medium">Check-out</Label>
+                  <p className="text-sm">{format(new Date(selectedBooking.check_out_date), 'PPP')}</p>
+                </div>
+              </div>
+              {selectedBooking.special_requests && (
+                <div>
+                  <Label className="text-sm font-medium">Special Requests</Label>
+                  <p className="text-sm bg-gray-50 p-2 rounded">{selectedBooking.special_requests}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Update Status Dialog */}
       <Dialog open={isStatusDialogOpen} onOpenChange={setIsStatusDialogOpen}>
@@ -290,7 +368,7 @@ const Bookings = () => {
           <DialogHeader>
             <DialogTitle>Update Booking Status</DialogTitle>
             <DialogDescription>
-              Select the new status for booking ID: {selectedBooking?.id}
+              Update the status for {selectedBooking?.guest_name}'s booking
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -330,7 +408,7 @@ const Bookings = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Booking</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete booking ID: {selectedBooking?.id}? This action cannot be undone.
+              Are you sure you want to delete {selectedBooking?.guest_name}'s booking? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

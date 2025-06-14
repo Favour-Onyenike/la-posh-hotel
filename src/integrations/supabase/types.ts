@@ -262,7 +262,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_available_rooms: {
+        Args: {
+          check_in_param: string
+          check_out_param: string
+          room_type_param?: string
+        }
+        Returns: {
+          id: string
+          name: string
+          description: string
+          price_per_night: number
+          capacity: number
+          room_type: string
+          room_number: string
+          image_url: string
+          features: string[]
+          availability_status: string
+        }[]
+      }
+      is_room_available: {
+        Args: {
+          room_id_param: string
+          check_in_param: string
+          check_out_param: string
+          exclude_booking_id?: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "user"

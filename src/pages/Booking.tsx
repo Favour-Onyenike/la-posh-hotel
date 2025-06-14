@@ -1,658 +1,174 @@
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BookingForm from "@/components/BookingForm";
+import RoomCard from "@/components/RoomCard";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardFooter, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import { 
-  Bed, 
-  Users, 
-  Award, 
-  DoorClosed, 
-  Wifi, 
-  Tv, 
-  Bath, 
-  AirVent, 
-  Clock,
-  Utensils,
-  Calendar as CalendarIcon,
-  Filter,
-  Search,
-} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { format, addDays, isWithinInterval, parseISO } from "date-fns";
-import { cn } from "@/lib/utils";
-
-// Room data
-const rooms = [
-  {
-    id: "opal-01",
-    type: "Room",
-    name: "Opal",
-    roomNumber: "Opal 01",
-    image: "/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png",
-    description: "Comfortable rooms offering essential amenities with elegant designs.",
-    price: 35000,
-    amenities: ["Free Wi-Fi", "TV", "Private Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Queen",
-    bookingStatus: [
-      { date: "2025-05-20", status: "booked" },
-      { date: "2025-05-21", status: "booked" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "opal-02",
-    type: "Room",
-    name: "Opal",
-    roomNumber: "Opal 02",
-    image: "/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png",
-    description: "Comfortable rooms offering essential amenities with elegant designs.",
-    price: 35000,
-    amenities: ["Free Wi-Fi", "TV", "Private Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Queen",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "topaz-01",
-    type: "Room",
-    name: "Topaz",
-    roomNumber: "Topaz 01",
-    image: "/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png",
-    description: "Spacious rooms with enhanced comfort and modern furnishings.",
-    price: 40000,
-    amenities: ["High-Speed Wi-Fi", "43\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Queen",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "topaz-02",
-    type: "Room",
-    name: "Topaz",
-    roomNumber: "Topaz 02",
-    image: "/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png",
-    description: "Spacious rooms with enhanced comfort and modern furnishings.",
-    price: 40000,
-    amenities: ["High-Speed Wi-Fi", "43\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Queen",
-    bookingStatus: [
-      { date: "2025-05-20", status: "booked" },
-      { date: "2025-05-21", status: "booked" },
-      { date: "2025-05-22", status: "booked" }
-    ]
-  },
-  {
-    id: "topaz-03",
-    type: "Room",
-    name: "Topaz",
-    roomNumber: "Topaz 03",
-    image: "/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png",
-    description: "Spacious rooms with enhanced comfort and modern furnishings.",
-    price: 40000,
-    amenities: ["High-Speed Wi-Fi", "43\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Queen",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "onyx-01",
-    type: "Room",
-    name: "Onyx",
-    roomNumber: "Onyx 01",
-    image: "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png",
-    description: "Elegant rooms featuring premium amenities and sophisticated decor.",
-    price: 45000,
-    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Luxury Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "onyx-02",
-    type: "Room",
-    name: "Onyx",
-    roomNumber: "Onyx 02",
-    image: "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png",
-    description: "Elegant rooms featuring premium amenities and sophisticated decor.",
-    price: 45000,
-    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Luxury Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "onyx-03",
-    type: "Room",
-    name: "Onyx",
-    roomNumber: "Onyx 03",
-    image: "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png",
-    description: "Elegant rooms featuring premium amenities and sophisticated decor.",
-    price: 45000,
-    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Luxury Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "onyx-04",
-    type: "Room",
-    name: "Onyx",
-    roomNumber: "Onyx 04",
-    image: "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png",
-    description: "Elegant rooms featuring premium amenities and sophisticated decor.",
-    price: 45000,
-    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Luxury Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "onyx-05",
-    type: "Room",
-    name: "Onyx",
-    roomNumber: "Onyx 05",
-    image: "/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png",
-    description: "Elegant rooms featuring premium amenities and sophisticated decor.",
-    price: 45000,
-    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Luxury Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  // Adding more room types to match the 38 count mentioned
-  {
-    id: "ivory-01",
-    type: "Room",
-    name: "Ivory",
-    roomNumber: "Ivory 01",
-    image: "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png",
-    description: "Bright and airy rooms with luxurious touches and ample space.",
-    price: 42000,
-    amenities: ["High-Speed Wi-Fi", "48\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King/Twin",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "ivory-02",
-    type: "Room",
-    name: "Ivory",
-    roomNumber: "Ivory 02",
-    image: "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png",
-    description: "Bright and airy rooms with luxurious touches and ample space.",
-    price: 42000,
-    amenities: ["High-Speed Wi-Fi", "48\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King/Twin",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "ivory-03",
-    type: "Room",
-    name: "Ivory",
-    roomNumber: "Ivory 03",
-    image: "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png",
-    description: "Bright and airy rooms with luxurious touches and ample space.",
-    price: 42000,
-    amenities: ["High-Speed Wi-Fi", "48\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King/Twin",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "ivory-04",
-    type: "Room",
-    name: "Ivory",
-    roomNumber: "Ivory 04",
-    image: "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png",
-    description: "Bright and airy rooms with luxurious touches and ample space.",
-    price: 42000,
-    amenities: ["High-Speed Wi-Fi", "48\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King/Twin",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "ivory-05",
-    type: "Room",
-    name: "Ivory",
-    roomNumber: "Ivory 05",
-    image: "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png",
-    description: "Bright and airy rooms with luxurious touches and ample space.",
-    price: 42000,
-    amenities: ["High-Speed Wi-Fi", "48\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King/Twin",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "ivory-06",
-    type: "Room",
-    name: "Ivory",
-    roomNumber: "Ivory 06",
-    image: "/lovable-uploads/247043c1-0231-4f7a-b19e-6f0273dcc58b.png",
-    description: "Bright and airy rooms with luxurious touches and ample space.",
-    price: 42000,
-    amenities: ["High-Speed Wi-Fi", "48\" TV", "Premium Coffee Maker", "Spacious Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King/Twin",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "amber-01",
-    type: "Room",
-    name: "Amber",
-    roomNumber: "Amber 01",
-    image: "/lovable-uploads/8625d04c-54ec-4d6c-83b7-3a1081dac086.png",
-    description: "Warm and inviting executive rooms with premium bedding and stylish furnishings.",
-    price: 48000,
-    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Marble Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "amber-02",
-    type: "Room",
-    name: "Amber",
-    roomNumber: "Amber 02",
-    image: "/lovable-uploads/8625d04c-54ec-4d6c-83b7-3a1081dac086.png",
-    description: "Warm and inviting executive rooms with premium bedding and stylish furnishings.",
-    price: 48000,
-    amenities: ["High-Speed Wi-Fi", "50\" TV", "Nespresso Machine", "Marble Bathroom", "Air Conditioning", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  }
-];
-
-// Suites data
-const suites = [
-  {
-    id: "diamond-01",
-    type: "Suite",
-    name: "Diamond",
-    roomNumber: "Diamond 01",
-    image: "/lovable-uploads/7d3b8634-80e9-4dc1-ba22-be8f76121c97.png",
-    description: "Luxurious suites with separate living areas and premium amenities.",
-    price: 85000,
-    amenities: ["Ultra-Fast Wi-Fi", "65\" TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "diamond-02",
-    type: "Suite",
-    name: "Diamond",
-    roomNumber: "Diamond 02",
-    image: "/lovable-uploads/7d3b8634-80e9-4dc1-ba22-be8f76121c97.png",
-    description: "Luxurious suites with separate living areas and premium amenities.",
-    price: 85000,
-    amenities: ["Ultra-Fast Wi-Fi", "65\" TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "sapphire-01",
-    type: "Suite",
-    name: "Sapphire",
-    roomNumber: "Sapphire 01",
-    image: "/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png",
-    description: "Elegant suites featuring sophisticated design and premium services.",
-    price: 80000,
-    amenities: ["Ultra-Fast Wi-Fi", "60\" TV", "Kitchenette", "Luxury Bathroom with Walk-in Shower", "Smart Climate Control", "Premium Mini Bar", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "sapphire-02",
-    type: "Suite",
-    name: "Sapphire",
-    roomNumber: "Sapphire 02",
-    image: "/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png",
-    description: "Elegant suites featuring sophisticated design and premium services.",
-    price: 80000,
-    amenities: ["Ultra-Fast Wi-Fi", "60\" TV", "Kitchenette", "Luxury Bathroom with Walk-in Shower", "Smart Climate Control", "Premium Mini Bar", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "emerald-01",
-    type: "Suite",
-    name: "Emerald",
-    roomNumber: "Emerald 01",
-    image: "/lovable-uploads/c5b0e6f8-b1da-4fc2-ae09-35e930422a81.png",
-    description: "Mini suite offering luxurious comfort in a compact yet elegant space.",
-    price: 65000,
-    amenities: ["High-Speed Wi-Fi", "55\" TV", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "gold-01",
-    type: "Suite",
-    name: "Gold",
-    roomNumber: "Gold 01",
-    image: "/lovable-uploads/8625d04c-54ec-4d6c-83b7-3a1081dac086.png",
-    description: "Premium suites with opulent furnishings and expansive living areas.",
-    price: 75000,
-    amenities: ["Ultra-Fast Wi-Fi", "60\" TV", "Kitchenette", "Marble Bathroom with Dual Sinks", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "gold-02",
-    type: "Suite",
-    name: "Gold",
-    roomNumber: "Gold 02",
-    image: "/lovable-uploads/8625d04c-54ec-4d6c-83b7-3a1081dac086.png",
-    description: "Premium suites with opulent furnishings and expansive living areas.",
-    price: 75000,
-    amenities: ["Ultra-Fast Wi-Fi", "60\" TV", "Kitchenette", "Marble Bathroom with Dual Sinks", "Smart Climate Control", "Premium Mini Bar", "Dining Area", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "pearl-01",
-    type: "Suite",
-    name: "Pearl",
-    roomNumber: "Pearl 01",
-    image: "/lovable-uploads/28419863-c4a4-4fb6-a14e-c864333d1966.png",
-    description: "Exclusive suite offering the ultimate in luxury and personalized service.",
-    price: 90000,
-    amenities: ["Ultra-Fast Wi-Fi", "75\" TV", "Full Kitchenette", "Luxury Bathroom with Jacuzzi and Steam Shower", "Smart Climate Control", "Premium Stocked Bar", "Dining Area", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Emperor King",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "ruby-01",
-    type: "Suite",
-    name: "Ruby",
-    roomNumber: "Ruby 01",
-    image: "/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png",
-    description: "Double bed suites perfect for couples, with deluxe amenities.",
-    price: 70000,
-    amenities: ["High-Speed Wi-Fi", "55\" TV", "Kitchenette", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Two Queen Beds",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "ruby-02",
-    type: "Suite",
-    name: "Ruby",
-    roomNumber: "Ruby 02",
-    image: "/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png",
-    description: "Double bed suites perfect for couples, with deluxe amenities.",
-    price: 70000,
-    amenities: ["High-Speed Wi-Fi", "55\" TV", "Kitchenette", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Two Queen Beds",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  },
-  {
-    id: "ruby-03",
-    type: "Suite",
-    name: "Ruby",
-    roomNumber: "Ruby 03",
-    image: "/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png",
-    description: "Double bed suites perfect for couples, with deluxe amenities.",
-    price: 70000,
-    amenities: ["High-Speed Wi-Fi", "55\" TV", "Kitchenette", "Luxury Bathroom", "Climate Control", "Mini Bar", "Free Breakfast"],
-    maxGuests: 2,
-    bedType: "Two Queen Beds",
-    bookingStatus: [
-      { date: "2025-05-20", status: "available" },
-      { date: "2025-05-21", status: "available" },
-      { date: "2025-05-22", status: "available" }
-    ]
-  }
-];
-
-// Combine rooms and suites
-const allAccommodations = [...rooms, ...suites];
-
-// Room card component
-const RoomCard = ({ accommodation, checkInDate, checkOutDate }) => {
-  const isAvailable = () => {
-    if (!checkInDate || !checkOutDate) return true;
-    
-    // For the demo, we'll use a simple check
-    // A real implementation would check all dates between checkIn and checkOut
-    const randomAvailability = Math.random() > 0.3; // 70% chance of being available
-    return randomAvailability;
-  };
-  
-  return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
-      <div className="relative h-48 overflow-hidden">
-        <img 
-          src={accommodation.image} 
-          alt={`${accommodation.name} ${accommodation.type}`}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-        />
-        <div className="absolute top-0 right-0 bg-hotel-gold text-white px-3 py-1 m-2 rounded-md text-sm font-medium">
-          {accommodation.type}
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-          <p className="text-white font-bold text-xl">{accommodation.name}</p>
-          <p className="text-white/90 text-sm">₦{accommodation.price.toLocaleString()}/night</p>
-        </div>
-      </div>
-      <CardHeader className="py-3">
-        <CardTitle className="flex justify-between items-center">
-          <span>{accommodation.roomNumber}</span>
-          <Badge 
-            variant={isAvailable() ? "outline" : "destructive"} 
-            className={isAvailable() ? "bg-green-50 text-green-800 border-green-800" : ""}>
-            {isAvailable() ? "Available" : "Booked"}
-          </Badge>
-        </CardTitle>
-        <CardDescription className="flex items-center gap-2">
-          <DoorClosed size={16} />
-          <span>{accommodation.roomNumber}</span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex-grow py-2">
-        <p className="text-gray-700 mb-3 line-clamp-2">{accommodation.description}</p>
-        
-        <div>
-          <h4 className="text-sm font-medium mb-2 text-gray-700">Key Features</h4>
-          <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-            <div className="flex items-center gap-1">
-              <Users size={16} />
-              <span>{accommodation.maxGuests} Guests</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Bed size={16} />
-              <span>{accommodation.bedType}</span>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-between items-center border-t pt-3 pb-3">
-        <div className="text-hotel-gold font-bold">
-          ₦{accommodation.price.toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
-        </div>
-        <Button 
-          variant="hotel" 
-          size="sm" 
-          disabled={!isAvailable()}
-        >
-          Book Now
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-};
+import { Clock, Users, Award, Calendar as CalendarIcon, Search, ArrowLeft } from "lucide-react";
+import { format, addDays } from "date-fns";
+import { supabase } from "@/integrations/supabase/client";
+import { Room } from "@/types/supabase";
+import { useToast } from "@/hooks/use-toast";
 
 const Booking = () => {
   const [searchParams, setSearchParams] = useState({
-    checkIn: null,
-    checkOut: null,
+    checkIn: null as Date | null,
+    checkOut: null as Date | null,
     accommodationType: "",
     guests: 1,
-    priceRange: [0, 100000]
   });
   
-  const [filteredAccommodations, setFilteredAccommodations] = useState(allAccommodations);
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  
+  const { toast } = useToast();
   const today = new Date();
 
-  // Filter accommodations based on search parameters
-  const filterAccommodations = () => {
-    let filtered = allAccommodations;
-    
-    // Filter by accommodation type
-    if (searchParams.accommodationType) {
-      filtered = filtered.filter(acc => acc.type.toLowerCase() === searchParams.accommodationType.toLowerCase());
-    }
-    
-    // Filter by number of guests
-    if (searchParams.guests > 0) {
-      filtered = filtered.filter(acc => acc.maxGuests >= searchParams.guests);
-    }
-    
-    // Filter by price range
-    filtered = filtered.filter(acc => 
-      acc.price >= searchParams.priceRange[0] && 
-      acc.price <= searchParams.priceRange[1]
-    );
-    
-    setFilteredAccommodations(filtered);
-  };
-  
-  // Apply filters when search parameters change
   useEffect(() => {
-    filterAccommodations();
-  }, [searchParams]);
+    fetchRooms();
+  }, []);
+
+  useEffect(() => {
+    if (searchParams.checkIn && searchParams.checkOut) {
+      searchAvailableRooms();
+    } else {
+      setAvailableRooms(rooms);
+    }
+  }, [searchParams.checkIn, searchParams.checkOut, rooms]);
+
+  const fetchRooms = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('rooms')
+        .select('*')
+        .eq('availability_status', 'available')
+        .order('price_per_night', { ascending: true });
+
+      if (error) {
+        throw error;
+      }
+
+      setRooms(data || []);
+    } catch (error) {
+      console.error('Error fetching rooms:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch rooms',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const searchAvailableRooms = async () => {
+    if (!searchParams.checkIn || !searchParams.checkOut) return;
+
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.rpc('get_available_rooms', {
+        check_in_param: format(searchParams.checkIn, 'yyyy-MM-dd'),
+        check_out_param: format(searchParams.checkOut, 'yyyy-MM-dd'),
+        room_type_param: searchParams.accommodationType || null
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      // Filter by capacity if needed
+      let filtered = data || [];
+      if (searchParams.guests > 1) {
+        filtered = filtered.filter(room => room.capacity >= searchParams.guests);
+      }
+
+      setAvailableRooms(filtered);
+    } catch (error) {
+      console.error('Error searching available rooms:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to search available rooms',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRoomBook = (room: Room) => {
+    if (!searchParams.checkIn || !searchParams.checkOut) {
+      toast({
+        title: 'Select Dates',
+        description: 'Please select check-in and check-out dates first.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setSelectedRoom(room);
+    setShowBookingForm(true);
+  };
+
+  const handleBookingComplete = () => {
+    setShowBookingForm(false);
+    setSelectedRoom(null);
+    // Refresh available rooms
+    searchAvailableRooms();
+  };
+
+  const handleBookingCancel = () => {
+    setShowBookingForm(false);
+    setSelectedRoom(null);
+  };
+
+  // Filter displayed rooms based on search criteria
+  const filteredRooms = availableRooms.filter(room => {
+    if (searchParams.accommodationType && searchParams.accommodationType !== "all") {
+      return room.room_type.toLowerCase() === searchParams.accommodationType.toLowerCase();
+    }
+    return true;
+  });
+
+  const isRoomAvailable = (roomId: string) => {
+    return availableRooms.some(room => room.id === roomId);
+  };
+
+  if (showBookingForm && selectedRoom && searchParams.checkIn && searchParams.checkOut) {
+    return (
+      <>
+        <Navbar />
+        <div className="pt-24 md:pt-28 lg:pt-32 pb-16">
+          <div className="hotel-container">
+            <Button
+              variant="outline"
+              onClick={handleBookingCancel}
+              className="mb-6"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Room Selection
+            </Button>
+            <BookingForm
+              room={selectedRoom}
+              checkInDate={searchParams.checkIn}
+              checkOutDate={searchParams.checkOut}
+              onBookingComplete={handleBookingComplete}
+              onCancel={handleBookingCancel}
+            />
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -746,7 +262,7 @@ const Booking = () => {
                 
                 {/* Accommodation Type */}
                 <div>
-                  <label htmlFor="accommodation-type" className="block text-sm font-medium mb-1">Accommodation Type</label>
+                  <label htmlFor="accommodation-type" className="block text-sm font-medium mb-1">Room Type</label>
                   <Select 
                     value={searchParams.accommodationType} 
                     onValueChange={(value) => 
@@ -779,6 +295,8 @@ const Booking = () => {
                     <SelectContent>
                       <SelectItem value="1">1 Guest</SelectItem>
                       <SelectItem value="2">2 Guests</SelectItem>
+                      <SelectItem value="3">3 Guests</SelectItem>
+                      <SelectItem value="4">4 Guests</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -789,7 +307,8 @@ const Booking = () => {
                   variant="hotel"
                   size="lg"
                   className="px-8"
-                  onClick={filterAccommodations}
+                  onClick={searchAvailableRooms}
+                  disabled={!searchParams.checkIn || !searchParams.checkOut}
                 >
                   <Search className="mr-2 h-4 w-4" />
                   Search Availability
@@ -803,15 +322,17 @@ const Booking = () => {
         <section className="section-padding bg-hotel-beige py-16">
           <div className="hotel-container">
             <div className="max-w-7xl mx-auto">
-              <h2 className="hotel-title text-center mb-8">Available Accommodations</h2>
+              <h2 className="hotel-title text-center mb-8">
+                {searchParams.checkIn && searchParams.checkOut ? 'Available' : 'All'} Accommodations
+              </h2>
               
               {/* Results count and applied filters */}
               <div className="flex flex-wrap items-center justify-between mb-8">
                 <p className="text-gray-700 font-medium">
-                  Showing {filteredAccommodations.length} accommodations
+                  Showing {filteredRooms.length} accommodations
                 </p>
                 <div className="flex flex-wrap items-center gap-2 mt-2 md:mt-0">
-                  {searchParams.accommodationType && (
+                  {searchParams.accommodationType && searchParams.accommodationType !== "all" && (
                     <Badge variant="outline" className="bg-gray-50">
                       Type: {searchParams.accommodationType}
                     </Badge>
@@ -829,19 +350,28 @@ const Booking = () => {
                 </div>
               </div>
               
-              {/* Results grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredAccommodations.map((accommodation) => (
-                  <RoomCard 
-                    key={accommodation.id} 
-                    accommodation={accommodation}
-                    checkInDate={searchParams.checkIn}
-                    checkOutDate={searchParams.checkOut}
-                  />
-                ))}
-              </div>
+              {/* Loading state */}
+              {loading && (
+                <div className="text-center py-12">
+                  <p className="text-lg text-gray-700">Searching for available rooms...</p>
+                </div>
+              )}
               
-              {filteredAccommodations.length === 0 && (
+              {/* Results grid */}
+              {!loading && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredRooms.map((room) => (
+                    <RoomCard 
+                      key={room.id} 
+                      room={room}
+                      isAvailable={isRoomAvailable(room.id)}
+                      onBook={handleRoomBook}
+                    />
+                  ))}
+                </div>
+              )}
+              
+              {!loading && filteredRooms.length === 0 && (
                 <div className="text-center py-12">
                   <p className="text-lg text-gray-700 mb-4">No accommodations found matching your criteria.</p>
                   <Button 
@@ -852,7 +382,6 @@ const Booking = () => {
                       checkOut: null,
                       accommodationType: "",
                       guests: 1,
-                      priceRange: [0, 100000]
                     })}
                   >
                     Reset Filters
@@ -897,7 +426,7 @@ const Booking = () => {
                     </li>
                     <li className="flex items-start">
                       <Users className="text-hotel-gold mr-2 mt-1" size={18} />
-                      <span>Maximum of 2 guests per room/suite</span>
+                      <span>Maximum capacity as specified per room/suite</span>
                     </li>
                     <li className="flex items-start">
                       <Award className="text-hotel-gold mr-2 mt-1" size={18} />
