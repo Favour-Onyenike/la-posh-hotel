@@ -11,9 +11,17 @@ const UpdateUserRole = () => {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
 
+  console.log('UpdateUserRole - Current state:', {
+    user: user?.email,
+    profile: profile,
+    isAdmin: isAdmin,
+    profileRole: profile?.role
+  });
+
   // Redirect if already admin
   useEffect(() => {
     if (user && isAdmin) {
+      console.log('User is already admin, redirecting...');
       toast({
         title: "Already Admin",
         description: "You already have admin access. Redirecting to dashboard...",
@@ -25,39 +33,70 @@ const UpdateUserRole = () => {
   }, [user, isAdmin, toast]);
 
   const updateToAdmin = async () => {
-    if (!user) return;
+    if (!user) {
+      console.log('No user found');
+      return;
+    }
     
-    console.log('Updating user role to admin for:', user.id);
+    console.log('Starting role update for user:', user.id);
     setIsUpdating(true);
+    
     try {
-      const { error } = await supabase
+      // First, let's check current profile
+      const { data: currentProfile, error: fetchError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      console.log('Current profile before update:', currentProfile);
+      
+      if (fetchError) {
+        console.error('Error fetching current profile:', fetchError);
+        throw fetchError;
+      }
+
+      // Now update the role
+      const { data: updateData, error: updateError } = await supabase
         .from('profiles')
         .update({ role: 'admin' })
-        .eq('id', user.id);
+        .eq('id', user.id)
+        .select()
+        .single();
 
-      if (error) {
-        console.error('Error updating role:', error);
-        throw error;
+      console.log('Update result:', { data: updateData, error: updateError });
+
+      if (updateError) {
+        console.error('Error updating role:', updateError);
+        throw updateError;
       }
 
       console.log('Role updated successfully, refreshing profile...');
+      
+      // Wait a moment for the database to settle
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       // Refresh the profile in the auth context
       await refreshProfile();
+      
+      // Wait another moment for the context to update
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       toast({
         title: "Success",
-        description: "Your role has been updated to admin. You now have admin access!",
+        description: "Your role has been updated to admin. Redirecting...",
       });
       
-      // Redirect to admin dashboard after successful update
+      // Force a page reload to ensure fresh data
       setTimeout(() => {
         window.location.href = '/admin/dashboard';
-      }, 1500);
+      }, 1000);
+      
     } catch (error: any) {
-      console.error('Full error updating role:', error);
+      console.error('Error in updateToAdmin:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || 'Failed to update role',
         variant: "destructive"
       });
     } finally {
@@ -66,7 +105,15 @@ const UpdateUserRole = () => {
   };
 
   if (!user) {
-    return <div>Please log in first</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6">
+            <p>Please log in first</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
@@ -80,11 +127,13 @@ const UpdateUserRole = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="text-sm text-gray-600 space-y-2">
-              <p>Current user: {user.email}</p>
-              <p>Current role: {profile?.role || 'No role'}</p>
-              <p>Admin access: {isAdmin ? 'Yes' : 'No'}</p>
+            <div className="text-sm text-gray-600 space-y-2 bg-gray-100 p-3 rounded">
+              <p><strong>User:</strong> {user.email}</p>
+              <p><strong>Profile ID:</strong> {profile?.id || 'Loading...'}</p>
+              <p><strong>Current role:</strong> {profile?.role || 'Loading...'}</p>
+              <p><strong>Admin access:</strong> {isAdmin ? 'Yes' : 'No'}</p>
             </div>
+            
             {!isAdmin && (
               <Button 
                 onClick={updateToAdmin} 
@@ -94,6 +143,7 @@ const UpdateUserRole = () => {
                 {isUpdating ? "Updating..." : "Update to Admin"}
               </Button>
             )}
+            
             {isAdmin && (
               <div className="text-center">
                 <p className="text-green-600 font-medium mb-2">✓ You already have admin access!</p>
@@ -105,6 +155,16 @@ const UpdateUserRole = () => {
                 </Button>
               </div>
             )}
+            
+            <div className="text-center">
+              <Button 
+                variant="outline"
+                onClick={() => window.location.href = '/'}
+                className="w-full"
+              >
+                Return to Home
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -24,8 +24,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = async (userId: string, retryCount = 0) => {
     try {
+      console.log(`Fetching profile for user ${userId} (attempt ${retryCount + 1})`);
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -34,10 +36,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (error) {
         console.error('Error fetching profile:', error);
+        
+        // If profile doesn't exist and this is the first attempt, wait and retry
+        if (error.code === 'PGRST116' && retryCount < 2) {
+          console.log('Profile not found, retrying in 1 second...');
+          setTimeout(() => fetchProfile(userId, retryCount + 1), 1000);
+          return;
+        }
         return;
       }
 
-      console.log('Profile fetched:', data);
+      console.log('Profile fetched successfully:', data);
       setProfile(data as Profile);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
@@ -46,11 +55,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const refreshProfile = async () => {
     if (user) {
+      console.log('Refreshing profile for user:', user.id);
       await fetchProfile(user.id);
     }
   };
 
   useEffect(() => {
+    console.log('Setting up auth state listener...');
+    
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -108,8 +120,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Check if user is admin based on their profile role or email
+  // Check if user is admin based on their profile role
   const isAdmin = user && profile ? profile.role === 'admin' : false;
+
+  console.log('AuthContext state:', {
+    user: user?.email,
+    profile: profile,
+    isAdmin: isAdmin,
+    isLoading: isLoading
+  });
 
   return (
     <AuthContext.Provider
