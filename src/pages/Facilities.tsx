@@ -1,223 +1,146 @@
+
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Star, Wifi, Car, Utensils, Dumbbell, TreePine, Zap } from "lucide-react";
-import { usePageContent, getContentValue } from "@/hooks/usePageContent";
+import { 
+  Wifi, 
+  Car, 
+  Utensils, 
+  Dumbbell, 
+  Waves, 
+  Shield, 
+  Clock, 
+  Headphones,
+  Coffee,
+  Briefcase,
+  Users,
+  Baby
+} from "lucide-react";
 
 const Facilities = () => {
-  const { data: content, isLoading } = usePageContent("facilities");
-
-  // Updated facility items with icons for better mobile presentation
-  const facilityItems = [
+  const facilities = [
     {
-      title: "Restaurant",
-      description: "Experience exquisite cuisine at our in-house restaurant offering a blend of local delicacies and international dishes prepared by our expert chefs.",
-      imageSrc: "/lovable-uploads/5554f5f5-c5dc-46b2-b735-61e278864872.png",
-      icon: Utensils,
-      highlights: ["Local & International Cuisine", "Expert Chefs", "Indoor & Outdoor Seating"]
-    },
-    {
-      title: "Executive Rooms",
-      description: "Spacious and elegantly furnished suites designed for ultimate comfort and relaxation with premium amenities.",
-      imageSrc: "/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png",
       icon: Wifi,
-      highlights: ["King-sized Beds", "Smart TVs", "High-speed WiFi"]
+      title: "Free Wi-Fi",
+      description: "High-speed internet access throughout the hotel"
     },
     {
-      title: "24/7 Power Supply",
-      description: "Uninterrupted power supply through our integrated system of solar inverters, generators and dedicated transformer.",
-      imageSrc: "/lovable-uploads/2041bcf9-cce4-478f-95c0-b002a66664b5.png",
-      icon: Zap,
-      highlights: ["Solar Powered", "Backup Generators", "Eco-friendly Solution"]
+      icon: Car,
+      title: "Parking",
+      description: "Complimentary parking for all guests"
     },
     {
-      title: "Fitness Center",
-      description: "Stay fit during your stay with our well-equipped gym featuring cardio machines, free weights, and training equipment.",
-      imageSrc: "/lovable-uploads/d9d5cdb1-1c16-4557-8c64-39e713537d74.png",
+      icon: Utensils,
+      title: "Restaurant",
+      description: "Fine dining with local and international cuisine"
+    },
+    {
       icon: Dumbbell,
-      highlights: ["Cardio Equipment", "Free Weights", "Fresh Towels Available"]
+      title: "Fitness Center",
+      description: "Modern gym equipment available 24/7"
     },
     {
-      title: "Outdoor Recreation Area",
-      description: "Enjoy our outdoor seating area with entertainment options including pool table and various games for leisure.",
-      imageSrc: "/lovable-uploads/9423b162-188e-46ac-a0ac-33fbdf219e2c.png",
-      icon: TreePine,
-      highlights: ["Pool Table", "Outdoor Seating", "Multiple Game Options"]
+      icon: Waves,
+      title: "Swimming Pool",
+      description: "Outdoor pool with poolside service"
+    },
+    {
+      icon: Shield,
+      title: "Security",
+      description: "24/7 security and surveillance"
+    },
+    {
+      icon: Clock,
+      title: "Room Service",
+      description: "24-hour room service available"
+    },
+    {
+      icon: Headphones,
+      title: "Concierge",
+      description: "Personal concierge services"
+    },
+    {
+      icon: Coffee,
+      title: "Café & Bar",
+      description: "Relaxing café and cocktail bar"
+    },
+    {
+      icon: Briefcase,
+      title: "Business Center",
+      description: "Full-service business facilities"
+    },
+    {
+      icon: Users,
+      title: "Event Halls",
+      description: "Spacious venues for meetings and events"
+    },
+    {
+      icon: Baby,
+      title: "Family Friendly",
+      description: "Children's play area and family services"
     }
   ];
 
   return (
-    <>
+    <div className="min-h-screen bg-white">
       <Navbar />
-      <div className="pt-20 pb-16">
-        {/* Hero Section - Reduced height for mobile */}
-        <section 
-          className="py-16 md:py-32 lg:py-40 bg-cover bg-center relative overflow-hidden"
-          style={{ backgroundImage: "url('/lovable-uploads/e9be561a-1ed6-476f-aab8-fd04aaef0620.png')" }}
-        >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-          <div className="hotel-container relative z-10">
-            <div className="max-w-6xl mx-auto text-center animate-fade-in px-4">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-serif">
-                {isLoading ? "Our Facilities" : getContentValue(content, "hero_title", "content", "Our Facilities")}
-              </h1>
-              <p className="text-lg md:text-xl text-white mb-6">
-                {isLoading ? "Luxury amenities for an unforgettable stay" : getContentValue(content, "hero_subtitle", "content", "Luxury amenities for an unforgettable stay")}
-              </p>
-              <div className="flex justify-center gap-1 mt-6">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="text-hotel-gold fill-hotel-gold" size={20} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+      
+      {/* Hero Section */}
+      <section className="relative h-96 bg-gradient-to-r from-green-600 to-blue-600 flex items-center justify-center text-white">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Our Facilities</h1>
+          <p className="text-xl md:text-2xl">Luxury amenities for an unforgettable stay</p>
+        </div>
+      </section>
 
-        {/* Facilities Introduction - More compact for mobile */}
-        <section className="bg-white py-12 md:py-20">
-          <div className="hotel-container">
-            <div className="max-w-4xl mx-auto text-center px-4">              
-              <h2 className="text-2xl md:text-3xl font-serif font-bold mb-6 text-black">
-                {isLoading ? "Premium Amenities" : getContentValue(content, "intro_title", "content", "Premium Amenities")}
-              </h2>
-              {isLoading ? (
-                <div className="space-y-4">
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </div>
-              ) : (
-                <div className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line">
-                  {getContentValue(content, "intro_content", "content", "At La Posh Signature Hotel & Suites, we pride ourselves on offering a comprehensive range of premium facilities designed to enhance your stay. Every amenity has been carefully crafted to exceed your expectations and create memorable experiences.")}
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
+      {/* Introduction */}
+      <section className="py-16 px-4 max-w-6xl mx-auto text-center">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6">Premium Amenities</h2>
+        <p className="text-gray-600 text-lg leading-relaxed max-w-3xl mx-auto">
+          At La Posh Signature Hotel & Suites, we pride ourselves on offering a comprehensive range of 
+          premium facilities designed to enhance your stay. Every amenity has been carefully crafted to 
+          exceed your expectations and create memorable experiences.
+        </p>
+      </section>
 
-        {/* Mobile-First Facilities Layout - Keep existing unchanged */}
-        <section className="bg-gray-50 py-8 md:py-16">
-          <div className="container mx-auto px-4 max-w-6xl">
-            <div className="space-y-6 md:space-y-8">
-              {facilityItems.map((item, index) => {
-                const IconComponent = item.icon;
-                return (
-                  <div 
-                    key={index}
-                    className="bg-white rounded-xl shadow-lg overflow-hidden"
-                  >
-                    {/* Mobile Layout - Optimized for touch and readability */}
-                    <div className="md:hidden">
-                      {/* Image with better aspect ratio for mobile */}
-                      <div className="relative h-48">
-                        <img 
-                          src={item.imageSrc} 
-                          alt={item.title} 
-                          className="w-full h-full object-cover"
-                        />
-                        {/* Icon overlay */}
-                        <div className="absolute top-4 right-4 bg-white/90 p-2 rounded-full">
-                          <IconComponent className="text-hotel-gold" size={20} />
-                        </div>
-                      </div>
-                      
-                      {/* Content with better spacing */}
-                      <div className="p-6">
-                        <h3 className="text-xl font-serif font-bold mb-3 text-black">{item.title}</h3>
-                        <p className="text-gray-700 text-sm leading-relaxed mb-4">{item.description}</p>
-                        
-                        {/* Highlights for mobile */}
-                        <div className="space-y-2">
-                          {item.highlights.map((highlight, idx) => (
-                            <div key={idx} className="flex items-center text-sm text-gray-600">
-                              <div className="w-2 h-2 bg-hotel-gold rounded-full mr-3 flex-shrink-0"></div>
-                              <span>{highlight}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Desktop Layout - Keep existing alternating design */}
-                    <div className="hidden md:grid md:grid-cols-2">
-                      {index % 2 === 0 ? (
-                        <>
-                          <div className="h-64 md:h-72">
-                            <img 
-                              src={item.imageSrc} 
-                              alt={item.title} 
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <div className="p-8 flex flex-col justify-center">
-                            <div className="flex items-center mb-4">
-                              <IconComponent className="text-hotel-gold mr-3" size={24} />
-                              <h3 className="text-2xl font-serif font-bold text-black">{item.title}</h3>
-                            </div>
-                            <p className="text-gray-700 leading-relaxed mb-4">{item.description}</p>
-                            <div className="space-y-2">
-                              {item.highlights.map((highlight, idx) => (
-                                <div key={idx} className="flex items-center text-gray-600">
-                                  <div className="w-2 h-2 bg-hotel-gold rounded-full mr-3 flex-shrink-0"></div>
-                                  <span>{highlight}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="p-8 flex flex-col justify-center">
-                            <div className="flex items-center mb-4">
-                              <IconComponent className="text-hotel-gold mr-3" size={24} />
-                              <h3 className="text-2xl font-serif font-bold text-black">{item.title}</h3>
-                            </div>
-                            <p className="text-gray-700 leading-relaxed mb-4">{item.description}</p>
-                            <div className="space-y-2">
-                              {item.highlights.map((highlight, idx) => (
-                                <div key={idx} className="flex items-center text-gray-600">
-                                  <div className="w-2 h-2 bg-hotel-gold rounded-full mr-3 flex-shrink-0"></div>
-                                  <span>{highlight}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                          <div className="h-64 md:h-72">
-                            <img 
-                              src={item.imageSrc} 
-                              alt={item.title} 
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        </>
-                      )}
-                    </div>
+      {/* Facilities Grid */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {facilities.map((facility, index) => {
+              const IconComponent = facility.icon;
+              return (
+                <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
+                    <IconComponent className="w-6 h-6 text-white" />
                   </div>
-                );
-              })}
-            </div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">{facility.title}</h3>
+                  <p className="text-gray-600">{facility.description}</p>
+                </div>
+              );
+            })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* CTA Section - More compact for mobile */}
-        <section className="bg-hotel-beige py-12 md:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-2xl md:text-3xl font-serif font-bold mb-4 md:mb-6">Experience Luxury at La Posh</h2>
-              <p className="text-base md:text-lg mb-6 md:mb-8 text-gray-700">
-                Indulge in our world-class facilities and impeccable service. Book your stay today and 
-                discover the epitome of luxury and comfort.
-              </p>
-              <Button variant="hotel" size="lg" className="font-medium px-8 py-3">
-                Book Your Stay Now
-              </Button>
-            </div>
-          </div>
-        </section>
-      </div>
+      {/* Additional Info */}
+      <section className="py-16 px-4 max-w-6xl mx-auto">
+        <div className="bg-blue-50 rounded-lg p-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Experience Luxury</h2>
+          <p className="text-gray-600 text-lg mb-6">
+            Our facilities are designed to provide you with the ultimate comfort and convenience during your stay.
+          </p>
+          <a 
+            href="/booking" 
+            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Book Your Stay
+          </a>
+        </div>
+      </section>
+
       <Footer />
-    </>
+    </div>
   );
 };
 
