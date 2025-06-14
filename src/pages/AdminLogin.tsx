@@ -37,20 +37,33 @@ const AdminLogin = () => {
       
       // Check if identifier is a username (doesn't contain @)
       if (!identifier.includes('@')) {
+        console.log('Looking up username:', identifier);
+        
         // Look up email by username
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('email')
           .eq('username', identifier)
-          .single();
+          .maybeSingle();
 
-        if (profileError || !profile) {
-          setError('Username not found');
+        console.log('Profile lookup result:', { profile, profileError });
+
+        if (profileError) {
+          console.error('Profile lookup error:', profileError);
+          setError('Error looking up username: ' + profileError.message);
+          return;
+        }
+
+        if (!profile) {
+          setError('Username not found. Please check your username or try registering first.');
           return;
         }
         
         email = profile.email;
+        console.log('Found email for username:', email);
       }
+
+      console.log('Attempting login with email:', email);
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -58,11 +71,13 @@ const AdminLogin = () => {
       });
 
       if (error) {
+        console.error('Login error:', error);
         setError(error.message);
         return;
       }
 
       if (data.user) {
+        console.log('Login successful:', data.user.email);
         toast({
           title: "Login successful",
           description: "Welcome to the admin panel",
@@ -70,6 +85,7 @@ const AdminLogin = () => {
         navigate('/admin/dashboard');
       }
     } catch (err: any) {
+      console.error('Unexpected error:', err);
       setError(err.message || 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
@@ -157,6 +173,15 @@ const AdminLogin = () => {
               )}
             </Button>
           </form>
+          
+          <div className="mt-4 text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{' '}
+              <Link to="/admin/register" className="text-blue-600 hover:underline">
+                Create admin account
+              </Link>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
