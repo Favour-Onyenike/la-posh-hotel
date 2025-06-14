@@ -224,7 +224,7 @@ const Dashboard = () => {
   }, []);
 
   // Toggle room availability
-  const toggleRoomAvailability = async (roomId: string, currentStatus: 'available' | 'taken') => {
+  const toggleRoomAvailability = async (roomId: string, currentStatus: string) => {
     const newStatus = currentStatus === 'available' ? 'taken' : 'available';
     
     try {
