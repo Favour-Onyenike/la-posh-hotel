@@ -18,7 +18,8 @@ import {
   X,
   LogOut,
   UserPlus,
-  ToggleLeft
+  ToggleLeft,
+  FileText
 } from 'lucide-react';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
@@ -40,6 +41,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     { name: 'Reviews', href: '/admin/reviews', icon: MessageSquare },
     { name: 'Gallery', href: '/admin/gallery', icon: Images },
     { name: 'Events', href: '/admin/events', icon: CalendarDays },
+    { name: 'Content', href: '/admin/content', icon: FileText },
     // Only show Team link if user has permission
     ...(canAccessTeam ? [{ name: 'Team', href: '/admin/team', icon: UserPlus }] : []),
     { name: 'Activity Logs', href: '/admin/activity-logs', icon: MessageSquare },
