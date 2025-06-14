@@ -6,12 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { 
   runBookingSystemTest, 
+  runBookingSystemTestWithEmail,
   cleanupTestData 
 } from '@/utils/testBookingSystem';
-import { Play, Trash2, CheckCircle, AlertCircle } from 'lucide-react';
+import { Play, Trash2, CheckCircle, AlertCircle, Mail } from 'lucide-react';
 
 const BookingSystemTester = () => {
   const [isRunning, setIsRunning] = useState(false);
+  const [isRunningEmail, setIsRunningEmail] = useState(false);
   const [isCleaning, setIsCleaning] = useState(false);
   const [testResults, setTestResults] = useState<any>(null);
   const { toast } = useToast();
@@ -42,6 +44,35 @@ const BookingSystemTester = () => {
       });
     } finally {
       setIsRunning(false);
+    }
+  };
+
+  const handleRunEmailTest = async () => {
+    setIsRunningEmail(true);
+    try {
+      const results = await runBookingSystemTestWithEmail();
+      if (results) {
+        setTestResults(results);
+        toast({
+          title: 'Email Test Completed Successfully! ✅',
+          description: 'Check your email inbox for the confirmation email!',
+        });
+      } else {
+        toast({
+          title: 'Email Test Failed ❌',
+          description: 'Check the console for error details.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Email test execution error:', error);
+      toast({
+        title: 'Email Test Error ❌',
+        description: 'An unexpected error occurred during email testing.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsRunningEmail(false);
     }
   };
 
@@ -118,26 +149,36 @@ const BookingSystemTester = () => {
         <div className="flex gap-3">
           <Button
             onClick={handleRunTest}
-            disabled={isRunning}
+            disabled={isRunning || isRunningEmail}
             className="flex-1"
             variant="default"
           >
             <Play className="mr-2 h-4 w-4" />
-            {isRunning ? 'Running Test...' : 'Run Booking Test'}
+            {isRunning ? 'Running Standard Test...' : 'Run Standard Test'}
           </Button>
           
-          {testResults && (
-            <Button
-              onClick={handleCleanup}
-              disabled={isCleaning}
-              variant="outline"
-              className="flex-1"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              {isCleaning ? 'Cleaning...' : 'Cleanup Test Data'}
-            </Button>
-          )}
+          <Button
+            onClick={handleRunEmailTest}
+            disabled={isRunning || isRunningEmail}
+            className="flex-1"
+            variant="secondary"
+          >
+            <Mail className="mr-2 h-4 w-4" />
+            {isRunningEmail ? 'Running Email Test...' : 'Test With Email'}
+          </Button>
         </div>
+
+        {testResults && (
+          <Button
+            onClick={handleCleanup}
+            disabled={isCleaning}
+            variant="outline"
+            className="w-full"
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            {isCleaning ? 'Cleaning...' : 'Cleanup Test Data'}
+          </Button>
+        )}
 
         <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
           <div className="flex items-center gap-2 mb-2">
