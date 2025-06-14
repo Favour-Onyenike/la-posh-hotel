@@ -25,30 +25,32 @@ const AdminRegister = () => {
     setIsLoading(true);
 
     try {
-      // Check if this is the first admin user (no existing profiles)
-      const { data: existingProfiles, error: profileError } = await supabase
+      // Check if this is the first admin user (no existing admin profiles)
+      const { data: existingAdmins, error: adminError } = await supabase
         .from('profiles')
         .select('id')
+        .eq('role', 'admin')
         .limit(1);
 
-      if (profileError) {
-        throw new Error(profileError.message);
+      if (adminError) {
+        throw new Error(adminError.message);
       }
 
-      const isFirstAdmin = existingProfiles?.length === 0;
+      const isFirstAdmin = existingAdmins?.length === 0;
+      console.log('Is first admin?', isFirstAdmin, 'Existing admins:', existingAdmins?.length);
 
       // If not first admin and no invite token, require invite
       if (!isFirstAdmin && !inviteToken) {
         toast({
           title: "Invalid Registration",
-          description: "You need a valid invite link to register",
+          description: "You need a valid invite link to register as an admin",
           variant: "destructive"
         });
         setIsLoading(false);
         return;
       }
 
-      // Validate invite token if provided
+      // Validate invite token if provided (and not first admin)
       if (inviteToken && !isFirstAdmin) {
         const { data: tokenData, error: tokenError } = await supabase
           .from('invite_tokens')
@@ -79,7 +81,8 @@ const AdminRegister = () => {
           data: {
             username,
             full_name: fullName,
-            invite_token: inviteToken || undefined
+            invite_token: inviteToken || undefined,
+            is_first_admin: isFirstAdmin
           }
         }
       });
@@ -90,7 +93,7 @@ const AdminRegister = () => {
 
       // If user was created successfully, manually create/update the profile
       if (data.user) {
-        console.log('User created, updating profile:', { username, fullName });
+        console.log('User created, updating profile:', { username, fullName, isFirstAdmin });
         
         // Update the profile with the username
         const { error: updateError } = await supabase
