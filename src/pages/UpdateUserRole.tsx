@@ -56,13 +56,11 @@ const UpdateUserRole = () => {
         throw fetchError;
       }
 
-      // Now update the role
+      // Now update the role - remove .single() and just use update
       const { data: updateData, error: updateError } = await supabase
         .from('profiles')
         .update({ role: 'admin' })
-        .eq('id', user.id)
-        .select()
-        .single();
+        .eq('id', user.id);
 
       console.log('Update result:', { data: updateData, error: updateError });
 
@@ -74,23 +72,36 @@ const UpdateUserRole = () => {
       console.log('Role updated successfully, refreshing profile...');
       
       // Wait a moment for the database to settle
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Refresh the profile in the auth context
       await refreshProfile();
       
       // Wait another moment for the context to update
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      toast({
-        title: "Success",
-        description: "Your role has been updated to admin. Redirecting...",
-      });
-      
-      // Force a page reload to ensure fresh data
-      setTimeout(() => {
-        window.location.href = '/admin/dashboard';
-      }, 1000);
+      // Verify the update worked
+      const { data: verifyProfile, error: verifyError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      console.log('Verified profile after update:', verifyProfile);
+
+      if (verifyProfile?.role === 'admin') {
+        toast({
+          title: "Success",
+          description: "Your role has been updated to admin. Redirecting...",
+        });
+        
+        // Force a page reload to ensure fresh data
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard';
+        }, 1000);
+      } else {
+        throw new Error('Role update verification failed');
+      }
       
     } catch (error: any) {
       console.error('Error in updateToAdmin:', error);
