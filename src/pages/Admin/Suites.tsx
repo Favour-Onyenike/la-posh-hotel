@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Room } from '@/types/supabase';
@@ -381,7 +380,7 @@ const Suites = () => {
 
       toast({
         title: 'Price Updated',
-        description: `Suite price updated to $${newPrice.toFixed(2)}`,
+        description: `Suite price updated to ₦${newPrice.toLocaleString()}`,
       });
     } catch (error) {
       console.error('Error updating suite price:', error);
@@ -558,7 +557,7 @@ const Suites = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="price">
-                  Price per Night <span className="text-destructive">*</span>
+                  Price per Night (₦) <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="price"
@@ -567,7 +566,7 @@ const Suites = () => {
                   min="0"
                   value={pricePerNight}
                   onChange={(e) => setPricePerNight(e.target.value)}
-                  placeholder="599.99"
+                  placeholder="45000"
                 />
               </div>
               
@@ -763,7 +762,7 @@ const Suites = () => {
                     <div className="flex items-center justify-between">
                       <CardTitle className="line-clamp-1 text-lg">{suite.name}</CardTitle>
                       <div className="flex items-center gap-2">
-                        <p className="font-bold text-primary">${Number(suite.price_per_night).toFixed(2)}</p>
+                        <p className="font-bold text-primary">₦{Number(suite.price_per_night).toLocaleString()}</p>
                       </div>
                     </div>
                   </CardHeader>

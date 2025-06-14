@@ -26,7 +26,7 @@ const RoomCard = ({ room, isAvailable, onBook }: RoomCardProps) => {
         </div>
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
           <p className="text-white font-bold text-xl">{room.name}</p>
-          <p className="text-white/90 text-sm">₦{room.price_per_night.toLocaleString()}/night</p>
+          <p className="text-white/90 text-sm">₦{Number(room.price_per_night).toLocaleString()}/night</p>
         </div>
       </div>
       
@@ -61,7 +61,7 @@ const RoomCard = ({ room, isAvailable, onBook }: RoomCardProps) => {
       
       <CardFooter className="flex justify-between items-center border-t pt-3 pb-3">
         <div className="text-hotel-gold font-bold">
-          ₦{room.price_per_night.toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
+          ₦{Number(room.price_per_night).toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
         </div>
         <Button 
           variant="hotel" 
