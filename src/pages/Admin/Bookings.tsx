@@ -123,10 +123,53 @@ const Bookings = () => {
         booking.id === selectedBooking.id ? { ...booking, status: newStatus } : booking
       ));
 
-      toast({
-        title: 'Success',
-        description: 'Booking status updated successfully',
-      });
+      // Send confirmation email if status is changed to "confirmed"
+      if (newStatus === 'confirmed') {
+        const room = getRoomById(selectedBooking.room_id);
+        if (room) {
+          try {
+            console.log('Sending booking confirmation email...');
+            const { error: emailError } = await supabase.functions.invoke('send-booking-confirmation', {
+              body: {
+                guestName: selectedBooking.guest_name,
+                guestEmail: selectedBooking.guest_email,
+                roomName: room.name,
+                roomNumber: room.room_number,
+                checkInDate: selectedBooking.check_in_date,
+                checkOutDate: selectedBooking.check_out_date,
+                totalPrice: selectedBooking.total_price,
+                bookingId: selectedBooking.id
+              }
+            });
+
+            if (emailError) {
+              console.error('Error sending confirmation email:', emailError);
+              toast({
+                title: 'Status Updated',
+                description: 'Booking confirmed but failed to send confirmation email. Please contact the guest directly.',
+                variant: 'destructive',
+              });
+            } else {
+              toast({
+                title: 'Booking Confirmed',
+                description: 'Booking status updated and confirmation email sent to guest.',
+              });
+            }
+          } catch (emailError) {
+            console.error('Error sending confirmation email:', emailError);
+            toast({
+              title: 'Status Updated',
+              description: 'Booking confirmed but failed to send confirmation email. Please contact the guest directly.',
+              variant: 'destructive',
+            });
+          }
+        }
+      } else {
+        toast({
+          title: 'Success',
+          description: 'Booking status updated successfully',
+        });
+      }
     } catch (error) {
       console.error('Error updating booking status:', error);
       toast({
