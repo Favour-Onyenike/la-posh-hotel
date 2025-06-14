@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { Room } from '@/types/supabase';
 import RoomCard from '@/components/RoomCard';
 import BookingForm from '@/components/BookingForm';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -147,174 +149,182 @@ const Booking = () => {
 
   if (selectedRoom) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="container mx-auto px-4">
-          <div className="mb-6">
-            <Button 
-              variant="outline" 
-              onClick={() => setSelectedRoom(null)}
-              className="mb-4"
-            >
-              ← Back to Rooms
-            </Button>
+      <>
+        <Navbar />
+        <div className="min-h-screen bg-gray-50 py-8" style={{ marginTop: '80px' }}>
+          <div className="container mx-auto px-4">
+            <div className="mb-6">
+              <Button 
+                variant="outline" 
+                onClick={() => setSelectedRoom(null)}
+                className="mb-4"
+              >
+                ← Back to Rooms
+              </Button>
+            </div>
+            <BookingForm 
+              room={selectedRoom} 
+              onBookingComplete={handleBookingSuccess}
+              onCancel={handleCancelBooking}
+              checkInDate={checkInDate ? new Date(checkInDate) : new Date()}
+              checkOutDate={checkOutDate ? new Date(checkOutDate) : new Date()}
+            />
           </div>
-          <BookingForm 
-            room={selectedRoom} 
-            onBookingComplete={handleBookingSuccess}
-            onCancel={handleCancelBooking}
-            checkInDate={checkInDate ? new Date(checkInDate) : new Date()}
-            checkOutDate={checkOutDate ? new Date(checkOutDate) : new Date()}
-          />
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Book Your Stay</h1>
-          <p className="text-lg text-gray-600">Choose from our selection of rooms and suites</p>
-        </div>
-
-        {/* Availability Summary */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CalendarDays className="h-5 w-5" />
-              Availability Overview
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">{getAvailableCount()}</div>
-                <div className="text-sm text-gray-600">Available Rooms</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-600">{getTotalCount() - getAvailableCount()}</div>
-                <div className="text-sm text-gray-600">Occupied Rooms</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">{getTotalCount()}</div>
-                <div className="text-sm text-gray-600">Total Rooms</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Filters */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Filter className="h-5 w-5" />
-              Filter Options
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Check-in Date</label>
-                <input
-                  type="date"
-                  value={checkInDate}
-                  onChange={(e) => setCheckInDate(e.target.value)}
-                  className="w-full p-2 border rounded-md"
-                  min={new Date().toISOString().split('T')[0]}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Check-out Date</label>
-                <input
-                  type="date"
-                  value={checkOutDate}
-                  onChange={(e) => setCheckOutDate(e.target.value)}
-                  className="w-full p-2 border rounded-md"
-                  min={checkInDate || new Date().toISOString().split('T')[0]}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Guests</label>
-                <select
-                  value={guests}
-                  onChange={(e) => setGuests(parseInt(e.target.value))}
-                  className="w-full p-2 border rounded-md"
-                >
-                  {[1, 2, 3, 4, 5, 6].map(num => (
-                    <option key={num} value={num}>{num} Guest{num > 1 ? 's' : ''}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Room Type</label>
-                <select
-                  value={roomTypeFilter}
-                  onChange={(e) => setRoomTypeFilter(e.target.value)}
-                  className="w-full p-2 border rounded-md"
-                >
-                  <option value="all">All Types</option>
-                  <option value="room">Rooms</option>
-                  <option value="suite">Suites</option>
-                </select>
-              </div>
-            </div>
-            <div className="mt-4 flex items-center gap-4">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={showOnlyAvailable}
-                  onChange={(e) => setShowOnlyAvailable(e.target.checked)}
-                  className="rounded"
-                />
-                <span className="text-sm">Show only available rooms</span>
-              </label>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Rooms Grid */}
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="text-lg">Loading rooms...</div>
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gray-50 py-8" style={{ marginTop: '80px' }}>
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Book Your Stay</h1>
+            <p className="text-lg text-gray-600">Choose from our selection of rooms and suites</p>
           </div>
-        ) : (
-          <>
-            <div className="mb-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-medium">
-                  {filteredRooms.length} room{filteredRooms.length !== 1 ? 's' : ''} found
-                </span>
-                {!showOnlyAvailable && (
-                  <Badge variant="outline">Including unavailable rooms</Badge>
+
+          {/* Availability Summary */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CalendarDays className="h-5 w-5" />
+                Availability Overview
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">{getAvailableCount()}</div>
+                  <div className="text-sm text-gray-600">Available Rooms</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-gray-600">{getTotalCount() - getAvailableCount()}</div>
+                  <div className="text-sm text-gray-600">Occupied Rooms</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600">{getTotalCount()}</div>
+                  <div className="text-sm text-gray-600">Total Rooms</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Filters */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Filter className="h-5 w-5" />
+                Filter Options
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Check-in Date</label>
+                  <input
+                    type="date"
+                    value={checkInDate}
+                    onChange={(e) => setCheckInDate(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Check-out Date</label>
+                  <input
+                    type="date"
+                    value={checkOutDate}
+                    onChange={(e) => setCheckOutDate(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                    min={checkInDate || new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Guests</label>
+                  <select
+                    value={guests}
+                    onChange={(e) => setGuests(parseInt(e.target.value))}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    {[1, 2, 3, 4, 5, 6].map(num => (
+                      <option key={num} value={num}>{num} Guest{num > 1 ? 's' : ''}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Room Type</label>
+                  <select
+                    value={roomTypeFilter}
+                    onChange={(e) => setRoomTypeFilter(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="all">All Types</option>
+                    <option value="room">Rooms</option>
+                    <option value="suite">Suites</option>
+                  </select>
+                </div>
+              </div>
+              <div className="mt-4 flex items-center gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={showOnlyAvailable}
+                    onChange={(e) => setShowOnlyAvailable(e.target.checked)}
+                    className="rounded"
+                  />
+                  <span className="text-sm">Show only available rooms</span>
+                </label>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Rooms Grid */}
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="text-lg">Loading rooms...</div>
+            </div>
+          ) : (
+            <>
+              <div className="mb-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-medium">
+                    {filteredRooms.length} room{filteredRooms.length !== 1 ? 's' : ''} found
+                  </span>
+                  {!showOnlyAvailable && (
+                    <Badge variant="outline">Including unavailable rooms</Badge>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredRooms.length === 0 ? (
+                  <div className="col-span-full text-center py-12">
+                    <div className="text-gray-500">
+                      <CalendarDays className="mx-auto h-12 w-12 mb-4" />
+                      <h3 className="text-lg font-medium mb-2">No rooms available</h3>
+                      <p>Try adjusting your filters or dates</p>
+                    </div>
+                  </div>
+                ) : (
+                  filteredRooms.map((room) => (
+                    <RoomCard
+                      key={room.id}
+                      room={room}
+                      isAvailable={room.availability_status === 'available'}
+                      onBook={handleBookRoom}
+                    />
+                  ))
                 )}
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredRooms.length === 0 ? (
-                <div className="col-span-full text-center py-12">
-                  <div className="text-gray-500">
-                    <CalendarDays className="mx-auto h-12 w-12 mb-4" />
-                    <h3 className="text-lg font-medium mb-2">No rooms available</h3>
-                    <p>Try adjusting your filters or dates</p>
-                  </div>
-                </div>
-              ) : (
-                filteredRooms.map((room) => (
-                  <RoomCard
-                    key={room.id}
-                    room={room}
-                    isAvailable={room.availability_status === 'available'}
-                    onBook={handleBookRoom}
-                  />
-                ))
-              )}
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
