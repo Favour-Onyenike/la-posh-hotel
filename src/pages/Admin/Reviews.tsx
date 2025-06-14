@@ -133,6 +133,7 @@ const Reviews = () => {
                   <TableHead>Reviewer</TableHead>
                   <TableHead>Rating</TableHead>
                   <TableHead>Review</TableHead>
+                  <TableHead>Photo</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -140,7 +141,7 @@ const Reviews = () => {
               <TableBody>
                 {reviews.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                       No reviews found
                     </TableCell>
                   </TableRow>
@@ -155,6 +156,17 @@ const Reviews = () => {
                         {review.content.length > 50
                           ? `${review.content.substring(0, 50)}...`
                           : review.content}
+                      </TableCell>
+                      <TableCell>
+                        {review.image_url ? (
+                          <img 
+                            src={review.image_url} 
+                            alt="Review" 
+                            className="w-10 h-10 object-cover rounded"
+                          />
+                        ) : (
+                          <span className="text-gray-400 text-sm">No photo</span>
+                        )}
                       </TableCell>
                       <TableCell>{format(new Date(review.created_at), 'MMM d, yyyy')}</TableCell>
                       <TableCell className="text-right">
@@ -182,7 +194,7 @@ const Reviews = () => {
 
       {/* View Review Dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Review by {selectedReview?.reviewer_name}</DialogTitle>
             <DialogDescription>
@@ -194,6 +206,17 @@ const Reviews = () => {
               <div className="mb-2 flex">
                 {selectedReview && renderStars(selectedReview.rating)}
               </div>
+              
+              {selectedReview?.image_url && (
+                <div className="mb-4">
+                  <img
+                    src={selectedReview.image_url}
+                    alt="Review photo"
+                    className="w-full max-w-md h-64 object-cover rounded-lg"
+                  />
+                </div>
+              )}
+              
               <p className="text-sm leading-6">{selectedReview?.content}</p>
             </div>
           </div>

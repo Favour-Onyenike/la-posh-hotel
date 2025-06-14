@@ -19,6 +19,17 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
           />
         ))}
       </div>
+      
+      {review.image_url && (
+        <div className="mb-4">
+          <img
+            src={review.image_url}
+            alt="Review photo"
+            className="w-full h-48 object-cover rounded-lg"
+          />
+        </div>
+      )}
+      
       <p className="text-black mb-6 line-clamp-4">
         "{review.content}"
       </p>
