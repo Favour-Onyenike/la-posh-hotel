@@ -1,8 +1,11 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
+import AdminProfileDropdown from './AdminProfileDropdown';
 import { 
   LayoutDashboard, 
   Calendar, 
@@ -14,7 +17,6 @@ import {
   Menu,
   X,
   LogOut,
-  User,
   UserPlus,
   ToggleLeft
 } from 'lucide-react';
@@ -53,6 +55,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       return user.email.split('@')[0];
     }
     return 'Admin';
+  };
+
+  const getInitials = () => {
+    const name = getDisplayName();
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   };
 
   return (
@@ -111,9 +118,14 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gray-800">
           <div className="flex items-center mb-4 px-4">
-            <User className="h-8 w-8 text-gray-400 mr-3" />
+            <Avatar className="h-8 w-8 mr-3">
+              <AvatarImage src={profile?.avatar_url || ''} alt={getDisplayName()} />
+              <AvatarFallback className="bg-gray-600 text-gray-200 text-sm">
+                {getInitials()}
+              </AvatarFallback>
+            </Avatar>
             <div>
-              <p className="text-sm font-medium text-white">{user?.email}</p>
+              <p className="text-sm font-medium text-white">{getDisplayName()}</p>
               <p className="text-xs text-gray-400">Administrator</p>
             </div>
           </div>
@@ -145,6 +157,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
               <h2 className="text-xl font-semibold text-gray-900">
                 Welcome {getDisplayName()}
               </h2>
+            </div>
+            
+            {/* Profile Dropdown in header */}
+            <div className="flex items-center ml-auto">
+              <AdminProfileDropdown />
             </div>
           </div>
         </div>
