@@ -148,36 +148,6 @@ export type Database = {
           },
         ]
       }
-      content: {
-        Row: {
-          content: string
-          created_at: string
-          id: string
-          page: string
-          section: string
-          title: string | null
-          updated_at: string
-        }
-        Insert: {
-          content: string
-          created_at?: string
-          id?: string
-          page: string
-          section: string
-          title?: string | null
-          updated_at?: string
-        }
-        Update: {
-          content?: string
-          created_at?: string
-          id?: string
-          page?: string
-          section?: string
-          title?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       events: {
         Row: {
           created_at: string

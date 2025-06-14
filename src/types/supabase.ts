@@ -61,13 +61,3 @@ export type GalleryItem = {
   created_at: string;
   updated_at: string;
 }
-
-export type ContentItem = {
-  id: string;
-  page: string;
-  section: string;
-  title: string | null;
-  content: string;
-  created_at: string;
-  updated_at: string;
-}
