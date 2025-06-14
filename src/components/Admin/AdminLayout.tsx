@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -40,7 +39,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     await signOut();
   };
 
-  // Get display name from profile or user email
+  // Get display name prioritizing username for any admin
   const getDisplayName = () => {
     if (profile?.username) {
       return profile.username;
