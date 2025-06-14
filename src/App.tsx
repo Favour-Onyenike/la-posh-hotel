@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Index from '@/pages/Index';
@@ -16,10 +17,9 @@ import AdminRooms from '@/pages/Admin/Rooms';
 import AdminSuites from '@/pages/Admin/Suites';
 import AdminReviews from '@/pages/Admin/Reviews';
 import AdminGallery from '@/pages/Admin/Gallery';
-import { AuthProvider } from '@/context/AuthContext';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { AuthProvider } from '@/contexts/AuthContext';
+import ProtectedRoute from '@/components/Admin/ProtectedRoute';
 import { Toaster } from '@/components/ui/toaster';
-import { QueryClient } from 'react-query';
 import TestBookingSystem from '@/pages/TestBookingSystem';
 
 function App() {
