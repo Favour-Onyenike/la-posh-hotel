@@ -135,7 +135,7 @@ const InviteManagement = () => {
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
-                This link expires in 7 days and can only be used once.
+                This link expires in 24 hours and can only be used once.
               </p>
             </div>
           )}
