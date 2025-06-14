@@ -15,7 +15,8 @@ import {
   X,
   LogOut,
   User,
-  UserPlus
+  UserPlus,
+  ToggleLeft
 } from 'lucide-react';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
@@ -28,6 +29,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     { name: 'Bookings', href: '/admin/bookings', icon: Calendar },
     { name: 'Rooms', href: '/admin/rooms', icon: BedDouble },
     { name: 'Suites', href: '/admin/suites', icon: Star },
+    { name: 'Room Availability', href: '/admin/room-availability', icon: ToggleLeft },
     { name: 'Reviews', href: '/admin/reviews', icon: MessageSquare },
     { name: 'Gallery', href: '/admin/gallery', icon: Images },
     { name: 'Events', href: '/admin/events', icon: CalendarDays },
@@ -39,13 +41,13 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     await signOut();
   };
 
-  // Get display name prioritizing username, then full_name, then email prefix
+  // Get display name prioritizing full_name, then username, then email prefix
   const getDisplayName = () => {
-    if (profile?.username) {
-      return profile.username;
-    }
     if (profile?.full_name) {
       return profile.full_name;
+    }
+    if (profile?.username) {
+      return profile.username;
     }
     if (user?.email) {
       return user.email.split('@')[0];
