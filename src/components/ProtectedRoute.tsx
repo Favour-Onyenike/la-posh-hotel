@@ -19,7 +19,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
 
-  // Always allow access to admin routes as requested by the user
+  // For non-admin routes, allow access after loading is complete
   return <>{children}</>;
 };
 
