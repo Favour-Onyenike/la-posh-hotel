@@ -91,26 +91,6 @@ const AdminRegister = () => {
         throw new Error(error.message);
       }
 
-      // If user was created successfully, manually create/update the profile
-      if (data.user) {
-        console.log('User created, updating profile:', { username, fullName, isFirstAdmin });
-        
-        // Update the profile with the username
-        const { error: updateError } = await supabase
-          .from('profiles')
-          .update({
-            username: username,
-            full_name: fullName
-          })
-          .eq('id', data.user.id);
-
-        if (updateError) {
-          console.error('Error updating profile:', updateError);
-        } else {
-          console.log('Profile updated successfully');
-        }
-      }
-
       toast({
         title: "Registration Successful",
         description: isFirstAdmin 
