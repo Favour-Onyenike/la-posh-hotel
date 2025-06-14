@@ -92,7 +92,7 @@ const Facilities = () => {
                 >
                   {/* Mobile Layout - Always image first, then content */}
                   <div className="md:hidden">
-                    <div className="h-64">
+                    <div className="h-48">
                       <AspectRatio ratio={4/3} className="h-full">
                         <img 
                           src={item.imageSrc} 

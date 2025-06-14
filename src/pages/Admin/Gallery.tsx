@@ -31,7 +31,26 @@ const Gallery = () => {
 
   useEffect(() => {
     fetchGalleryItems();
+    ensureStorageBucket();
   }, []);
+
+  const ensureStorageBucket = async () => {
+    try {
+      const { data: buckets } = await supabase.storage.listBuckets();
+      const galleryBucket = buckets?.find(bucket => bucket.name === 'gallery');
+      
+      if (!galleryBucket) {
+        const { error } = await supabase.storage.createBucket('gallery', {
+          public: true
+        });
+        if (error) {
+          console.error('Error creating gallery bucket:', error);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking storage bucket:', error);
+    }
+  };
 
   const fetchGalleryItems = async () => {
     try {
@@ -78,17 +97,36 @@ const Gallery = () => {
       setUploadProgress({ current: 0, total: files.length });
 
       const uploadPromises = Array.from(files).map(async (file, index) => {
-        // Create a URL for the file
-        const fileUrl = URL.createObjectURL(file);
+        // Generate unique filename
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        
+        // Upload file to Supabase storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('gallery')
+          .upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: false
+          });
 
-        const { error } = await supabase.from('gallery').insert({
-          image_url: fileUrl,
-          title: '', // Empty title
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        // Get public URL
+        const { data: urlData } = supabase.storage
+          .from('gallery')
+          .getPublicUrl(fileName);
+
+        // Insert into gallery table
+        const { error: insertError } = await supabase.from('gallery').insert({
+          image_url: urlData.publicUrl,
+          title: file.name.split('.')[0], // Use filename without extension as title
           description: '', // Empty description
         });
 
-        if (error) {
-          throw error;
+        if (insertError) {
+          throw insertError;
         }
 
         // Update progress
@@ -124,6 +162,14 @@ const Gallery = () => {
     if (!selectedItem) return;
 
     try {
+      // Delete from storage if it's a storage URL
+      if (selectedItem.image_url.includes('supabase')) {
+        const urlParts = selectedItem.image_url.split('/');
+        const fileName = urlParts[urlParts.length - 1];
+        await supabase.storage.from('gallery').remove([fileName]);
+      }
+
+      // Delete from database
       const { error } = await supabase
         .from('gallery')
         .delete()
@@ -217,6 +263,7 @@ const Gallery = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Image</TableHead>
+                  <TableHead>Title</TableHead>
                   <TableHead>Upload Date</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -224,7 +271,7 @@ const Gallery = () => {
               <TableBody>
                 {galleryItems.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
                       No images found. Upload your first images to get started.
                     </TableCell>
                   </TableRow>
@@ -238,6 +285,7 @@ const Gallery = () => {
                           className="h-16 w-16 rounded object-cover"
                         />
                       </TableCell>
+                      <TableCell>{item.title || 'Untitled'}</TableCell>
                       <TableCell>{format(new Date(item.created_at), 'MMM d, yyyy')}</TableCell>
                       <TableCell className="text-right">
                         <Button
