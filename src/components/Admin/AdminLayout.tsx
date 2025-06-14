@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTeamPermissions } from '@/hooks/useTeamPermissions';
 import AdminProfileDropdown from './AdminProfileDropdown';
 import { 
   LayoutDashboard, 
@@ -25,6 +26,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { signOut, user, profile } = useAuth();
+  const { hasTeamPermission, isPrimaryAdmin } = useTeamPermissions();
+
+  // Check if user can access team management
+  const canAccessTeam = hasTeamPermission || isPrimaryAdmin;
 
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -35,7 +40,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     { name: 'Reviews', href: '/admin/reviews', icon: MessageSquare },
     { name: 'Gallery', href: '/admin/gallery', icon: Images },
     { name: 'Events', href: '/admin/events', icon: CalendarDays },
-    { name: 'Team', href: '/admin/team', icon: UserPlus },
+    // Only show Team link if user has permission
+    ...(canAccessTeam ? [{ name: 'Team', href: '/admin/team', icon: UserPlus }] : []),
     { name: 'Activity Logs', href: '/admin/activity-logs', icon: MessageSquare },
   ];
 
