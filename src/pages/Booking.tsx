@@ -198,32 +198,6 @@ const Booking = () => {
 
         <div className="bg-gray-50 py-8">
           <div className="container mx-auto px-4">
-            {/* Availability Summary */}
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CalendarDays className="h-5 w-5" />
-                  Availability Overview
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">{getAvailableCount()}</div>
-                    <div className="text-sm text-gray-600">Available Rooms</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-600">{getTotalCount() - getAvailableCount()}</div>
-                    <div className="text-sm text-gray-600">Occupied Rooms</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">{getTotalCount()}</div>
-                    <div className="text-sm text-gray-600">Total Rooms</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Filters */}
             <Card className="mb-6">
               <CardHeader>
