@@ -31,24 +31,47 @@ const Gallery = () => {
 
   useEffect(() => {
     fetchGalleryItems();
-    ensureStorageBucket();
+    initializeStorage();
   }, []);
 
-  const ensureStorageBucket = async () => {
+  const initializeStorage = async () => {
     try {
-      const { data: buckets } = await supabase.storage.listBuckets();
+      console.log('Initializing storage...');
+      
+      // Check if bucket exists
+      const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
+      console.log('Existing buckets:', buckets);
+      
+      if (bucketsError) {
+        console.error('Error listing buckets:', bucketsError);
+        return;
+      }
+
       const galleryBucket = buckets?.find(bucket => bucket.name === 'gallery');
       
       if (!galleryBucket) {
-        const { error } = await supabase.storage.createBucket('gallery', {
-          public: true
+        console.log('Creating gallery bucket...');
+        const { data: createData, error: createError } = await supabase.storage.createBucket('gallery', {
+          public: true,
+          allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+          fileSizeLimit: 5242880 // 5MB
         });
-        if (error) {
-          console.error('Error creating gallery bucket:', error);
+        
+        if (createError) {
+          console.error('Error creating gallery bucket:', createError);
+          toast({
+            title: 'Storage Setup Error',
+            description: 'Failed to create storage bucket. Please contact administrator.',
+            variant: 'destructive',
+          });
+        } else {
+          console.log('Gallery bucket created successfully:', createData);
         }
+      } else {
+        console.log('Gallery bucket already exists');
       }
     } catch (error) {
-      console.error('Error checking storage bucket:', error);
+      console.error('Error initializing storage:', error);
     }
   };
 
@@ -92,11 +115,27 @@ const Gallery = () => {
       return;
     }
 
+    // Check file sizes (5MB limit)
+    const oversizedFiles = Array.from(files).filter(file => file.size > 5242880);
+    if (oversizedFiles.length > 0) {
+      toast({
+        title: 'Error',
+        description: 'Please select images smaller than 5MB',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     try {
       setUploading(true);
       setUploadProgress({ current: 0, total: files.length });
 
-      const uploadPromises = Array.from(files).map(async (file, index) => {
+      console.log(`Starting upload of ${files.length} files...`);
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        console.log(`Uploading file ${i + 1}/${files.length}: ${file.name}`);
+        
         // Generate unique filename
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
@@ -110,13 +149,18 @@ const Gallery = () => {
           });
 
         if (uploadError) {
-          throw uploadError;
+          console.error('Upload error:', uploadError);
+          throw new Error(`Failed to upload ${file.name}: ${uploadError.message}`);
         }
+
+        console.log('Upload successful:', uploadData);
 
         // Get public URL
         const { data: urlData } = supabase.storage
           .from('gallery')
           .getPublicUrl(fileName);
+
+        console.log('Public URL:', urlData.publicUrl);
 
         // Insert into gallery table
         const { error: insertError } = await supabase.from('gallery').insert({
@@ -126,14 +170,13 @@ const Gallery = () => {
         });
 
         if (insertError) {
-          throw insertError;
+          console.error('Database insert error:', insertError);
+          throw new Error(`Failed to save ${file.name} to database: ${insertError.message}`);
         }
 
         // Update progress
-        setUploadProgress(prev => ({ ...prev, current: index + 1 }));
-      });
-
-      await Promise.all(uploadPromises);
+        setUploadProgress(prev => ({ ...prev, current: i + 1 }));
+      }
 
       await fetchGalleryItems();
       setIsUploadDialogOpen(false);
@@ -149,7 +192,7 @@ const Gallery = () => {
       console.error('Error uploading images:', error);
       toast({
         title: 'Error',
-        description: 'Failed to upload images',
+        description: error instanceof Error ? error.message : 'Failed to upload images',
         variant: 'destructive',
       });
     } finally {
@@ -234,7 +277,7 @@ const Gallery = () => {
                     disabled={uploading}
                   />
                   <p className="text-sm text-muted-foreground mt-2">
-                    Select multiple images to upload at once
+                    Select multiple images to upload at once (max 5MB each)
                   </p>
                 </div>
                 {uploading && (
