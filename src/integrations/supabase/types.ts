@@ -399,6 +399,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_admin_users: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          email: string
+          full_name: string
+          username: string
+          role: Database["public"]["Enums"]["app_role"]
+          created_at: string
+          last_login: string
+        }[]
+      }
       get_available_rooms: {
         Args: {
           check_in_param: string
@@ -443,6 +455,10 @@ export type Database = {
           target_id_param?: string
         }
         Returns: undefined
+      }
+      revoke_admin_status: {
+        Args: { target_admin_id: string; revoked_by_admin_id: string }
+        Returns: boolean
       }
       revoke_log_permission: {
         Args: { target_admin_id: string; revoked_by_admin_id: string }
