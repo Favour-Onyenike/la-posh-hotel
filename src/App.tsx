@@ -11,6 +11,7 @@ import About from '@/pages/About';
 import Contact from '@/pages/Contact';
 import NotFound from '@/pages/NotFound';
 import AddReview from '@/pages/AddReview';
+import AdminLogin from '@/pages/AdminLogin';
 import Dashboard from '@/pages/Admin/Dashboard';
 import AdminBookings from '@/pages/Admin/Bookings';
 import AdminRooms from '@/pages/Admin/Rooms';
@@ -40,7 +41,10 @@ function App() {
           <Route path="/add-review" element={<AddReview />} />
           <Route path="/test-booking" element={<TestBookingSystem />} />
           
-          {/* Admin Routes - Fixed routing */}
+          {/* Admin Login Route */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          
+          {/* Admin Routes - Now properly protected */}
           <Route 
             path="/admin" 
             element={
