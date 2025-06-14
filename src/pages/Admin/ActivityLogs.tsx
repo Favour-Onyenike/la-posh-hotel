@@ -2,6 +2,7 @@
 import React from 'react';
 import AdminLayout from '@/components/Admin/AdminLayout';
 import AdminActivityLogs from '@/components/Admin/AdminActivityLogs';
+import LogPermissionManager from '@/components/Admin/LogPermissionManager';
 
 const ActivityLogs = () => {
   return (
@@ -13,6 +14,8 @@ const ActivityLogs = () => {
             Monitor admin activities and system events for security and audit purposes
           </p>
         </div>
+        
+        <LogPermissionManager />
         <AdminActivityLogs />
       </div>
     </AdminLayout>

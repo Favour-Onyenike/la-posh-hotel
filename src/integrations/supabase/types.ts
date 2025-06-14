@@ -412,6 +412,10 @@ export type Database = {
           availability_status: string
         }[]
       }
+      grant_log_permission: {
+        Args: { target_admin_id: string; granted_by_admin_id: string }
+        Returns: boolean
+      }
       has_admin_permission: {
         Args: { user_id: string; permission: string }
         Returns: boolean
@@ -433,6 +437,10 @@ export type Database = {
           target_id_param?: string
         }
         Returns: undefined
+      }
+      revoke_log_permission: {
+        Args: { target_admin_id: string; revoked_by_admin_id: string }
+        Returns: boolean
       }
     }
     Enums: {
