@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, Settings, LogOut, Camera } from 'lucide-react';
 import {
   DropdownMenu,
@@ -16,6 +17,7 @@ import AdminProfileModal from './AdminProfileModal';
 
 const AdminProfileDropdown = () => {
   const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const getDisplayName = () => {
@@ -38,6 +40,7 @@ const AdminProfileDropdown = () => {
 
   const handleSignOut = async () => {
     await signOut();
+    navigate('/');
   };
 
   return (
