@@ -13,6 +13,7 @@ import NotFound from '@/pages/NotFound';
 import AddReview from '@/pages/AddReview';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminRegister from '@/pages/AdminRegister';
+import UpdateUserRole from '@/pages/UpdateUserRole';
 import Dashboard from '@/pages/Admin/Dashboard';
 import AdminBookings from '@/pages/Admin/Bookings';
 import AdminRooms from '@/pages/Admin/Rooms';
@@ -42,6 +43,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/add-review" element={<AddReview />} />
           <Route path="/test-booking" element={<TestBookingSystem />} />
+          <Route path="/update-user-role" element={<UpdateUserRole />} />
           
           {/* Admin Login and Registration Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
