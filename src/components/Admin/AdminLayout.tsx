@@ -39,7 +39,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     await signOut();
   };
 
-  // Get display name prioritizing username for any admin
+  // Get display name prioritizing username, then full_name, then email prefix
   const getDisplayName = () => {
     if (profile?.username) {
       return profile.username;
