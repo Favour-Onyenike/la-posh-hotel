@@ -24,6 +24,7 @@ import AdminEvents from '@/pages/Admin/Events';
 import TeamManagement from '@/pages/Admin/TeamManagement';
 import ActivityLogs from '@/pages/Admin/ActivityLogs';
 import RoomAvailability from '@/pages/Admin/RoomAvailability';
+import ContentManagement from '@/pages/Admin/ContentManagement';
 import { AuthProvider } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/Admin/ProtectedRoute';
 import { Toaster } from '@/components/ui/toaster';
@@ -137,6 +138,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <RoomAvailability />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/content" 
+            element={
+              <ProtectedRoute>
+                <ContentManagement />
               </ProtectedRoute>
             } 
           />
