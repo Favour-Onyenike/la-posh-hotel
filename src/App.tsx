@@ -39,9 +39,17 @@ function App() {
           <Route path="/add-review" element={<AddReview />} />
           <Route path="/test-booking" element={<TestBookingSystem />} />
           
-          {/* Admin Routes */}
+          {/* Admin Routes - Fixed routing */}
           <Route 
             path="/admin" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/dashboard" 
             element={
               <ProtectedRoute>
                 <Dashboard />
