@@ -400,6 +400,10 @@ export type Database = {
           availability_status: string
         }[]
       }
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
       grant_log_permission: {
         Args: { target_admin_id: string; granted_by_admin_id: string }
         Returns: boolean
