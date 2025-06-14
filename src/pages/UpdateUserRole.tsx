@@ -7,13 +7,27 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const UpdateUserRole = () => {
-  const { user, refreshProfile } = useAuth();
+  const { user, refreshProfile, profile, isAdmin } = useAuth();
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
+
+  // Redirect if already admin
+  useEffect(() => {
+    if (user && isAdmin) {
+      toast({
+        title: "Already Admin",
+        description: "You already have admin access. Redirecting to dashboard...",
+      });
+      setTimeout(() => {
+        window.location.href = '/admin/dashboard';
+      }, 1500);
+    }
+  }, [user, isAdmin, toast]);
 
   const updateToAdmin = async () => {
     if (!user) return;
     
+    console.log('Updating user role to admin for:', user.id);
     setIsUpdating(true);
     try {
       const { error } = await supabase
@@ -22,9 +36,11 @@ const UpdateUserRole = () => {
         .eq('id', user.id);
 
       if (error) {
+        console.error('Error updating role:', error);
         throw error;
       }
 
+      console.log('Role updated successfully, refreshing profile...');
       // Refresh the profile in the auth context
       await refreshProfile();
 
@@ -38,6 +54,7 @@ const UpdateUserRole = () => {
         window.location.href = '/admin/dashboard';
       }, 1500);
     } catch (error: any) {
+      console.error('Full error updating role:', error);
       toast({
         title: "Error",
         description: error.message,
@@ -63,16 +80,31 @@ const UpdateUserRole = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <p className="text-sm text-gray-600">
-              Current user: {user.email}
-            </p>
-            <Button 
-              onClick={updateToAdmin} 
-              className="w-full" 
-              disabled={isUpdating}
-            >
-              {isUpdating ? "Updating..." : "Update to Admin"}
-            </Button>
+            <div className="text-sm text-gray-600 space-y-2">
+              <p>Current user: {user.email}</p>
+              <p>Current role: {profile?.role || 'No role'}</p>
+              <p>Admin access: {isAdmin ? 'Yes' : 'No'}</p>
+            </div>
+            {!isAdmin && (
+              <Button 
+                onClick={updateToAdmin} 
+                className="w-full" 
+                disabled={isUpdating}
+              >
+                {isUpdating ? "Updating..." : "Update to Admin"}
+              </Button>
+            )}
+            {isAdmin && (
+              <div className="text-center">
+                <p className="text-green-600 font-medium mb-2">✓ You already have admin access!</p>
+                <Button 
+                  onClick={() => window.location.href = '/admin/dashboard'}
+                  className="w-full"
+                >
+                  Go to Admin Dashboard
+                </Button>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
