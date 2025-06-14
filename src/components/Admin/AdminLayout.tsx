@@ -42,6 +42,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
   // Get display name from profile or user email
   const getDisplayName = () => {
+    if (profile?.username) {
+      return profile.username;
+    }
     if (profile?.full_name) {
       return profile.full_name;
     }
