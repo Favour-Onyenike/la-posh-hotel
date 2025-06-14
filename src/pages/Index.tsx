@@ -234,12 +234,12 @@ const Index = () => {
               Book your stay now and discover why our guests return again and again for our
               exceptional service and unparalleled comfort.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button variant="hotel" size="lg" onClick={handleNavClick}>
+            <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+              <Button variant="hotel" size="lg" onClick={handleNavClick} className="w-full sm:w-auto">
                 Book Your Stay
               </Button>
-              <Link to="/contact" onClick={handleNavClick}>
-                <Button variant="hotel" size="lg">
+              <Link to="/contact" onClick={handleNavClick} className="w-full sm:w-auto">
+                <Button variant="hotel" size="lg" className="w-full sm:w-auto">
                   Contact Us
                 </Button>
               </Link>
