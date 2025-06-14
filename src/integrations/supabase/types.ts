@@ -434,6 +434,10 @@ export type Database = {
         Args: { target_admin_id: string; granted_by_admin_id: string }
         Returns: boolean
       }
+      grant_revenue_permission: {
+        Args: { target_admin_id: string; granted_by_admin_id: string }
+        Returns: boolean
+      }
       has_admin_permission: {
         Args: { user_id: string; permission: string }
         Returns: boolean
@@ -461,6 +465,10 @@ export type Database = {
         Returns: boolean
       }
       revoke_log_permission: {
+        Args: { target_admin_id: string; revoked_by_admin_id: string }
+        Returns: boolean
+      }
+      revoke_revenue_permission: {
         Args: { target_admin_id: string; revoked_by_admin_id: string }
         Returns: boolean
       }

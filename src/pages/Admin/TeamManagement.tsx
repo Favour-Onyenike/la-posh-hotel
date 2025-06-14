@@ -3,6 +3,7 @@ import React from 'react';
 import AdminLayout from '@/components/Admin/AdminLayout';
 import InviteManagement from '@/components/Admin/InviteManagement';
 import AdminUserManagement from '@/components/Admin/AdminUserManagement';
+import RevenuePermissionManager from '@/components/Admin/RevenuePermissionManager';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const TeamManagement = () => {
@@ -20,6 +21,7 @@ const TeamManagement = () => {
           <TabsList>
             <TabsTrigger value="invites">Invite Management</TabsTrigger>
             <TabsTrigger value="admins">Admin Users</TabsTrigger>
+            <TabsTrigger value="revenue">Revenue Permissions</TabsTrigger>
           </TabsList>
           
           <TabsContent value="invites" className="mt-6">
@@ -28,6 +30,10 @@ const TeamManagement = () => {
           
           <TabsContent value="admins" className="mt-6">
             <AdminUserManagement />
+          </TabsContent>
+          
+          <TabsContent value="revenue" className="mt-6">
+            <RevenuePermissionManager />
           </TabsContent>
         </Tabs>
       </div>

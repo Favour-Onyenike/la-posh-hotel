@@ -7,12 +7,14 @@ import TodayActivity from '@/components/Admin/TodayActivity';
 import RoomAvailabilityManager from '@/components/Admin/RoomAvailabilityManager';
 import { useDashboardData } from '@/hooks/useDashboardData';
 import { useRoomAvailability } from '@/hooks/useRoomAvailability';
+import { useRevenuePermissions } from '@/hooks/useRevenuePermissions';
 import { 
   Hotel, 
   DollarSign, 
   Star,
   MessageSquare,
-  Images
+  Images,
+  Lock
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -33,6 +35,8 @@ const Dashboard = () => {
     setRooms,
     setAvailableRooms
   } = useDashboardData();
+
+  const { hasRevenuePermission, permissionLoading } = useRevenuePermissions();
 
   const { toggleRoomAvailability } = useRoomAvailability(
     rooms,
@@ -66,12 +70,26 @@ const Dashboard = () => {
             description={`${Math.round(((totalRooms + totalSuites) > 0 ? (availableRooms / (totalRooms + totalSuites)) * 100 : 0) || 0)}% occupancy rate`}
             icon={<Hotel size={20} />}
           />
-          <StatCard 
-            title="Total Revenue" 
-            value={`$${revenue.toLocaleString()}`}
-            icon={<DollarSign size={20} />}
-            trend={12}
-          />
+          {permissionLoading ? (
+            <div className="animate-pulse">
+              <div className="h-24 bg-gray-200 rounded"></div>
+            </div>
+          ) : hasRevenuePermission ? (
+            <StatCard 
+              title="Total Revenue" 
+              value={`$${revenue.toLocaleString()}`}
+              icon={<DollarSign size={20} />}
+              trend={12}
+            />
+          ) : (
+            <StatCard 
+              title="Total Revenue" 
+              value="Access Restricted"
+              description="Contact admin for access"
+              icon={<Lock size={20} />}
+              className="opacity-60"
+            />
+          )}
           <StatCard 
             title="Reviews" 
             value={totalReviews}
