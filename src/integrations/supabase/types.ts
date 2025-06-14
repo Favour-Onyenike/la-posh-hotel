@@ -155,6 +155,51 @@ export type Database = {
         }
         Relationships: []
       }
+      invite_tokens: {
+        Row: {
+          created_at: string
+          created_by: string
+          expires_at: string
+          id: string
+          is_used: boolean
+          token: string
+          used_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          expires_at?: string
+          id?: string
+          is_used?: boolean
+          token: string
+          used_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          expires_at?: string
+          id?: string
+          is_used?: boolean
+          token?: string
+          used_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invite_tokens_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invite_tokens_used_by_fkey"
+            columns: ["used_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -163,6 +208,7 @@ export type Database = {
           id: string
           role: Database["public"]["Enums"]["app_role"]
           updated_at: string
+          username: string | null
         }
         Insert: {
           created_at?: string
@@ -171,6 +217,7 @@ export type Database = {
           id: string
           role?: Database["public"]["Enums"]["app_role"]
           updated_at?: string
+          username?: string | null
         }
         Update: {
           created_at?: string
@@ -179,6 +226,7 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           updated_at?: string
+          username?: string | null
         }
         Relationships: []
       }

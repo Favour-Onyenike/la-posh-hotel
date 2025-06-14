@@ -12,6 +12,7 @@ import Contact from '@/pages/Contact';
 import NotFound from '@/pages/NotFound';
 import AddReview from '@/pages/AddReview';
 import AdminLogin from '@/pages/AdminLogin';
+import AdminRegister from '@/pages/AdminRegister';
 import Dashboard from '@/pages/Admin/Dashboard';
 import AdminBookings from '@/pages/Admin/Bookings';
 import AdminRooms from '@/pages/Admin/Rooms';
@@ -19,6 +20,7 @@ import AdminSuites from '@/pages/Admin/Suites';
 import AdminReviews from '@/pages/Admin/Reviews';
 import AdminGallery from '@/pages/Admin/Gallery';
 import AdminEvents from '@/pages/Admin/Events';
+import TeamManagement from '@/pages/Admin/TeamManagement';
 import { AuthProvider } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/Admin/ProtectedRoute';
 import { Toaster } from '@/components/ui/toaster';
@@ -41,8 +43,9 @@ function App() {
           <Route path="/add-review" element={<AddReview />} />
           <Route path="/test-booking" element={<TestBookingSystem />} />
           
-          {/* Admin Login Route */}
+          {/* Admin Login and Registration Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/register" element={<AdminRegister />} />
           
           {/* Admin Routes - Now properly protected */}
           <Route 
@@ -106,6 +109,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminEvents />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/team" 
+            element={
+              <ProtectedRoute>
+                <TeamManagement />
               </ProtectedRoute>
             } 
           />

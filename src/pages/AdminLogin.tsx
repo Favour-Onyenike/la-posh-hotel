@@ -12,7 +12,7 @@ import { Loader2, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState(''); // Can be email or username
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -33,6 +33,25 @@ const AdminLogin = () => {
     setError('');
 
     try {
+      let email = identifier;
+      
+      // Check if identifier is a username (doesn't contain @)
+      if (!identifier.includes('@')) {
+        // Look up email by username
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('username', identifier)
+          .single();
+
+        if (profileError || !profile) {
+          setError('Username not found');
+          return;
+        }
+        
+        email = profile.email;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -50,8 +69,8 @@ const AdminLogin = () => {
         });
         navigate('/admin/dashboard');
       }
-    } catch (err) {
-      setError('An unexpected error occurred');
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +105,7 @@ const AdminLogin = () => {
           </div>
           <CardTitle className="text-2xl">Admin Login</CardTitle>
           <CardDescription>
-            Enter your credentials to access the admin panel
+            Enter your username/email and password to access the admin panel
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -98,13 +117,13 @@ const AdminLogin = () => {
             )}
             
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="identifier">Username or Email</Label>
               <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
+                id="identifier"
+                type="text"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                placeholder="Enter username or email"
                 required
                 disabled={isLoading}
               />
