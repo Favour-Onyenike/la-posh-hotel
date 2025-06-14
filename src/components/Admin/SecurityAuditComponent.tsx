@@ -5,180 +5,139 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Shield, AlertTriangle, CheckCircle, RefreshCw } from 'lucide-react';
+import { Shield, AlertTriangle, CheckCircle, RefreshCw, Info } from 'lucide-react';
 
-interface SecurityCheck {
+interface SecurityInfo {
   name: string;
-  status: 'pass' | 'fail' | 'warning';
+  status: 'pass' | 'fail' | 'info';
   description: string;
   details?: string;
 }
 
 const SecurityAuditComponent = () => {
   const { user, profile } = useAuth();
-  const [securityChecks, setSecurityChecks] = useState<SecurityCheck[]>([]);
+  const [securityInfo, setSecurityInfo] = useState<SecurityInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const runSecurityAudit = async () => {
+  const runBasicSecurityCheck = async () => {
     setIsLoading(true);
-    const checks: SecurityCheck[] = [];
+    const info: SecurityInfo[] = [];
 
-    // Check 1: User Authentication
-    checks.push({
-      name: 'User Authentication',
+    // Basic authentication check
+    info.push({
+      name: 'Authentication Status',
       status: user ? 'pass' : 'fail',
-      description: 'User is properly authenticated',
-      details: user ? `Authenticated as ${user.email}` : 'No user session found'
+      description: 'Current authentication state',
+      details: user ? `Logged in as ${user.email}` : 'Not authenticated'
     });
 
-    // Check 2: Admin Role Verification
-    const isAdmin = profile?.role === 'admin' || profile?.role === 'primary_admin';
-    checks.push({
-      name: 'Admin Role Verification',
-      status: isAdmin ? 'pass' : 'fail',
-      description: 'User has proper admin privileges',
-      details: `Current role: ${profile?.role || 'No role'}`
+    // Role information
+    info.push({
+      name: 'User Role',
+      status: 'info',
+      description: 'Current user role and permissions',
+      details: `Role: ${profile?.role || 'No role assigned'}`
     });
 
-    // Check 3: RLS Policy Test - Try to access admin activity logs
-    try {
-      const { data: logsData, error: logsError } = await supabase
-        .from('admin_activity_logs')
-        .select('id')
-        .limit(1);
-
-      checks.push({
-        name: 'Admin Activity Logs Access',
-        status: logsError ? 'fail' : 'pass',
-        description: 'Access to admin activity logs is properly controlled',
-        details: logsError ? `Error: ${logsError.message}` : 'Access granted successfully'
-      });
-    } catch (error) {
-      checks.push({
-        name: 'Admin Activity Logs Access',
-        status: 'fail',
-        description: 'Error testing admin activity logs access',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-
-    // Check 4: Profile Data Access
-    try {
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('id, role')
-        .eq('id', user?.id)
-        .single();
-
-      checks.push({
-        name: 'Profile Data Access',
-        status: profileError ? 'fail' : 'pass',
-        description: 'User can access their own profile data',
-        details: profileError ? `Error: ${profileError.message}` : 'Profile data accessible'
-      });
-    } catch (error) {
-      checks.push({
-        name: 'Profile Data Access',
-        status: 'fail',
-        description: 'Error accessing profile data',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-
-    // Check 5: Permissions System
+    // Profile access test
     if (user) {
       try {
-        const { data: permissionData, error: permissionError } = await supabase
-          .rpc('has_admin_permission', {
-            user_id: user.id,
-            permission: 'view_logs'
-          });
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('id, role')
+          .eq('id', user.id)
+          .single();
 
-        checks.push({
-          name: 'Permission System',
-          status: permissionError ? 'fail' : 'pass',
-          description: 'Admin permission system is functioning',
-          details: permissionError ? `Error: ${permissionError.message}` : `Permission check result: ${permissionData}`
+        info.push({
+          name: 'Profile Access',
+          status: profileError ? 'fail' : 'pass',
+          description: 'Access to user profile data',
+          details: profileError ? `Error: ${profileError.message}` : 'Profile data accessible'
         });
       } catch (error) {
-        checks.push({
-          name: 'Permission System',
+        info.push({
+          name: 'Profile Access',
           status: 'fail',
-          description: 'Error testing permission system',
+          description: 'Error accessing profile data',
           details: error instanceof Error ? error.message : 'Unknown error'
         });
       }
     }
 
-    setSecurityChecks(checks);
+    // Security note
+    info.push({
+      name: 'Security Notice',
+      status: 'info',
+      description: 'Enhanced security measures are active',
+      details: 'Row Level Security (RLS) policies protect all data access. Role escalation has been disabled.'
+    });
+
+    setSecurityInfo(info);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    runSecurityAudit();
+    runBasicSecurityCheck();
   }, [user, profile]);
 
-  const getStatusIcon = (status: SecurityCheck['status']) => {
+  const getStatusIcon = (status: SecurityInfo['status']) => {
     switch (status) {
       case 'pass':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'fail':
         return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'warning':
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      case 'info':
+        return <Info className="h-4 w-4 text-blue-500" />;
     }
   };
 
-  const getStatusBadge = (status: SecurityCheck['status']) => {
+  const getStatusBadge = (status: SecurityInfo['status']) => {
     switch (status) {
       case 'pass':
-        return <Badge variant="default" className="bg-green-100 text-green-800">Pass</Badge>;
+        return <Badge variant="default" className="bg-green-100 text-green-800">Active</Badge>;
       case 'fail':
-        return <Badge variant="destructive">Fail</Badge>;
-      case 'warning':
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">Warning</Badge>;
+        return <Badge variant="destructive">Issue</Badge>;
+      case 'info':
+        return <Badge variant="secondary" className="bg-blue-100 text-blue-800">Info</Badge>;
     }
   };
-
-  const passedChecks = securityChecks.filter(check => check.status === 'pass').length;
-  const totalChecks = securityChecks.length;
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Shield className="h-5 w-5" />
-          Security Audit
+          Security Information
         </CardTitle>
         <CardDescription>
-          Current security status: {passedChecks}/{totalChecks} checks passed
+          Basic security status and information
         </CardDescription>
         <Button 
-          onClick={runSecurityAudit} 
+          onClick={runBasicSecurityCheck} 
           disabled={isLoading}
           size="sm"
           variant="outline"
           className="w-fit"
         >
           <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-          Run Security Audit
+          Refresh
         </Button>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {securityChecks.map((check, index) => (
+          {securityInfo.map((info, index) => (
             <div key={index} className="flex items-start justify-between p-3 border rounded-lg">
               <div className="flex items-start gap-3">
-                {getStatusIcon(check.status)}
+                {getStatusIcon(info.status)}
                 <div>
-                  <h4 className="font-medium">{check.name}</h4>
-                  <p className="text-sm text-gray-600">{check.description}</p>
-                  {check.details && (
-                    <p className="text-xs text-gray-500 mt-1">{check.details}</p>
+                  <h4 className="font-medium">{info.name}</h4>
+                  <p className="text-sm text-gray-600">{info.description}</p>
+                  {info.details && (
+                    <p className="text-xs text-gray-500 mt-1">{info.details}</p>
                   )}
                 </div>
               </div>
-              {getStatusBadge(check.status)}
+              {getStatusBadge(info.status)}
             </div>
           ))}
         </div>

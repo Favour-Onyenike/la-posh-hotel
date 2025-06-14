@@ -31,9 +31,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return <Navigate to="/admin/login" replace />;
   }
 
-  // If authenticated but not admin, show access denied
+  // If authenticated but not admin, show access denied (NO ROLE ESCALATION OPTION)
   if (!isAdmin) {
-    console.log('User is not admin, showing access denied');
+    console.log('User is not admin, access denied');
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
@@ -42,17 +42,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
           <p className="text-sm text-gray-500 mb-4">
             Current role: {profile?.role || 'No role'} (Expected: admin or primary_admin)
           </p>
+          <p className="text-sm text-red-600 mb-4">
+            Contact a primary administrator to request admin access.
+          </p>
           <button
             onClick={() => window.location.href = '/'}
-            className="text-blue-600 hover:text-blue-800 mr-4"
+            className="text-blue-600 hover:text-blue-800"
           >
             Return to Home
-          </button>
-          <button
-            onClick={() => window.location.href = '/update-user-role'}
-            className="text-green-600 hover:text-green-800"
-          >
-            Update Role
           </button>
         </div>
       </div>
