@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const UpdateUserRole = () => {
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -25,15 +25,18 @@ const UpdateUserRole = () => {
         throw error;
       }
 
+      // Refresh the profile in the auth context
+      await refreshProfile();
+
       toast({
         title: "Success",
-        description: "Your role has been updated to admin. Please refresh the page.",
+        description: "Your role has been updated to admin. You now have admin access!",
       });
       
-      // Refresh the page to update the auth context
+      // Redirect to admin dashboard after successful update
       setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+        window.location.href = '/admin/dashboard';
+      }, 1500);
     } catch (error: any) {
       toast({
         title: "Error",
