@@ -88,7 +88,13 @@ const AdminActivityLogs = () => {
         return;
       }
 
-      setLogs(logsData || []);
+      // Type cast the data to match our interface
+      const typedLogs = (logsData || []).map(log => ({
+        ...log,
+        ip_address: log.ip_address as string | null
+      })) as AdminActivityLog[];
+
+      setLogs(typedLogs);
     } catch (error) {
       console.error('Error:', error);
       toast({

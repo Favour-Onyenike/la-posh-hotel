@@ -1,8 +1,13 @@
+
 import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { Profile } from '@/types/supabase';
 import { useToast } from "@/hooks/use-toast";
+
+type AuthProviderProps = {
+  children: ReactNode;
+};
 
 type AuthContextType = {
   session: Session | null;
@@ -65,7 +70,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signIn = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.auth.signIn({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         console.error('Error signing in:', error);
         toast({
@@ -192,6 +197,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   });
 
   const value = {
+    session,
     user,
     profile,
     isLoading,
