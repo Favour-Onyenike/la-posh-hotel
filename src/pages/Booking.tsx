@@ -133,6 +133,10 @@ const Booking = () => {
     });
   };
 
+  const handleCancelBooking = () => {
+    setSelectedRoom(null);
+  };
+
   const getAvailableCount = () => {
     return rooms.filter(room => room.availability_status === 'available').length;
   };
@@ -156,10 +160,10 @@ const Booking = () => {
           </div>
           <BookingForm 
             room={selectedRoom} 
-            onSuccess={handleBookingSuccess}
-            checkInDate={checkInDate ? new Date(checkInDate) : undefined}
-            checkOutDate={checkOutDate ? new Date(checkOutDate) : undefined}
-            guests={guests}
+            onBookingComplete={handleBookingSuccess}
+            onCancel={handleCancelBooking}
+            checkInDate={checkInDate ? new Date(checkInDate) : new Date()}
+            checkOutDate={checkOutDate ? new Date(checkOutDate) : new Date()}
           />
         </div>
       </div>
