@@ -55,7 +55,7 @@ const handler = async (req: Request): Promise<Response> => {
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Booking Confirmation - Laposh Hotel</title>
+          <title>Booking Confirmation - Laposh Signature Suites</title>
           <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { 
@@ -195,6 +195,22 @@ const handler = async (req: Request): Promise<Response> => {
               margin: 5px 0;
               opacity: 0.9;
             }
+            .address-section {
+              background: #f8f9fa;
+              padding: 20px;
+              border-radius: 8px;
+              margin: 20px 0;
+              border-left: 4px solid #D4AF37;
+            }
+            .address-section h4 {
+              color: #2c3e50;
+              margin-bottom: 10px;
+              font-size: 16px;
+            }
+            .address-section p {
+              color: #555;
+              line-height: 1.6;
+            }
             .closing {
               margin: 30px 0;
               font-size: 16px;
@@ -237,7 +253,7 @@ const handler = async (req: Request): Promise<Response> => {
           <div class="email-container">
             <div class="header">
               <div class="logo-section">
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7744159b-04e7-44ab-8c6a-6591e39c0bb6-9QqWcNGJ2XwpKg2bgJJqcPQHyY5kGg.png" alt="Laposh Hotel" class="logo">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/7744159b-04e7-44ab-8c6a-6591e39c0bb6-9QqWcNGJ2XwpKg2bgJJqcPQHyY5kGg.png" alt="Laposh Signature Suites" class="logo">
               </div>
               <h1>Booking Confirmation</h1>
               <p>Your luxury accommodation awaits</p>
@@ -247,7 +263,7 @@ const handler = async (req: Request): Promise<Response> => {
               <div class="greeting">Dear ${guestName},</div>
               
               <div class="intro-text">
-                We are delighted to confirm your reservation at Laposh Hotel. Your booking has been successfully processed, and we are excited to welcome you to our luxury establishment.
+                We are delighted to confirm your reservation at Laposh Signature Suites. Your booking has been successfully processed, and we are excited to welcome you to our luxury establishment.
               </div>
               
               <div class="booking-details">
@@ -282,7 +298,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <h3>Important Information</h3>
                 <div class="info-list">
                   <ul style="list-style: none; margin: 0; padding: 0;">
-                    <li>Check-in time: 2:00 PM</li>
+                    <li>Check-in time: 12:00 PM</li>
                     <li>Check-out time: 12:00 PM</li>
                     <li>Payment will be collected upon arrival at the hotel</li>
                     <li>Please bring a valid government-issued photo ID for check-in</li>
@@ -292,12 +308,17 @@ const handler = async (req: Request): Promise<Response> => {
                   </ul>
                 </div>
               </div>
+
+              <div class="address-section">
+                <h4>Hotel Location</h4>
+                <p>5 Poultry Road by Labrix<br>Abraka, Delta State<br>Nigeria</p>
+              </div>
               
               <div class="contact-info">
                 <h4>Need Assistance?</h4>
                 <p>Our reservations team is available 24/7 to assist you</p>
-                <p><strong>Phone:</strong> +234 (0) 123 456 7890</p>
-                <p><strong>Email:</strong> reservations@laposhhotel.com</p>
+                <p><strong>Phone:</strong> +234 905 212 9939</p>
+                <p><strong>Email:</strong> laposhsignaturesuites@gmail.com</p>
               </div>
               
               <div class="closing">
@@ -305,18 +326,18 @@ const handler = async (req: Request): Promise<Response> => {
               </div>
               
               <div class="closing">
-                Thank you for choosing Laposh Hotel. We look forward to providing you with an unforgettable luxury experience.
+                Thank you for choosing Laposh Signature Suites. We look forward to providing you with an unforgettable luxury experience.
               </div>
               
               <div class="signature">
                 Warm regards,<br>
-                <strong>The Laposh Hotel Team</strong><br>
+                <strong>The Laposh Signature Suites Team</strong><br>
                 <em>Where Luxury Meets Excellence</em>
               </div>
             </div>
             
             <div class="footer">
-              <p class="brand">Laposh Hotel | Signature Suites</p>
+              <p class="brand">Laposh Signature Suites</p>
               <p>Premium Hospitality Experience</p>
               <p>This is an automated confirmation email. Please do not reply directly to this message.</p>
               <p>For immediate assistance, please contact our reservations team.</p>
@@ -327,9 +348,9 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "Laposh Hotel <reservations@resend.dev>",
+      from: "Laposh Signature Suites <laposhsignaturesuites@resend.dev>",
       to: [guestEmail],
-      subject: `Booking Confirmed - ${roomName} | Laposh Hotel`,
+      subject: `Booking Confirmed - ${roomName} | Laposh Signature Suites`,
       html: emailHtml,
     });
 
