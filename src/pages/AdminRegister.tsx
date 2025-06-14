@@ -71,7 +71,7 @@ const AdminRegister = () => {
 
       const redirectUrl = `${window.location.origin}/admin`;
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -88,17 +88,35 @@ const AdminRegister = () => {
         throw new Error(error.message);
       }
 
+      // If user was created successfully, manually create/update the profile
+      if (data.user) {
+        console.log('User created, updating profile:', { username, fullName });
+        
+        // Update the profile with the username
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({
+            username: username,
+            full_name: fullName
+          })
+          .eq('id', data.user.id);
+
+        if (updateError) {
+          console.error('Error updating profile:', updateError);
+        } else {
+          console.log('Profile updated successfully');
+        }
+      }
+
       toast({
         title: "Registration Successful",
         description: isFirstAdmin 
-          ? "Welcome! You've created the first admin account." 
+          ? "Welcome! You've created the first admin account and can now log in." 
           : "Please check your email to confirm your account",
       });
       
-      if (isFirstAdmin) {
-        // For first admin, redirect to login immediately
-        navigate('/admin/login');
-      }
+      // For first admin or successful registration, redirect to login
+      navigate('/admin/login');
     } catch (error: any) {
       toast({
         title: "Registration Failed",
