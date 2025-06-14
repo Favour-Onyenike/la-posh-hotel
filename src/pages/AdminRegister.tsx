@@ -112,8 +112,19 @@ const AdminRegister = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4 relative"
+      style={{
+        backgroundImage: `url('/lovable-uploads/f8680508-9ea2-4bdd-8a4c-d7e685e886bd.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Overlay for better readability */}
+      <div className="absolute inset-0 bg-black/50"></div>
+      
+      <Card className="w-full max-w-md relative z-10 bg-white/95 backdrop-blur-sm">
         <CardHeader className="text-center">
           <img 
             src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
