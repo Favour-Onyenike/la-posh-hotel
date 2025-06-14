@@ -57,8 +57,11 @@ const AdminProfileModal: React.FC<AdminProfileModalProps> = ({ isOpen, onClose }
   const uploadAvatar = async (file: File): Promise<string | null> => {
     try {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${user?.id}-${Date.now()}.${fileExt}`;
-      const filePath = `avatars/${fileName}`;
+      const fileName = `${Date.now()}.${fileExt}`;
+      // Fix the path structure to match RLS policy: user_id/filename
+      const filePath = `${user?.id}/${fileName}`;
+
+      console.log('Uploading avatar to path:', filePath);
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
