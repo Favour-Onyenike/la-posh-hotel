@@ -183,7 +183,7 @@ const Booking = () => {
         {/* Hero Section with Background Image */}
         <section 
           className="py-32 md:py-40 lg:py-48 bg-cover bg-center relative overflow-hidden"
-          style={{ backgroundImage: "url('/lovable-uploads/8f6cc8d0-723a-47fc-a70b-5c04e60040c6.png')" }}
+          style={{ backgroundImage: "url('/lovable-uploads/a81671e7-269b-44f3-acfe-e0bf98da4d45.png')" }}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">
