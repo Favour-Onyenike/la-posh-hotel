@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const AdminLogin = () => {
@@ -61,11 +61,20 @@ const AdminLogin = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <img 
-            src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
-            alt="La Posh Signature Suites" 
-            className="h-12 w-auto mx-auto mb-4"
-          />
+          <div className="flex items-center justify-center mb-4">
+            <Link 
+              to="/" 
+              className="absolute left-6 top-6 flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Home
+            </Link>
+            <img 
+              src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
+              alt="La Posh Signature Suites" 
+              className="h-12 w-auto mx-auto"
+            />
+          </div>
           <CardTitle className="text-2xl">Admin Login</CardTitle>
           <CardDescription>
             Enter your credentials to access the admin panel
