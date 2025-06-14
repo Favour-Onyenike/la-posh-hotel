@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Booking, Room } from '@/types/supabase';
@@ -16,6 +15,8 @@ type DashboardData = {
   availableRooms: number;
   pendingBookings: number;
   confirmedBookings: number;
+  totalReviews: number;
+  totalGalleryImages: number;
   revenue: number;
   checkInsToday: number;
   checkOutsToday: number;
@@ -32,6 +33,8 @@ export const useDashboardData = (): DashboardData => {
   const [availableRooms, setAvailableRooms] = useState<number>(0);
   const [pendingBookings, setPendingBookings] = useState<number>(0);
   const [confirmedBookings, setConfirmedBookings] = useState<number>(0);
+  const [totalReviews, setTotalReviews] = useState<number>(0);
+  const [totalGalleryImages, setTotalGalleryImages] = useState<number>(0);
   const [revenue, setRevenue] = useState<number>(0);
   const [checkInsToday, setCheckInsToday] = useState<number>(0);
   const [checkOutsToday, setCheckOutsToday] = useState<number>(0);
@@ -104,6 +107,28 @@ export const useDashboardData = (): DashboardData => {
         }
         
         setConfirmedBookings(confirmedBookingsData?.length || 0);
+        
+        // Fetch total reviews count
+        const { data: reviewsData, error: reviewsError } = await supabase
+          .from('reviews')
+          .select('id');
+        
+        if (reviewsError) {
+          console.error('Error fetching reviews:', reviewsError);
+        }
+        
+        setTotalReviews(reviewsData?.length || 0);
+        
+        // Fetch total gallery images count
+        const { data: galleryData, error: galleryError } = await supabase
+          .from('gallery')
+          .select('id');
+        
+        if (galleryError) {
+          console.error('Error fetching gallery images:', galleryError);
+        }
+        
+        setTotalGalleryImages(galleryData?.length || 0);
         
         // Calculate total revenue from all bookings
         const { data: allBookings, error: allBookingsError } = await supabase
@@ -193,6 +218,8 @@ export const useDashboardData = (): DashboardData => {
     availableRooms,
     pendingBookings,
     confirmedBookings,
+    totalReviews,
+    totalGalleryImages,
     revenue,
     checkInsToday,
     checkOutsToday,

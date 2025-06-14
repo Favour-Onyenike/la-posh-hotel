@@ -10,7 +10,9 @@ import { useRoomAvailability } from '@/hooks/useRoomAvailability';
 import { 
   Hotel, 
   DollarSign, 
-  Star
+  Star,
+  MessageSquare,
+  Images
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -20,6 +22,8 @@ const Dashboard = () => {
     availableRooms,
     pendingBookings,
     confirmedBookings,
+    totalReviews,
+    totalGalleryImages,
     revenue,
     checkInsToday,
     checkOutsToday,
@@ -45,7 +49,7 @@ const Dashboard = () => {
         </div>
         
         {/* Stats Cards */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           <StatCard 
             title="Rooms" 
             value={totalRooms}
@@ -67,6 +71,16 @@ const Dashboard = () => {
             value={`$${revenue.toLocaleString()}`}
             icon={<DollarSign size={20} />}
             trend={12}
+          />
+          <StatCard 
+            title="Reviews" 
+            value={totalReviews}
+            icon={<MessageSquare size={20} />}
+          />
+          <StatCard 
+            title="Gallery Images" 
+            value={totalGalleryImages}
+            icon={<Images size={20} />}
           />
         </div>
         
