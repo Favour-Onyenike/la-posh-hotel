@@ -1,16 +1,14 @@
 
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import AdminLayout from "@/components/Admin/AdminLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash2, Upload, X } from "lucide-react";
-import { format } from "date-fns";
+import { Plus } from "lucide-react";
+import EventForm from "@/components/Admin/Events/EventForm";
+import EventsList from "@/components/Admin/Events/EventsList";
+import { useEventMutations } from "@/hooks/useEventMutations";
 
 interface Event {
   id: string;
@@ -25,16 +23,9 @@ interface Event {
 const AdminEvents = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    event_date: "",
-  });
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+
+  const { createEventMutation, updateEventMutation, deleteEventMutation } = useEventMutations();
 
   const { data: events, isLoading } = useQuery({
     queryKey: ["admin-events"],
@@ -49,195 +40,12 @@ const AdminEvents = () => {
     },
   });
 
-  const uploadImage = async (file: File): Promise<string> => {
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `events/${fileName}`;
-
-      console.log('Uploading file:', filePath);
-
-      // First, ensure the bucket exists
-      const { data: buckets } = await supabase.storage.listBuckets();
-      const eventsBucket = buckets?.find(bucket => bucket.name === 'events');
-      
-      if (!eventsBucket) {
-        console.log('Creating events bucket...');
-        const { error: bucketError } = await supabase.storage.createBucket('events', {
-          public: true,
-          allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-        });
-        
-        if (bucketError) {
-          console.error('Error creating bucket:', bucketError);
-          throw new Error(`Failed to create storage bucket: ${bucketError.message}`);
-        }
-      }
-
-      const { error: uploadError } = await supabase.storage
-        .from('events')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw new Error(`Failed to upload image: ${uploadError.message}`);
-      }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('events')
-        .getPublicUrl(filePath);
-
-      console.log('Upload successful, public URL:', publicUrl);
-      return publicUrl;
-    } catch (error) {
-      console.error('Error in uploadImage:', error);
-      throw error;
-    }
-  };
-
-  const createEventMutation = useMutation({
-    mutationFn: async (eventData: typeof formData) => {
-      let imageUrl = "";
-      
-      if (selectedImage) {
-        setIsUploading(true);
-        imageUrl = await uploadImage(selectedImage);
-      }
-
-      const { data, error } = await supabase
-        .from("events")
-        .insert([{ 
-          title: eventData.title,
-          description: eventData.description || null,
-          event_date: eventData.event_date,
-          image_url: imageUrl || null
-        }])
-        .select();
-      
-      if (error) {
-        console.error('Database insert error:', error);
-        throw new Error(`Failed to create event: ${error.message}`);
-      }
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-events"] });
-      queryClient.invalidateQueries({ queryKey: ["events"] });
-      toast({ title: "Success", description: "Event created successfully!" });
-      resetForm();
-    },
-    onError: (error: Error) => {
-      console.error('Create event error:', error);
-      toast({ 
-        title: "Error", 
-        description: error.message || "Failed to create event", 
-        variant: "destructive" 
-      });
-    },
-    onSettled: () => {
-      setIsUploading(false);
-    },
-  });
-
-  const updateEventMutation = useMutation({
-    mutationFn: async ({ id, eventData }: { id: string; eventData: typeof formData }) => {
-      let imageUrl = editingEvent?.image_url;
-      
-      if (selectedImage) {
-        setIsUploading(true);
-        imageUrl = await uploadImage(selectedImage);
-      }
-
-      const { data, error } = await supabase
-        .from("events")
-        .update({ 
-          title: eventData.title,
-          description: eventData.description || null,
-          event_date: eventData.event_date,
-          image_url: imageUrl || null
-        })
-        .eq("id", id)
-        .select();
-      
-      if (error) {
-        console.error('Database update error:', error);
-        throw new Error(`Failed to update event: ${error.message}`);
-      }
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-events"] });
-      queryClient.invalidateQueries({ queryKey: ["events"] });
-      toast({ title: "Success", description: "Event updated successfully!" });
-      resetForm();
-    },
-    onError: (error: Error) => {
-      console.error('Update event error:', error);
-      toast({ 
-        title: "Error", 
-        description: error.message || "Failed to update event", 
-        variant: "destructive" 
-      });
-    },
-    onSettled: () => {
-      setIsUploading(false);
-    },
-  });
-
-  const deleteEventMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from("events")
-        .delete()
-        .eq("id", id);
-      
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-events"] });
-      queryClient.invalidateQueries({ queryKey: ["events"] });
-      toast({ title: "Success", description: "Event deleted successfully!" });
-    },
-    onError: (error: Error) => {
-      toast({ 
-        title: "Error", 
-        description: error.message || "Failed to delete event", 
-        variant: "destructive" 
-      });
-    },
-  });
-
   const resetForm = () => {
-    setFormData({ title: "", description: "", event_date: "" });
-    setSelectedImage(null);
-    setImagePreview(null);
     setIsCreating(false);
     setEditingEvent(null);
   };
 
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedImage(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const removeImage = () => {
-    setSelectedImage(null);
-    setImagePreview(null);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleSubmit = (formData: any, selectedImage: File | null) => {
     if (!formData.title || !formData.event_date) {
       toast({
         title: "Error",
@@ -250,23 +58,33 @@ const AdminEvents = () => {
     if (editingEvent) {
       updateEventMutation.mutate({ 
         id: editingEvent.id, 
-        eventData: formData
+        eventData: formData,
+        selectedImage,
+        currentImageUrl: editingEvent.image_url
+      }, {
+        onSuccess: resetForm
       });
     } else {
-      createEventMutation.mutate(formData);
+      createEventMutation.mutate({ 
+        eventData: formData,
+        selectedImage
+      }, {
+        onSuccess: resetForm
+      });
     }
   };
 
   const startEdit = (event: Event) => {
     setEditingEvent(event);
-    setFormData({
-      title: event.title,
-      description: event.description || "",
-      event_date: format(new Date(event.event_date), "yyyy-MM-dd'T'HH:mm"),
-    });
-    setImagePreview(event.image_url);
     setIsCreating(true);
   };
+
+  const handleDelete = (id: string) => {
+    deleteEventMutation.mutate(id);
+  };
+
+  const isFormLoading = createEventMutation.isPending || updateEventMutation.isPending;
+  const isUploading = isFormLoading; // Since upload is part of the mutation
 
   return (
     <AdminLayout>
@@ -283,138 +101,22 @@ const AdminEvents = () => {
         </div>
 
         {(isCreating || editingEvent) && (
-          <Card>
-            <CardHeader>
-              <CardTitle>{editingEvent ? "Edit Event" : "Create New Event"}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="title">Event Title *</Label>
-                  <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    required
-                    placeholder="Enter event title"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    rows={3}
-                    placeholder="Enter event description"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="event_date">Event Date & Time *</Label>
-                  <Input
-                    id="event_date"
-                    type="datetime-local"
-                    value={formData.event_date}
-                    onChange={(e) => setFormData({ ...formData, event_date: e.target.value })}
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="image">Event Image</Label>
-                  <div className="space-y-4">
-                    {imagePreview ? (
-                      <div className="relative w-full max-w-md">
-                        <img
-                          src={imagePreview}
-                          alt="Event preview"
-                          className="w-full h-48 object-cover rounded-lg border"
-                        />
-                        <Button
-                          type="button"
-                          variant="destructive"
-                          size="sm"
-                          className="absolute top-2 right-2"
-                          onClick={removeImage}
-                        >
-                          <X size={16} />
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                        <p className="mt-2 text-sm text-gray-600">Upload an image for the event</p>
-                      </div>
-                    )}
-                    <Input
-                      id="image"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageSelect}
-                      className="cursor-pointer"
-                    />
-                  </div>
-                </div>
-                
-                <div className="flex gap-2">
-                  <Button 
-                    type="submit" 
-                    disabled={createEventMutation.isPending || updateEventMutation.isPending || isUploading}
-                  >
-                    {isUploading ? "Uploading..." : editingEvent ? "Update Event" : "Create Event"}
-                  </Button>
-                  <Button type="button" variant="outline" onClick={resetForm}>
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+          <EventForm
+            editingEvent={editingEvent}
+            onSubmit={handleSubmit}
+            onCancel={resetForm}
+            isLoading={isFormLoading}
+            isUploading={isUploading}
+          />
         )}
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Events List</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <p>Loading events...</p>
-            ) : events && events.length > 0 ? (
-              <div className="space-y-4">
-                {events.map((event) => (
-                  <div key={event.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{event.title}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {format(new Date(event.event_date), "PPP 'at' p")}
-                      </p>
-                      {event.description && (
-                        <p className="text-sm text-gray-600 mt-1">{event.description}</p>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => startEdit(event)}>
-                        <Edit size={14} />
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="destructive" 
-                        onClick={() => deleteEventMutation.mutate(event.id)}
-                        disabled={deleteEventMutation.isPending}
-                      >
-                        <Trash2 size={14} />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-muted-foreground">No events found. Create your first event!</p>
-            )}
-          </CardContent>
-        </Card>
+        <EventsList
+          events={events}
+          isLoading={isLoading}
+          onEdit={startEdit}
+          onDelete={handleDelete}
+          isDeleting={deleteEventMutation.isPending}
+        />
       </div>
     </AdminLayout>
   );
