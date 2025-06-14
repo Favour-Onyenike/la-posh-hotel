@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -68,10 +67,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-yellow-600 to-yellow-700 border-r-2 border-black transform transition-transform duration-300 ease-in-out lg:translate-x-0",
+        "fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform duration-300 ease-in-out lg:translate-x-0",
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="flex items-center justify-between h-16 px-6 bg-black">
+        <div className="flex items-center justify-between h-16 px-6 bg-gray-800">
           <img 
             src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
             alt="La Posh Signature Suites" 
@@ -79,7 +78,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           />
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-yellow-400 hover:text-yellow-300"
+            className="lg:hidden text-gray-400 hover:text-white"
           >
             <X size={24} />
           </button>
@@ -95,10 +94,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                     to={item.href}
                     onClick={() => setSidebarOpen(false)}
                     className={cn(
-                      "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors border",
+                      "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors",
                       isActive
-                        ? "bg-black text-yellow-400 border-yellow-400 shadow-lg"
-                        : "text-black hover:bg-black hover:text-yellow-400 border-transparent hover:border-yellow-400"
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
                     )}
                   >
                     <item.icon className="mr-3 h-5 w-5" />
@@ -110,19 +109,19 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           </ul>
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-black border-t border-yellow-400">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gray-800">
           <div className="flex items-center mb-4 px-4">
-            <User className="h-8 w-8 text-yellow-400 mr-3" />
+            <User className="h-8 w-8 text-gray-400 mr-3" />
             <div>
-              <p className="text-sm font-medium text-yellow-400">{user?.email}</p>
-              <p className="text-xs text-yellow-300">Administrator</p>
+              <p className="text-sm font-medium text-white">{user?.email}</p>
+              <p className="text-xs text-gray-400">Administrator</p>
             </div>
           </div>
           <Button
             onClick={handleSignOut}
             variant="outline"
             size="sm"
-            className="w-full bg-transparent border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black"
+            className="w-full bg-transparent border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
           >
             <LogOut className="mr-2 h-4 w-4" />
             Sign Out
@@ -132,10 +131,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Header */}
       <div className="lg:pl-64">
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b-2 border-black bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <button
             type="button"
-            className="-m-2.5 p-2.5 text-black lg:hidden"
+            className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <Menu className="h-6 w-6" />
@@ -143,8 +142,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
           <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
             <div className="flex items-center gap-x-4 lg:gap-x-6">
-              <h2 className="text-xl font-semibold text-black">
-                Welcome <span className="text-yellow-600">{getDisplayName()}</span>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Welcome {getDisplayName()}
               </h2>
             </div>
           </div>
