@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit, Trash2, Upload, X } from "lucide-react";
 import { format } from "date-fns";
 
 interface Event {
@@ -29,8 +28,10 @@ const AdminEvents = () => {
     title: "",
     description: "",
     event_date: "",
-    image_url: "",
   });
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -47,11 +48,36 @@ const AdminEvents = () => {
     },
   });
 
+  const uploadImage = async (file: File): Promise<string> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `events/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('events')
+      .upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('events')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  };
+
   const createEventMutation = useMutation({
-    mutationFn: async (eventData: typeof formData) => {
+    mutationFn: async (eventData: typeof formData & { image_url?: string }) => {
+      let imageUrl = "";
+      
+      if (selectedImage) {
+        setIsUploading(true);
+        imageUrl = await uploadImage(selectedImage);
+      }
+
       const { data, error } = await supabase
         .from("events")
-        .insert([eventData])
+        .insert([{ ...eventData, image_url: imageUrl }])
         .select();
       
       if (error) throw error;
@@ -66,13 +92,23 @@ const AdminEvents = () => {
     onError: () => {
       toast({ title: "Error", description: "Failed to create event", variant: "destructive" });
     },
+    onSettled: () => {
+      setIsUploading(false);
+    },
   });
 
   const updateEventMutation = useMutation({
-    mutationFn: async ({ id, eventData }: { id: string; eventData: typeof formData }) => {
+    mutationFn: async ({ id, eventData }: { id: string; eventData: typeof formData & { image_url?: string } }) => {
+      let imageUrl = eventData.image_url;
+      
+      if (selectedImage) {
+        setIsUploading(true);
+        imageUrl = await uploadImage(selectedImage);
+      }
+
       const { data, error } = await supabase
         .from("events")
-        .update(eventData)
+        .update({ ...eventData, image_url: imageUrl })
         .eq("id", id)
         .select();
       
@@ -87,6 +123,9 @@ const AdminEvents = () => {
     },
     onError: () => {
       toast({ title: "Error", description: "Failed to update event", variant: "destructive" });
+    },
+    onSettled: () => {
+      setIsUploading(false);
     },
   });
 
@@ -110,15 +149,37 @@ const AdminEvents = () => {
   });
 
   const resetForm = () => {
-    setFormData({ title: "", description: "", event_date: "", image_url: "" });
+    setFormData({ title: "", description: "", event_date: "" });
+    setSelectedImage(null);
+    setImagePreview(null);
     setIsCreating(false);
     setEditingEvent(null);
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingEvent) {
-      updateEventMutation.mutate({ id: editingEvent.id, eventData: formData });
+      updateEventMutation.mutate({ 
+        id: editingEvent.id, 
+        eventData: { ...formData, image_url: editingEvent.image_url } 
+      });
     } else {
       createEventMutation.mutate(formData);
     }
@@ -130,8 +191,8 @@ const AdminEvents = () => {
       title: event.title,
       description: event.description || "",
       event_date: format(new Date(event.event_date), "yyyy-MM-dd'T'HH:mm"),
-      image_url: event.image_url || "",
     });
+    setImagePreview(event.image_url);
     setIsCreating(true);
   };
 
@@ -188,18 +249,47 @@ const AdminEvents = () => {
                 </div>
                 
                 <div>
-                  <Label htmlFor="image_url">Image URL</Label>
-                  <Input
-                    id="image_url"
-                    value={formData.image_url}
-                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                    placeholder="https://example.com/image.jpg"
-                  />
+                  <Label htmlFor="image">Event Image</Label>
+                  <div className="space-y-4">
+                    {imagePreview ? (
+                      <div className="relative w-full max-w-md">
+                        <img
+                          src={imagePreview}
+                          alt="Event preview"
+                          className="w-full h-48 object-cover rounded-lg border"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute top-2 right-2"
+                          onClick={removeImage}
+                        >
+                          <X size={16} />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                        <p className="mt-2 text-sm text-gray-600">Upload an image for the event</p>
+                      </div>
+                    )}
+                    <Input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      className="cursor-pointer"
+                    />
+                  </div>
                 </div>
                 
                 <div className="flex gap-2">
-                  <Button type="submit" disabled={createEventMutation.isPending || updateEventMutation.isPending}>
-                    {editingEvent ? "Update Event" : "Create Event"}
+                  <Button 
+                    type="submit" 
+                    disabled={createEventMutation.isPending || updateEventMutation.isPending || isUploading}
+                  >
+                    {isUploading ? "Uploading..." : editingEvent ? "Update Event" : "Create Event"}
                   </Button>
                   <Button type="button" variant="outline" onClick={resetForm}>
                     Cancel
