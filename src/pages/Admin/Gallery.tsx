@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { GalleryItem } from '@/types/supabase';
@@ -15,7 +14,7 @@ import {
 } from '@/components/ui/table';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Loader2, Plus, Trash2, Upload } from 'lucide-react';
+import { Loader2, Plus, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
@@ -31,49 +30,7 @@ const Gallery = () => {
 
   useEffect(() => {
     fetchGalleryItems();
-    initializeStorage();
   }, []);
-
-  const initializeStorage = async () => {
-    try {
-      console.log('Initializing storage...');
-      
-      // Check if bucket exists
-      const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
-      console.log('Existing buckets:', buckets);
-      
-      if (bucketsError) {
-        console.error('Error listing buckets:', bucketsError);
-        return;
-      }
-
-      const galleryBucket = buckets?.find(bucket => bucket.name === 'gallery');
-      
-      if (!galleryBucket) {
-        console.log('Creating gallery bucket...');
-        const { data: createData, error: createError } = await supabase.storage.createBucket('gallery', {
-          public: true,
-          allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-          fileSizeLimit: 5242880 // 5MB
-        });
-        
-        if (createError) {
-          console.error('Error creating gallery bucket:', createError);
-          toast({
-            title: 'Storage Setup Error',
-            description: 'Failed to create storage bucket. Please contact administrator.',
-            variant: 'destructive',
-          });
-        } else {
-          console.log('Gallery bucket created successfully:', createData);
-        }
-      } else {
-        console.log('Gallery bucket already exists');
-      }
-    } catch (error) {
-      console.error('Error initializing storage:', error);
-    }
-  };
 
   const fetchGalleryItems = async () => {
     try {
