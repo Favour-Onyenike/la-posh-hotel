@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,25 +50,56 @@ const AdminEvents = () => {
   });
 
   const uploadImage = async (file: File): Promise<string> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}.${fileExt}`;
-    const filePath = `events/${fileName}`;
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `events/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from('events')
-      .upload(filePath, file);
+      console.log('Uploading file:', filePath);
 
-    if (uploadError) throw uploadError;
+      // First, ensure the bucket exists
+      const { data: buckets } = await supabase.storage.listBuckets();
+      const eventsBucket = buckets?.find(bucket => bucket.name === 'events');
+      
+      if (!eventsBucket) {
+        console.log('Creating events bucket...');
+        const { error: bucketError } = await supabase.storage.createBucket('events', {
+          public: true,
+          allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+        });
+        
+        if (bucketError) {
+          console.error('Error creating bucket:', bucketError);
+          throw new Error(`Failed to create storage bucket: ${bucketError.message}`);
+        }
+      }
 
-    const { data: { publicUrl } } = supabase.storage
-      .from('events')
-      .getPublicUrl(filePath);
+      const { error: uploadError } = await supabase.storage
+        .from('events')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-    return publicUrl;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw new Error(`Failed to upload image: ${uploadError.message}`);
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('events')
+        .getPublicUrl(filePath);
+
+      console.log('Upload successful, public URL:', publicUrl);
+      return publicUrl;
+    } catch (error) {
+      console.error('Error in uploadImage:', error);
+      throw error;
+    }
   };
 
   const createEventMutation = useMutation({
-    mutationFn: async (eventData: typeof formData & { image_url?: string }) => {
+    mutationFn: async (eventData: typeof formData) => {
       let imageUrl = "";
       
       if (selectedImage) {
@@ -77,10 +109,18 @@ const AdminEvents = () => {
 
       const { data, error } = await supabase
         .from("events")
-        .insert([{ ...eventData, image_url: imageUrl }])
+        .insert([{ 
+          title: eventData.title,
+          description: eventData.description || null,
+          event_date: eventData.event_date,
+          image_url: imageUrl || null
+        }])
         .select();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Database insert error:', error);
+        throw new Error(`Failed to create event: ${error.message}`);
+      }
       return data;
     },
     onSuccess: () => {
@@ -89,8 +129,13 @@ const AdminEvents = () => {
       toast({ title: "Success", description: "Event created successfully!" });
       resetForm();
     },
-    onError: () => {
-      toast({ title: "Error", description: "Failed to create event", variant: "destructive" });
+    onError: (error: Error) => {
+      console.error('Create event error:', error);
+      toast({ 
+        title: "Error", 
+        description: error.message || "Failed to create event", 
+        variant: "destructive" 
+      });
     },
     onSettled: () => {
       setIsUploading(false);
@@ -98,8 +143,8 @@ const AdminEvents = () => {
   });
 
   const updateEventMutation = useMutation({
-    mutationFn: async ({ id, eventData }: { id: string; eventData: typeof formData & { image_url?: string } }) => {
-      let imageUrl = eventData.image_url;
+    mutationFn: async ({ id, eventData }: { id: string; eventData: typeof formData }) => {
+      let imageUrl = editingEvent?.image_url;
       
       if (selectedImage) {
         setIsUploading(true);
@@ -108,11 +153,19 @@ const AdminEvents = () => {
 
       const { data, error } = await supabase
         .from("events")
-        .update({ ...eventData, image_url: imageUrl })
+        .update({ 
+          title: eventData.title,
+          description: eventData.description || null,
+          event_date: eventData.event_date,
+          image_url: imageUrl || null
+        })
         .eq("id", id)
         .select();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Database update error:', error);
+        throw new Error(`Failed to update event: ${error.message}`);
+      }
       return data;
     },
     onSuccess: () => {
@@ -121,8 +174,13 @@ const AdminEvents = () => {
       toast({ title: "Success", description: "Event updated successfully!" });
       resetForm();
     },
-    onError: () => {
-      toast({ title: "Error", description: "Failed to update event", variant: "destructive" });
+    onError: (error: Error) => {
+      console.error('Update event error:', error);
+      toast({ 
+        title: "Error", 
+        description: error.message || "Failed to update event", 
+        variant: "destructive" 
+      });
     },
     onSettled: () => {
       setIsUploading(false);
@@ -143,8 +201,12 @@ const AdminEvents = () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
       toast({ title: "Success", description: "Event deleted successfully!" });
     },
-    onError: () => {
-      toast({ title: "Error", description: "Failed to delete event", variant: "destructive" });
+    onError: (error: Error) => {
+      toast({ 
+        title: "Error", 
+        description: error.message || "Failed to delete event", 
+        variant: "destructive" 
+      });
     },
   });
 
@@ -175,10 +237,20 @@ const AdminEvents = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.title || !formData.event_date) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (editingEvent) {
       updateEventMutation.mutate({ 
         id: editingEvent.id, 
-        eventData: { ...formData, image_url: editingEvent.image_url } 
+        eventData: formData
       });
     } else {
       createEventMutation.mutate(formData);
@@ -218,12 +290,13 @@ const AdminEvents = () => {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <Label htmlFor="title">Event Title</Label>
+                  <Label htmlFor="title">Event Title *</Label>
                   <Input
                     id="title"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     required
+                    placeholder="Enter event title"
                   />
                 </div>
                 
@@ -234,11 +307,12 @@ const AdminEvents = () => {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
+                    placeholder="Enter event description"
                   />
                 </div>
                 
                 <div>
-                  <Label htmlFor="event_date">Event Date & Time</Label>
+                  <Label htmlFor="event_date">Event Date & Time *</Label>
                   <Input
                     id="event_date"
                     type="datetime-local"
