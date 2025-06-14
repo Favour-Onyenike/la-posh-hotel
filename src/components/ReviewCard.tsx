@@ -2,12 +2,22 @@
 import React from "react";
 import { Star } from "lucide-react";
 import { Review } from "@/types/supabase";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface ReviewCardProps {
   review: Review;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   return (
     <div className="bg-white p-8 rounded-lg shadow-md h-full">
       <div className="flex text-hotel-gold mb-4">
@@ -20,26 +30,22 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
         ))}
       </div>
       
-      {review.image_url && (
-        <div className="mb-4">
-          <img
-            src={review.image_url}
-            alt="Review photo"
-            className="w-full h-48 object-cover rounded-lg"
-          />
-        </div>
-      )}
-      
       <p className="text-black mb-6 line-clamp-4">
         "{review.content}"
       </p>
+      
       <div className="flex items-center">
-        <div
-          className="w-12 h-12 rounded-full bg-cover bg-center mr-4"
-          style={{
-            backgroundImage: `url(https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewer_name)}&background=random)`,
-          }}
-        />
+        <Avatar className="w-12 h-12 mr-4">
+          {review.image_url ? (
+            <AvatarImage 
+              src={review.image_url} 
+              alt={`${review.reviewer_name}'s photo`}
+            />
+          ) : null}
+          <AvatarFallback className="bg-hotel-gold text-white font-semibold">
+            {getInitials(review.reviewer_name)}
+          </AvatarFallback>
+        </Avatar>
         <div>
           <h4 className="font-semibold text-black">{review.reviewer_name}</h4>
           <p className="text-black text-sm">
