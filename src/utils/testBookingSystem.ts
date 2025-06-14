@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 export const createTestRoom = async () => {
@@ -34,7 +33,7 @@ export const createTestRoom = async () => {
   }
 };
 
-export const createTestBooking = async (roomId: string) => {
+export const createTestBooking = async (roomId: string, customerEmail: string = 'onyenikefavour8@gmail.com') => {
   try {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -46,10 +45,10 @@ export const createTestBooking = async (roomId: string) => {
       room_id: roomId,
       check_in_date: tomorrow.toISOString().split('T')[0],
       check_out_date: dayAfterTomorrow.toISOString().split('T')[0],
-      guest_name: 'John Test User',
-      guest_email: 'test@example.com',
-      guest_phone: '+234-800-123-4567',
-      special_requests: 'Late checkout if possible. Testing the booking system functionality.',
+      guest_name: 'Favour Onyenike',
+      guest_email: customerEmail,
+      guest_phone: '+234-905-212-9939',
+      special_requests: 'Testing the booking confirmation email system. Please ensure all amenities are ready.',
       total_price: 45000, // 3 nights * 15000
       status: 'pending'
     };
@@ -69,6 +68,60 @@ export const createTestBooking = async (roomId: string) => {
     return data;
   } catch (error) {
     console.error('Error in createTestBooking:', error);
+    return null;
+  }
+};
+
+export const confirmBookingAndSendEmail = async (bookingId: string) => {
+  try {
+    // Update booking status to confirmed
+    const { data: booking, error: updateError } = await supabase
+      .from('bookings')
+      .update({ status: 'confirmed' })
+      .eq('id', bookingId)
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error('Error updating booking status:', updateError);
+      return null;
+    }
+
+    // Get room details
+    const { data: room, error: roomError } = await supabase
+      .from('rooms')
+      .select('*')
+      .eq('id', booking.room_id)
+      .single();
+
+    if (roomError) {
+      console.error('Error fetching room details:', roomError);
+      return null;
+    }
+
+    // Send confirmation email
+    const { data: emailResponse, error: emailError } = await supabase.functions.invoke('send-booking-confirmation', {
+      body: {
+        guestName: booking.guest_name,
+        guestEmail: booking.guest_email,
+        roomName: room.name,
+        roomNumber: room.room_number,
+        checkInDate: booking.check_in_date,
+        checkOutDate: booking.check_out_date,
+        totalPrice: booking.total_price,
+        bookingId: booking.id
+      }
+    });
+
+    if (emailError) {
+      console.error('Error sending confirmation email:', emailError);
+      return null;
+    }
+
+    console.log('Confirmation email sent successfully:', emailResponse);
+    return { booking, room, emailResponse };
+  } catch (error) {
+    console.error('Error in confirmBookingAndSendEmail:', error);
     return null;
   }
 };
@@ -100,7 +153,7 @@ export const cleanupTestData = async () => {
     const { error: bookingError } = await supabase
       .from('bookings')
       .delete()
-      .eq('guest_email', 'test@example.com');
+      .eq('guest_email', 'onyenikefavour8@gmail.com');
 
     if (bookingError) {
       console.error('Error deleting test bookings:', bookingError);
@@ -120,6 +173,52 @@ export const cleanupTestData = async () => {
   } catch (error) {
     console.error('Error in cleanupTestData:', error);
   }
+};
+
+export const runBookingSystemTestWithEmail = async () => {
+  console.log('🚀 Starting booking system test with email confirmation...');
+  
+  // Step 1: Create test room
+  console.log('📝 Step 1: Creating test room...');
+  const testRoom = await createTestRoom();
+  if (!testRoom) {
+    console.log('❌ Failed to create test room');
+    return;
+  }
+  
+  // Step 2: Create test booking with your email
+  console.log('📅 Step 2: Creating test booking with your email...');
+  const testBooking = await createTestBooking(testRoom.id, 'onyenikefavour8@gmail.com');
+  if (!testBooking) {
+    console.log('❌ Failed to create test booking');
+    return;
+  }
+  
+  // Step 3: Confirm booking and send email
+  console.log('📧 Step 3: Confirming booking and sending email...');
+  const result = await confirmBookingAndSendEmail(testBooking.id);
+  if (!result) {
+    console.log('❌ Failed to confirm booking and send email');
+    return;
+  }
+  
+  console.log('✅ Test completed successfully!');
+  console.log('📊 Summary:');
+  console.log(`- Test Room: ${testRoom.name} (${testRoom.room_number})`);
+  console.log(`- Test Booking: ${testBooking.guest_name} - ${testBooking.guest_email}`);
+  console.log(`- Check-in: ${testBooking.check_in_date}`);
+  console.log(`- Check-out: ${testBooking.check_out_date}`);
+  console.log(`- Total: ₦${testBooking.total_price.toLocaleString()}`);
+  console.log('📧 Confirmation email sent to: onyenikefavour8@gmail.com');
+  console.log('');
+  console.log('🎯 Check your email inbox for the confirmation email!');
+  console.log('🧹 To cleanup test data, call cleanupTestData()');
+  
+  return {
+    room: testRoom,
+    booking: result.booking,
+    emailResponse: result.emailResponse
+  };
 };
 
 export const runBookingSystemTest = async () => {
