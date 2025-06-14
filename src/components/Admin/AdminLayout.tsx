@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -67,10 +68,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform duration-300 ease-in-out lg:translate-x-0",
+        "fixed inset-y-0 left-0 z-50 w-64 bg-yellow-600 transform transition-transform duration-300 ease-in-out lg:translate-x-0",
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="flex items-center justify-between h-16 px-6 bg-gray-800">
+        <div className="flex items-center justify-between h-16 px-6 bg-yellow-700">
           <img 
             src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
             alt="La Posh Signature Suites" 
@@ -78,7 +79,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           />
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-gray-400 hover:text-white"
+            className="lg:hidden text-gray-200 hover:text-white"
           >
             <X size={24} />
           </button>
@@ -96,8 +97,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                     className={cn(
                       "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors",
                       isActive
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                        ? "bg-yellow-800 text-white shadow-lg"
+                        : "text-gray-100 hover:bg-yellow-700 hover:text-white"
                     )}
                   >
                     <item.icon className="mr-3 h-5 w-5" />
@@ -109,19 +110,19 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           </ul>
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gray-800">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-yellow-700">
           <div className="flex items-center mb-4 px-4">
-            <User className="h-8 w-8 text-gray-400 mr-3" />
+            <User className="h-8 w-8 text-gray-200 mr-3" />
             <div>
               <p className="text-sm font-medium text-white">{user?.email}</p>
-              <p className="text-xs text-gray-400">Administrator</p>
+              <p className="text-xs text-gray-200">Administrator</p>
             </div>
           </div>
           <Button
             onClick={handleSignOut}
             variant="outline"
             size="sm"
-            className="w-full bg-transparent border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+            className="w-full bg-transparent border-gray-300 text-gray-100 hover:bg-yellow-800 hover:text-white hover:border-white"
           >
             <LogOut className="mr-2 h-4 w-4" />
             Sign Out
