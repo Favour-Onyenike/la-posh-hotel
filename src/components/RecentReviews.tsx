@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const fetchRecentReviews = async (): Promise<Review[]> => {
+  console.log("Fetching recent reviews...");
   const { data, error } = await supabase
     .from("reviews")
     .select("*")
@@ -19,14 +20,22 @@ const fetchRecentReviews = async (): Promise<Review[]> => {
     throw new Error("Failed to fetch reviews");
   }
 
+  console.log("Recent reviews fetched:", data);
   return data || [];
 };
 
 const RecentReviews: React.FC = () => {
-  const { data: reviews, isLoading, error } = useQuery({
+  const { data: reviews, isLoading, error, refetch } = useQuery({
     queryKey: ["recentReviews"],
     queryFn: fetchRecentReviews,
+    staleTime: 0, // Always fetch fresh data
+    gcTime: 0, // Don't cache the data
   });
+
+  // Force refetch when component mounts to ensure fresh data
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   if (isLoading) {
     return (
@@ -57,6 +66,8 @@ const RecentReviews: React.FC = () => {
     );
   }
 
+  console.log("Rendering reviews:", reviews.length);
+  
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {reviews.map((review) => (
