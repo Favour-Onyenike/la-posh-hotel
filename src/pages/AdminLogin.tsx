@@ -58,17 +58,26 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-md">
+    <div 
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/lovable-uploads/b841abff-1a31-4104-9335-b652fe261765.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <Link 
+        to="/" 
+        className="absolute left-6 top-6 flex items-center text-white hover:text-gray-300 transition-colors z-10"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Back to Home
+      </Link>
+      
+      <Card className="w-full max-w-md bg-white/95 backdrop-blur-sm shadow-2xl">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-4">
-            <Link 
-              to="/" 
-              className="absolute left-6 top-6 flex items-center text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
-            </Link>
             <img 
               src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
               alt="La Posh Signature Suites" 
