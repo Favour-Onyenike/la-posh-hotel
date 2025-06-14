@@ -1,9 +1,8 @@
-
 export type Profile = {
   id: string;
   email: string;
   full_name: string | null;
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'primary_admin';
   created_at: string;
   updated_at: string;
 }

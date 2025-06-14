@@ -1,5 +1,4 @@
-
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { Profile } from '@/types/supabase';
@@ -10,14 +9,17 @@ type AuthContextType = {
   user: User | null;
   profile: Profile | null;
   isAdmin: boolean;
+  isPrimaryAdmin: boolean;
   isLoading: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -57,6 +59,58 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (user) {
       console.log('Refreshing profile for user:', user.id);
       await fetchProfile(user.id);
+    }
+  };
+
+  const signIn = async (email: string, password: string) => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase.auth.signIn({ email, password });
+      if (error) {
+        console.error('Error signing in:', error);
+        toast({
+          title: "Login failed",
+          description: "Invalid email or password",
+          variant: "destructive"
+        });
+        return;
+      }
+      setSession(data.session);
+      setUser(data.user);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error in signIn:', error);
+      toast({
+        title: "Login failed",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const signUp = async (email: string, password: string) => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        console.error('Error signing up:', error);
+        toast({
+          title: "Sign up failed",
+          description: "Email already in use",
+          variant: "destructive"
+        });
+        return;
+      }
+      setSession(data.session);
+      setUser(data.user);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error in signUp:', error);
+      toast({
+        title: "Sign up failed",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      });
     }
   };
 
@@ -121,27 +175,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Check if user is admin based on their profile role
-  const isAdmin = user && profile ? profile.role === 'admin' : false;
+  const isAdmin = useMemo(() => {
+    return profile?.role === 'admin' || profile?.role === 'primary_admin';
+  }, [profile?.role]);
+
+  const isPrimaryAdmin = useMemo(() => {
+    return profile?.role === 'primary_admin';
+  }, [profile?.role]);
 
   console.log('AuthContext state:', {
     user: user?.email,
     profile: profile,
     isAdmin: isAdmin,
+    isPrimaryAdmin: isPrimaryAdmin,
     isLoading: isLoading
   });
 
+  const value = {
+    user,
+    profile,
+    isLoading,
+    isAdmin,
+    isPrimaryAdmin,
+    signIn,
+    signUp,
+    signOut,
+    refreshProfile,
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        session,
-        user,
-        profile,
-        isAdmin,
-        isLoading,
-        signOut,
-        refreshProfile,
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

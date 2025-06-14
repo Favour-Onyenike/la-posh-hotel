@@ -9,6 +9,89 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_activity_logs: {
+        Row: {
+          action: string
+          admin_id: string
+          created_at: string
+          details: Json | null
+          id: string
+          ip_address: unknown | null
+          target_id: string | null
+          target_resource: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          admin_id: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          target_id?: string | null
+          target_resource?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          target_id?: string | null
+          target_resource?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_activity_logs_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      admin_permissions: {
+        Row: {
+          admin_id: string
+          granted_at: string
+          granted_by: string
+          id: string
+          permission_type: string
+        }
+        Insert: {
+          admin_id: string
+          granted_at?: string
+          granted_by: string
+          id?: string
+          permission_type: string
+        }
+        Update: {
+          admin_id?: string
+          granted_at?: string
+          granted_by?: string
+          id?: string
+          permission_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_permissions_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admin_permissions_granted_by_fkey"
+            columns: ["granted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
           check_in_date: string
@@ -329,6 +412,10 @@ export type Database = {
           availability_status: string
         }[]
       }
+      has_admin_permission: {
+        Args: { user_id: string; permission: string }
+        Returns: boolean
+      }
       is_room_available: {
         Args: {
           room_id_param: string
@@ -337,6 +424,15 @@ export type Database = {
           exclude_booking_id?: string
         }
         Returns: boolean
+      }
+      log_admin_activity: {
+        Args: {
+          action_text: string
+          details_json?: Json
+          target_resource_text?: string
+          target_id_param?: string
+        }
+        Returns: undefined
       }
     }
     Enums: {

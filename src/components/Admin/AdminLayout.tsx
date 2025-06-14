@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -33,6 +32,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     { name: 'Gallery', href: '/admin/gallery', icon: Images },
     { name: 'Events', href: '/admin/events', icon: CalendarDays },
     { name: 'Team', href: '/admin/team', icon: UserPlus },
+    { name: 'Activity Logs', href: '/admin/activity-logs', icon: MessageSquare },
   ];
 
   const handleSignOut = async () => {
