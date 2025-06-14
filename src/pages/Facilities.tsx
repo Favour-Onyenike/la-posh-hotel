@@ -4,8 +4,11 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Star, Wifi, Car, Utensils, Dumbbell, TreePine, Zap } from "lucide-react";
+import { usePageContent, getContentValue } from "@/hooks/usePageContent";
 
 const Facilities = () => {
+  const { data: content, isLoading } = usePageContent("facilities");
+
   // Updated facility items with icons for better mobile presentation
   const facilityItems = [
     {
@@ -57,9 +60,11 @@ const Facilities = () => {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">
             <div className="max-w-6xl mx-auto text-center animate-fade-in px-4">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-serif">Our Facilities</h1>
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-serif">
+                {isLoading ? "Our Facilities" : getContentValue(content, "hero_title", "content", "Our Facilities")}
+              </h1>
               <p className="text-lg md:text-xl text-white mb-6">
-                Luxury amenities for an unforgettable stay
+                {isLoading ? "Luxury amenities for an unforgettable stay" : getContentValue(content, "hero_subtitle", "content", "Luxury amenities for an unforgettable stay")}
               </p>
               <div className="flex justify-center gap-1 mt-6">
                 {[...Array(5)].map((_, i) => (
@@ -74,19 +79,24 @@ const Facilities = () => {
         <section className="bg-white py-12 md:py-20">
           <div className="hotel-container">
             <div className="max-w-4xl mx-auto text-center px-4">              
-              <h2 className="text-2xl md:text-3xl font-serif font-bold mb-6 text-black">Premium Amenities</h2>
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-4">
-                At La Posh Signature Hotel & Suites, we pride ourselves on offering a comprehensive range of 
-                premium facilities designed to enhance your stay.
-              </p>
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed">
-                Every amenity has been carefully crafted to exceed your expectations and create memorable experiences.
-              </p>
+              <h2 className="text-2xl md:text-3xl font-serif font-bold mb-6 text-black">
+                {isLoading ? "Premium Amenities" : getContentValue(content, "intro_title", "content", "Premium Amenities")}
+              </h2>
+              {isLoading ? (
+                <div className="space-y-4">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              ) : (
+                <div className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+                  {getContentValue(content, "intro_content", "content", "At La Posh Signature Hotel & Suites, we pride ourselves on offering a comprehensive range of premium facilities designed to enhance your stay. Every amenity has been carefully crafted to exceed your expectations and create memorable experiences.")}
+                </div>
+              )}
             </div>
           </div>
         </section>
 
-        {/* Mobile-First Facilities Layout */}
+        {/* Mobile-First Facilities Layout - Keep existing unchanged */}
         <section className="bg-gray-50 py-8 md:py-16">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="space-y-6 md:space-y-8">
