@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -57,7 +56,7 @@ const Booking = () => {
         throw error;
       }
 
-      setRooms(data || []);
+      setRooms(data as Room[] || []);
     } catch (error) {
       console.error('Error fetching rooms:', error);
       toast({
@@ -91,7 +90,7 @@ const Booking = () => {
         filtered = filtered.filter(room => room.capacity >= searchParams.guests);
       }
 
-      setAvailableRooms(filtered);
+      setAvailableRooms(filtered as Room[]);
     } catch (error) {
       console.error('Error searching available rooms:', error);
       toast({

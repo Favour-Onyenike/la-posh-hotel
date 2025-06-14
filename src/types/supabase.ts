@@ -18,9 +18,9 @@ export type Room = {
   room_number: string;
   image_url: string | null;
   features: string[];
-  availability_status: 'available' | 'taken';
-  created_at: string;
-  updated_at: string;
+  availability_status: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export type Booking = {
