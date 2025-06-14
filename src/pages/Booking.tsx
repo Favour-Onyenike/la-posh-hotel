@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Room } from '@/types/supabase';
@@ -158,8 +157,8 @@ const Booking = () => {
           <BookingForm 
             room={selectedRoom} 
             onSuccess={handleBookingSuccess}
-            checkInDate={checkInDate}
-            checkOutDate={checkOutDate}
+            checkInDate={checkInDate ? new Date(checkInDate) : undefined}
+            checkOutDate={checkOutDate ? new Date(checkOutDate) : undefined}
             guests={guests}
           />
         </div>
