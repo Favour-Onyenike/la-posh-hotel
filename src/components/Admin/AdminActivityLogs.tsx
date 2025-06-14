@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Loader2, Shield, User, Calendar, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
@@ -22,6 +23,8 @@ interface AdminActivityLog {
   profiles: {
     email: string;
     full_name: string | null;
+    username: string | null;
+    avatar_url: string | null;
   };
 }
 
@@ -65,14 +68,16 @@ const AdminActivityLogs = () => {
 
       setHasPermission(true);
 
-      // Load activity logs
+      // Load activity logs with avatar information
       const { data: logsData, error: logsError } = await supabase
         .from('admin_activity_logs')
         .select(`
           *,
           profiles!admin_id (
             email,
-            full_name
+            full_name,
+            username,
+            avatar_url
           )
         `)
         .order('created_at', { ascending: false })
@@ -113,6 +118,21 @@ const AdminActivityLogs = () => {
     if (action.includes('delete') || action.includes('remove')) return 'bg-red-100 text-red-800';
     if (action.includes('login') || action.includes('auth')) return 'bg-purple-100 text-purple-800';
     return 'bg-gray-100 text-gray-800';
+  };
+
+  const getDisplayName = (log: AdminActivityLog) => {
+    if (log.profiles?.username) {
+      return log.profiles.username;
+    }
+    if (log.profiles?.full_name) {
+      return log.profiles.full_name;
+    }
+    return log.profiles?.email || 'Unknown Admin';
+  };
+
+  const getInitials = (log: AdminActivityLog) => {
+    const name = getDisplayName(log);
+    return name.substring(0, 2).toUpperCase();
   };
 
   if (isLoading) {
@@ -172,10 +192,15 @@ const AdminActivityLogs = () => {
                       </div>
                       
                       <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <User className="h-4 w-4" />
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6">
+                            <AvatarImage src={log.profiles?.avatar_url || undefined} />
+                            <AvatarFallback className="text-xs">
+                              {getInitials(log)}
+                            </AvatarFallback>
+                          </Avatar>
                           <span>
-                            {log.profiles?.full_name || log.profiles?.email || 'Unknown Admin'}
+                            {getDisplayName(log)}
                           </span>
                         </div>
                         
