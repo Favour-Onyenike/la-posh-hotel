@@ -15,57 +15,67 @@ type TodayActivityProps = {
   confirmedBookings: number;
 };
 
+const ActivityItem = ({ 
+  icon, 
+  label, 
+  value, 
+  color 
+}: { 
+  icon: React.ReactNode; 
+  label: string; 
+  value: number; 
+  color: string;
+}) => (
+  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+    <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${color}`}>
+      {icon}
+    </div>
+    <div>
+      <p className="text-sm font-medium text-gray-700">{label}</p>
+      <p className="text-2xl font-bold text-gray-900">{value}</p>
+    </div>
+  </div>
+);
+
 const TodayActivity = ({ 
   checkInsToday, 
   checkOutsToday, 
   pendingBookings, 
   confirmedBookings 
 }: TodayActivityProps) => (
-  <Card>
+  <Card className="shadow-lg">
     <CardHeader>
-      <CardTitle>Today's Activity</CardTitle>
+      <CardTitle className="text-xl text-gray-700">Today's Activity</CardTitle>
     </CardHeader>
     <CardContent>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100">
-            <ArrowRightLeft size={18} className="text-blue-700" />
-          </div>
-          <div>
-            <p className="text-sm font-medium">Check-ins Today</p>
-            <p className="text-2xl font-bold">{checkInsToday}</p>
-          </div>
-        </div>
+      <div className="space-y-4">
+        <ActivityItem
+          icon={<ArrowRightLeft size={20} className="text-blue-700" />}
+          label="Check-ins Today"
+          value={checkInsToday}
+          color="bg-blue-100"
+        />
         
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100">
-            <CheckSquare size={18} className="text-green-700" />
-          </div>
-          <div>
-            <p className="text-sm font-medium">Check-outs Today</p>
-            <p className="text-2xl font-bold">{checkOutsToday}</p>
-          </div>
-        </div>
+        <ActivityItem
+          icon={<CheckSquare size={20} className="text-green-700" />}
+          label="Check-outs Today"
+          value={checkOutsToday}
+          color="bg-green-100"
+        />
         
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100">
-            <Users size={18} className="text-amber-700" />
-          </div>
-          <div>
-            <p className="text-sm font-medium">Pending Bookings</p>
-            <p className="text-2xl font-bold">{pendingBookings}</p>
-          </div>
-        </div>
+        <ActivityItem
+          icon={<Users size={20} className="text-amber-700" />}
+          label="Pending Bookings"
+          value={pendingBookings}
+          color="bg-amber-100"
+        />
         
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-100">
-            <Star size={18} className="text-purple-700" />
-          </div>
-          <div>
-            <p className="text-sm font-medium">Confirmed Bookings</p>
-            <p className="text-2xl font-bold">{confirmedBookings}</p>
-          </div>
-        </div>
+        <ActivityItem
+          icon={<Star size={20} className="text-purple-700" />}
+          label="Confirmed Bookings"
+          value={confirmedBookings}
+          color="bg-purple-100"
+        />
       </div>
     </CardContent>
   </Card>
