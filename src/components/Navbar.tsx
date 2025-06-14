@@ -129,7 +129,7 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <div className="flex items-center justify-between px-4 py-3">
+              <div className="flex items-center justify-between px-4 py-3 gap-4">
                 <AdminLoginLink />
                 <Button 
                   className="bg-hotel-gold hover:bg-transparent hover:text-hotel-gold text-white"
