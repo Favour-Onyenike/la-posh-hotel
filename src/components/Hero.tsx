@@ -19,6 +19,12 @@ const Hero = () => {
   const handleAddReview = () => {
     navigate('/add-review');
   };
+
+  // Helper function to get the correct image path for production
+  const getImagePath = (imageName: string) => {
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+  };
   
   return (
     <div className="relative h-screen md:h-screen w-full">
@@ -27,7 +33,7 @@ const Hero = () => {
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
-            "url('/lovable-uploads/8f6cc8d0-723a-47fc-a70b-5c04e60040c6.png')",
+            `url('${getImagePath('8f6cc8d0-723a-47fc-a70b-5c04e60040c6.png')}')`,
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/30" />

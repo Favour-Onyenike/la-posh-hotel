@@ -77,11 +77,17 @@ const CounterItem = ({
 };
 
 const CounterBar = () => {
+  // Helper function to get the correct image path for production
+  const getImagePath = (imageName: string) => {
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+  };
+
   return (
     <section className="relative section-padding">
       <div 
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/lovable-uploads/cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png')" }}
+        style={{ backgroundImage: `url('${getImagePath('cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png')}')` }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
       </div>

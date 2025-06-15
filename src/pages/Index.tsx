@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -48,6 +49,12 @@ const Index = () => {
     window.scrollTo(0, 0);
   };
 
+  // Helper function to get the correct image path for production
+  const getImagePath = (imageName: string) => {
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+  };
+
   return (
     <>
       <Navbar />
@@ -80,7 +87,7 @@ const Index = () => {
               </div>
               <div className="rounded-lg overflow-hidden shadow-xl border-2 border-hotel-gold/20 hover:shadow-2xl transition-all duration-300 hover-scale h-[300px]">
                 <img 
-                  src="/lovable-uploads/442a4b2f-8a6f-4bd7-9c4d-a0a37dfb8260.png" 
+                  src={getImagePath("442a4b2f-8a6f-4bd7-9c4d-a0a37dfb8260.png")} 
                   alt="Hotel Exterior" 
                   className="w-full h-full object-cover"
                 />
@@ -166,19 +173,19 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <RoomPreview
-              image="/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png"
+              image={getImagePath("1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png")}
               title="Executive Room"
               price={40000}
               description="Elegant room with king-size bed, city views, and modern amenities"
             />
             <RoomPreview
-              image="/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png"
+              image={getImagePath("1ab4d322-ad33-47ce-b765-091d8b14f781.png")}
               title="Standard Suite"
               price={80000}
               description="Spacious suite with separate living area and premium amenities"
             />
             <RoomPreview
-              image="/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png"
+              image={getImagePath("bc6140b3-ddd4-4e67-a150-73a6930b623d.png")}
               title="Mini Suite"
               price={45000}
               description="Our finest accommodation with panoramic views and luxurious features"
@@ -202,7 +209,7 @@ const Index = () => {
           className="absolute inset-0 bg-cover bg-center bg-fixed opacity-20"
           style={{
             backgroundImage:
-              "url('/lovable-uploads/b0b33b9b-6fb9-4d30-836e-20c55bc93064.png')",
+              `url('${getImagePath('b0b33b9b-6fb9-4d30-836e-20c55bc93064.png')}')`,
           }}
         />
         <div className="hotel-container relative z-10">
