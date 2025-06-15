@@ -12,9 +12,11 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true);
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
 
-  // Helper function to get the correct image path
+  // Helper function to get proper image paths for GitHub Pages deployment
   const getImagePath = (imageName: string) => {
-    return `/lovable-uploads/${imageName}`;
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const basePath = isGitHubPages ? '/la-posh-hotel-app' : '';
+    return `${basePath}/lovable-uploads/${imageName}`;
   };
 
   useEffect(() => {

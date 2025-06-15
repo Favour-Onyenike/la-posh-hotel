@@ -6,9 +6,11 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Star, Wifi, Car, Utensils, Dumbbell, TreePine, Zap } from "lucide-react";
 
 const Facilities = () => {
-  // Helper function to get the correct image path
+  // Helper function to get proper image paths for GitHub Pages deployment
   const getImagePath = (imageName: string) => {
-    return `/lovable-uploads/${imageName}`;
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const basePath = isGitHubPages ? '/la-posh-hotel-app' : '';
+    return `${basePath}/lovable-uploads/${imageName}`;
   };
 
   // Updated facility items with icons for better mobile presentation

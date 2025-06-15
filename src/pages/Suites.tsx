@@ -16,9 +16,10 @@ const Suites = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Helper function to get the correct image path
+  // Helper function to get the correct image path for production
   const getImagePath = (imageName: string) => {
-    return `/lovable-uploads/${imageName}`;
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
   };
   
   useEffect(() => {
