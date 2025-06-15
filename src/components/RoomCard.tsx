@@ -1,78 +1,96 @@
 
-import React from 'react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Bed, Users, DoorClosed } from 'lucide-react';
-import { Room } from '@/types/supabase';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface RoomCardProps {
-  room: Room;
-  isAvailable: boolean;
-  onBook: (room: Room) => void;
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  capacity: number;
+  imageUrl: string;
+  features: string[];
+  className?: string;
+  onBookNow?: (roomId: string) => void;
 }
 
-const RoomCard = ({ room, isAvailable, onBook }: RoomCardProps) => {
+const RoomCard = ({ 
+  id, 
+  name, 
+  description, 
+  price, 
+  capacity, 
+  imageUrl, 
+  features, 
+  className,
+  onBookNow 
+}: RoomCardProps) => {
+  // Helper function to get the correct image path for production
+  const getImagePath = (imageName: string) => {
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+  };
+
+  // If imageUrl contains 'lovable-uploads/', extract just the filename and use getImagePath
+  const processedImageUrl = imageUrl.includes('lovable-uploads/') 
+    ? getImagePath(imageUrl.split('lovable-uploads/')[1])
+    : imageUrl;
+
+  const handleBooking = () => {
+    if (onBookNow) {
+      onBookNow(id);
+    }
+  };
+
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
-      <div className="relative h-48 overflow-hidden">
-        <img 
-          src={room.image_url || '/placeholder.svg'} 
-          alt={`${room.name} ${room.room_type}`}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+    <div className={cn("group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300", className)}>
+      <div className="relative overflow-hidden">
+        <img
+          src={processedImageUrl}
+          alt={name}
+          className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        <div className="absolute top-0 right-0 bg-hotel-gold text-white px-3 py-1 m-2 rounded-md text-sm font-medium">
-          {room.room_type}
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-          <p className="text-white font-bold text-xl">{room.name}</p>
-          <p className="text-white/90 text-sm">₦{Number(room.price_per_night).toLocaleString()}/night</p>
-        </div>
+        <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-all duration-300"></div>
       </div>
       
-      <CardHeader className="py-3">
-        <CardTitle className="flex justify-between items-center">
-          <span>{room.room_number}</span>
-          <Badge 
-            variant={isAvailable ? "outline" : "destructive"} 
-            className={isAvailable ? "bg-green-50 text-green-800 border-green-800" : ""}>
-            {isAvailable ? "Available" : "Booked"}
-          </Badge>
-        </CardTitle>
-      </CardHeader>
-      
-      <CardContent className="flex-grow py-2">
-        <p className="text-gray-700 mb-3 line-clamp-2">{room.description}</p>
+      <div className="p-6">
+        <h3 className="font-serif text-xl font-semibold mb-2 text-hotel-navy">{name}</h3>
+        <p className="text-gray-600 mb-4 line-clamp-3">{description}</p>
         
-        <div>
-          <h4 className="text-sm font-medium mb-2 text-gray-700">Key Features</h4>
-          <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
-            <div className="flex items-center gap-1">
-              <Users size={16} />
-              <span>{room.capacity} Guests</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <DoorClosed size={16} />
-              <span>{room.room_number}</span>
-            </div>
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-2xl font-bold text-hotel-gold">₦{price.toLocaleString()}</span>
+          <span className="text-sm text-gray-500">per night</span>
+        </div>
+        
+        <div className="mb-4">
+          <p className="text-sm text-gray-600 mb-2">Capacity: {capacity} guests</p>
+          <div className="flex flex-wrap gap-2">
+            {features.slice(0, 3).map((feature, index) => (
+              <span
+                key={index}
+                className="px-2 py-1 bg-hotel-beige text-hotel-navy text-xs rounded-full"
+              >
+                {feature}
+              </span>
+            ))}
+            {features.length > 3 && (
+              <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                +{features.length - 3} more
+              </span>
+            )}
           </div>
         </div>
-      </CardContent>
-      
-      <CardFooter className="flex justify-between items-center border-t pt-3 pb-3">
-        <div className="text-hotel-gold font-bold">
-          ₦{Number(room.price_per_night).toLocaleString()}<span className="text-sm font-normal text-gray-500">/night</span>
-        </div>
+        
         <Button 
           variant="hotel" 
-          size="sm" 
-          disabled={!isAvailable}
-          onClick={() => onBook(room)}
+          className="w-full"
+          onClick={handleBooking}
         >
           Book Now
         </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 };
 
