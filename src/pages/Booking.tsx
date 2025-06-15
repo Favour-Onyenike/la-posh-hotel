@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Room } from '@/types/supabase';
@@ -298,9 +299,14 @@ const Booking = () => {
                     filteredRooms.map((room) => (
                       <RoomCard
                         key={room.id}
-                        room={room}
-                        isAvailable={room.availability_status === 'available'}
-                        onBook={handleBookRoom}
+                        id={room.id}
+                        name={room.name}
+                        description={room.description}
+                        price={room.price_per_night}
+                        capacity={room.capacity}
+                        imageUrl={room.image_url || ''}
+                        features={room.features || []}
+                        onBookNow={() => handleBookRoom(room)}
                       />
                     ))
                   )}
