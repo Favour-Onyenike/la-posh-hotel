@@ -12,15 +12,26 @@ interface EventCardProps {
 }
 
 const EventCard = ({ title, description, eventDate, imageUrl }: EventCardProps) => {
+  // Helper function to get the correct image path for production
+  const getImagePath = (imageName: string) => {
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+  };
+
   const eventDateTime = new Date(eventDate);
   const formattedDate = format(eventDateTime, "MMM dd, yyyy");
   const formattedTime = format(eventDateTime, "h:mm a");
+
+  // Process image URL if it's a lovable-uploads path
+  const processedImageUrl = imageUrl && imageUrl.includes('lovable-uploads/') 
+    ? getImagePath(imageUrl.split('lovable-uploads/')[1])
+    : imageUrl || "/placeholder.svg";
 
   return (
     <div className="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 max-w-sm mx-auto">
       <div className="relative overflow-hidden">
         <img
-          src={imageUrl || "/placeholder.svg"}
+          src={processedImageUrl}
           alt={title}
           className="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-110"
         />

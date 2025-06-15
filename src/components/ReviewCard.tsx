@@ -9,6 +9,12 @@ interface ReviewCardProps {
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
+  // Helper function to get the correct image path for production
+  const getImagePath = (imageName: string) => {
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+  };
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -17,6 +23,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
       .toUpperCase()
       .slice(0, 2);
   };
+
+  // Process image URL if it's a lovable-uploads path
+  const processedImageUrl = review.image_url && review.image_url.includes('lovable-uploads/') 
+    ? getImagePath(review.image_url.split('lovable-uploads/')[1])
+    : review.image_url;
 
   return (
     <div className="bg-white p-8 rounded-lg shadow-md h-full">
@@ -36,9 +47,9 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
       
       <div className="flex items-center">
         <Avatar className="w-12 h-12 mr-4">
-          {review.image_url ? (
+          {processedImageUrl ? (
             <AvatarImage 
-              src={review.image_url} 
+              src={processedImageUrl} 
               alt={`${review.reviewer_name}'s photo`}
             />
           ) : null}
