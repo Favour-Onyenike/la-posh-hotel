@@ -25,6 +25,22 @@ const Gallery = () => {
     return `/lovable-uploads/${imageName}`;
   };
 
+  // Helper function to determine if an image URL needs path transformation
+  const getProcessedImageUrl = (imageUrl: string) => {
+    // If it's a Supabase storage URL or external URL, use as-is
+    if (imageUrl.includes('supabase') || imageUrl.startsWith('http')) {
+      return imageUrl;
+    }
+    // If it's a local lovable-uploads path, apply getImagePath transformation
+    if (imageUrl.includes('lovable-uploads/')) {
+      const imageName = imageUrl.split('lovable-uploads/')[1];
+      return getImagePath(imageName);
+    }
+    // For any other case, try to extract filename and apply transformation
+    const imageName = imageUrl.split('/').pop() || imageUrl;
+    return getImagePath(imageName);
+  };
+
   useEffect(() => {
     fetchGalleryImages();
   }, []);
@@ -117,19 +133,22 @@ const Gallery = () => {
               </div>
             ) : (
               <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4">
-                {galleryImages.map((item) => (
-                  <div 
-                    key={item.id}
-                    className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-24 sm:h-48 md:h-64 cursor-pointer"
-                    onClick={() => handleImageClick(item.image_url)}
-                  >
-                    <img 
-                      src={item.image_url} 
-                      alt={item.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                ))}
+                {galleryImages.map((item) => {
+                  const processedImageUrl = getProcessedImageUrl(item.image_url);
+                  return (
+                    <div 
+                      key={item.id}
+                      className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-24 sm:h-48 md:h-64 cursor-pointer"
+                      onClick={() => handleImageClick(processedImageUrl)}
+                    >
+                      <img 
+                        src={processedImageUrl} 
+                        alt={item.title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
