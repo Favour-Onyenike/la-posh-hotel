@@ -29,6 +29,19 @@ import RoomsLoading from "@/components/Rooms/RoomsLoading";
 const RoomCard = ({ room }: { room: Room }) => {
   const navigate = useNavigate();
   
+  // Helper function to get proper image paths for GitHub Pages deployment
+  const getImagePath = (imageName: string) => {
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
+    const isProduction = import.meta.env.PROD;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
+  };
+  
   const handleBookNow = () => {
     navigate('/booking', { state: { roomType: `${room.name} ${room.room_number}`, roomPrice: room.price_per_night } });
   };
@@ -36,11 +49,25 @@ const RoomCard = ({ room }: { room: Room }) => {
   // Capitalize the room name for display
   const displayName = `${room.name.charAt(0).toUpperCase() + room.name.slice(1)} ${room.room_number}`;
   
+  // Process image URL to use getImagePath if it's a local upload
+  const processImageUrl = (imageUrl: string | null) => {
+    if (!imageUrl) return '/placeholder.svg';
+    
+    // If it's a lovable-uploads image, extract filename and use getImagePath
+    if (imageUrl.includes('lovable-uploads/')) {
+      const fileName = imageUrl.split('lovable-uploads/').pop();
+      return fileName ? getImagePath(fileName) : '/placeholder.svg';
+    }
+    
+    // If it's already a full URL (external or processed), use as is
+    return imageUrl;
+  };
+  
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
       <div className="relative h-48 overflow-hidden">
         <img 
-          src={room.image_url || '/placeholder.svg'} 
+          src={processImageUrl(room.image_url)} 
           alt={displayName}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
         />
@@ -98,9 +125,15 @@ const Rooms = () => {
   
   // Helper function to get proper image paths for GitHub Pages deployment
   const getImagePath = (imageName: string) => {
-    const isGitHubPages = window.location.hostname.includes('github.io');
-    const basePath = isGitHubPages ? '/la-posh-hotel-app' : '';
-    return `${basePath}/lovable-uploads/${imageName}`;
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
+    const isProduction = import.meta.env.PROD;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
   };
   
   useEffect(() => {

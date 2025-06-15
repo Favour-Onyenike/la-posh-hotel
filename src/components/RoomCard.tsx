@@ -26,16 +26,30 @@ const RoomCard = ({
   className,
   onBookNow 
 }: RoomCardProps) => {
-  // Helper function to get the correct image path for production
+  // Helper function to get proper image paths for GitHub Pages deployment
   const getImagePath = (imageName: string) => {
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
     const isProduction = import.meta.env.PROD;
-    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
   };
 
-  // If imageUrl contains 'lovable-uploads/', extract just the filename and use getImagePath
-  const processedImageUrl = imageUrl.includes('lovable-uploads/') 
-    ? getImagePath(imageUrl.split('lovable-uploads/')[1])
-    : imageUrl;
+  // Process image URL to use getImagePath if it's a local upload
+  const processImageUrl = (imageUrl: string) => {
+    // If it's a lovable-uploads image, extract filename and use getImagePath
+    if (imageUrl.includes('lovable-uploads/')) {
+      const fileName = imageUrl.split('lovable-uploads/').pop();
+      return fileName ? getImagePath(fileName) : imageUrl;
+    }
+    
+    // If it's already a full URL (external or processed), use as is
+    return imageUrl;
+  };
 
   const handleBooking = () => {
     if (onBookNow) {
@@ -47,7 +61,7 @@ const RoomCard = ({
     <div className={cn("group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300", className)}>
       <div className="relative overflow-hidden">
         <img
-          src={processedImageUrl}
+          src={processImageUrl(imageUrl)}
           alt={name}
           className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
         />

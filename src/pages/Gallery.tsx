@@ -14,9 +14,15 @@ const Gallery = () => {
 
   // Helper function to get proper image paths for GitHub Pages deployment
   const getImagePath = (imageName: string) => {
-    const isGitHubPages = window.location.hostname.includes('github.io');
-    const basePath = isGitHubPages ? '/la-posh-hotel-app' : '';
-    return `${basePath}/lovable-uploads/${imageName}`;
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
+    const isProduction = import.meta.env.PROD;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
   };
 
   useEffect(() => {

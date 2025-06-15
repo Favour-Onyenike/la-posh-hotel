@@ -2,10 +2,17 @@
 import React from 'react';
 
 const BookingHero = () => {
-  // Helper function to get the correct image path for production
+  // Helper function to get proper image paths for GitHub Pages deployment
   const getImagePath = (imageName: string) => {
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
     const isProduction = import.meta.env.PROD;
-    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
   };
 
   return (
