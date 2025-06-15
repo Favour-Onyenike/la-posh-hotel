@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -27,6 +28,19 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const { signOut, user, profile } = useAuth();
   const { hasTeamPermission, isPrimaryAdmin } = useTeamPermissions();
+
+  // Helper function to get the correct image path
+  const getImagePath = (imageName: string) => {
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
+    const isProduction = import.meta.env.PROD;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
+  };
 
   // Check if user can access team management
   const canAccessTeam = hasTeamPermission || isPrimaryAdmin;
@@ -86,7 +100,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       )}>
         <div className="flex items-center justify-between h-16 px-6 bg-gray-800">
           <img 
-            src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
+            src={getImagePath('62098d96-b078-48ab-9a8e-c9421cbf891e.png')}
             alt="La Posh Signature Suites" 
             className="h-10 w-auto"
           />
