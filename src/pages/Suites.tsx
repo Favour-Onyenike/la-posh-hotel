@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -100,6 +101,12 @@ const Suites = () => {
   const [suites, setSuites] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  // Helper function to get the correct image path for production
+  const getImagePath = (imageName: string) => {
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+  };
   
   useEffect(() => {
     fetchSuites();
@@ -160,7 +167,7 @@ const Suites = () => {
         {/* Hero Section */}
         <section
           className="py-20 md:py-28 lg:py-40 bg-cover bg-center relative overflow-hidden"
-          style={{ backgroundImage: "url('/lovable-uploads/e9be561a-1ed6-476f-aab8-fd04aaef0620.png')" }}
+          style={{ backgroundImage: `url('${getImagePath('e9be561a-1ed6-476f-aab8-fd04aaef0620.png')}')` }}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">

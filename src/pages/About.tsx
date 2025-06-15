@@ -9,6 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Star, StarHalf, Sparkles, History, Clock, Users, Award, Target, CheckCircle } from "lucide-react";
 
 const About = () => {
+  // Helper function to get the correct image path for production
+  const getImagePath = (imageName: string) => {
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+  };
+
   return (
     <>
       <Navbar />
@@ -16,7 +22,7 @@ const About = () => {
         {/* Hero Section with Background Image */}
         <section 
           className="py-32 md:py-40 lg:py-48 bg-cover bg-center relative overflow-hidden"
-          style={{ backgroundImage: "url('/lovable-uploads/e9be561a-1ed6-476f-aab8-fd04aaef0620.png')" }}
+          style={{ backgroundImage: `url('${getImagePath('e9be561a-1ed6-476f-aab8-fd04aaef0620.png')}')` }}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">
