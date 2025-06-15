@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,14 +7,20 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Star, Wifi, Car, Utensils, Dumbbell, TreePine, Zap } from "lucide-react";
 
 const Facilities = () => {
-  // Helper function to get proper image paths for GitHub Pages deployment
+  // Helper function to get proper image paths for both production and development (GitHub Pages or local)
   const getImagePath = (imageName: string) => {
-    const isGitHubPages = window.location.hostname.includes('github.io');
-    const basePath = isGitHubPages ? '/la-posh-hotel-app' : '';
-    return `${basePath}/lovable-uploads/${imageName}`;
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
+    const isProduction = import.meta.env.PROD;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
   };
 
-  // Updated facility items with icons for better mobile presentation
+  // Updated facility items to use getImagePath for every image
   const facilityItems = [
     {
       title: "Restaurant",
@@ -219,3 +226,4 @@ const Facilities = () => {
 };
 
 export default Facilities;
+
