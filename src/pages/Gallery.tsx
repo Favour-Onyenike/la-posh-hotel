@@ -12,6 +12,13 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true);
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
 
+  // Helper function to get proper image paths for GitHub Pages deployment
+  const getImagePath = (imageName: string) => {
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const basePath = isGitHubPages ? '/la-posh-hotel-app' : '';
+    return `${basePath}/lovable-uploads/${imageName}`;
+  };
+
   useEffect(() => {
     fetchGalleryImages();
   }, []);
@@ -69,7 +76,7 @@ const Gallery = () => {
         {/* Hero Section with Background Image - matching About page */}
         <section 
           className="py-24 md:py-32 lg:py-40 bg-cover bg-center relative overflow-hidden"
-          style={{ backgroundImage: "url('/lovable-uploads/e9be561a-1ed6-476f-aab8-fd04aaef0620.png')" }}
+          style={{ backgroundImage: `url('${getImagePath('e9be561a-1ed6-476f-aab8-fd04aaef0620.png')}')` }}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">

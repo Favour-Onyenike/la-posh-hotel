@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -98,6 +99,13 @@ const Rooms = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   
+  // Helper function to get proper image paths for GitHub Pages deployment
+  const getImagePath = (imageName: string) => {
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const basePath = isGitHubPages ? '/la-posh-hotel-app' : '';
+    return `${basePath}/lovable-uploads/${imageName}`;
+  };
+  
   useEffect(() => {
     fetchRooms();
   }, []);
@@ -157,7 +165,7 @@ const Rooms = () => {
         {/* Hero Section */}
         <section
           className="py-20 md:py-28 bg-cover bg-center relative overflow-hidden"
-          style={{ backgroundImage: "url('/lovable-uploads/e9be561a-1ed6-476f-aab8-fd04aaef0620.png')" }}
+          style={{ backgroundImage: `url('${getImagePath('e9be561a-1ed6-476f-aab8-fd04aaef0620.png')}')` }}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">
