@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -15,18 +15,16 @@ import {
 import { 
   Bed, 
   Users, 
-  Award, 
   DoorClosed, 
-  Wifi, 
-  Tv, 
-  Bath, 
-  AirVent, 
-  Clock,
-  Utensils
+  Clock
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { Room } from "@/types/supabase";
+import RoomsHero from "@/components/Rooms/RoomsHero";
+import RoomsIntroduction from "@/components/Rooms/RoomsIntroduction";
+import RoomsAmenities from "@/components/Rooms/RoomsAmenities";
+import RoomsCTA from "@/components/Rooms/RoomsCTA";
+import RoomsLoading from "@/components/Rooms/RoomsLoading";
 
 const RoomCard = ({ room }: { room: Room }) => {
   const navigate = useNavigate();
@@ -97,7 +95,6 @@ const RoomCard = ({ room }: { room: Room }) => {
 const Rooms = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   
   // Helper function to get proper image paths for GitHub Pages deployment
   const getImagePath = (imageName: string) => {
@@ -139,71 +136,16 @@ const Rooms = () => {
     }
   };
   
-  const handleBookNow = () => {
-    navigate('/booking');
-  };
-  
   if (loading) {
-    return (
-      <>
-        <Navbar />
-        <div className="pt-24 md:pt-28 lg:pt-32 pb-16 flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-hotel-gold mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading rooms...</p>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
+    return <RoomsLoading />;
   }
   
   return (
     <>
       <Navbar />
       <div className="pt-24 md:pt-28 lg:pt-32 pb-16">
-        {/* Hero Section */}
-        <section
-          className="py-20 md:py-28 bg-cover bg-center relative overflow-hidden"
-          style={{ backgroundImage: `url('${getImagePath('e9be561a-1ed6-476f-aab8-fd04aaef0620.png')}')` }}
-        >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-          <div className="hotel-container relative z-10">
-            <div className="max-w-6xl mx-auto text-center">
-              <h1 className="hotel-title mb-6 text-white text-4xl md:text-5xl lg:text-6xl font-bold">Our Rooms</h1>
-              <p className="text-xl md:text-2xl text-white">
-                Comfortable accommodations designed for your relaxation
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Introduction */}
-        <section className="section-padding bg-white py-16">
-          <div className="hotel-container">
-            <div className="max-w-6xl mx-auto">
-              <div className="prose prose-lg max-w-none text-center mb-12">
-                <p className="mb-6 text-black text-lg leading-relaxed">
-                  At La Posh Signature Hotel & Suites, we offer a variety of luxurious rooms 
-                  designed to provide comfort and elegance during your stay.
-                </p>
-                <p className="text-black text-lg leading-relaxed">
-                  Each room is meticulously maintained and furnished with modern amenities 
-                  to ensure a memorable experience.
-                </p>
-              </div>
-              <div className="flex justify-center">
-                <Button 
-                  variant="outline" 
-                  className="border-hotel-gold text-hotel-gold hover:bg-hotel-gold hover:text-white"
-                  onClick={() => navigate('/suites')}
-                >
-                  View Our Premium Suites
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <RoomsHero getImagePath={getImagePath} />
+        <RoomsIntroduction />
 
         {/* Rooms Section */}
         <section className="section-padding bg-hotel-beige py-16">
@@ -225,122 +167,8 @@ const Rooms = () => {
           </div>
         </section>
 
-        {/* Amenities Section */}
-        <section className="section-padding bg-white py-16">
-          <div className="hotel-container">
-            <div className="max-w-7xl mx-auto">
-              <h2 className="hotel-title text-center mb-8">Standard Room Amenities</h2>
-              <p className="text-center mb-12 max-w-3xl mx-auto text-gray-700">
-                Every room at La Posh Signature Hotel & Suites comes equipped with these standard amenities
-                to ensure your comfort and convenience.
-              </p>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <Wifi className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">Wi-Fi Access</h3>
-                      <p className="text-sm text-gray-600">Complimentary internet access throughout your stay</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <AirVent className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">Air Conditioning</h3>
-                      <p className="text-sm text-gray-600">Individually controlled climate system</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <Tv className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">TV</h3>
-                      <p className="text-sm text-gray-600">Flat-screen television with satellite channels</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <Bath className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">Luxury Bathroom</h3>
-                      <p className="text-sm text-gray-600">Premium bath amenities and plush towels</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <Utensils className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">Free Breakfast</h3>
-                      <p className="text-sm text-gray-600">Complimentary breakfast included with all rooms</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-white/80 backdrop-blur">
-                  <CardContent className="flex items-start gap-4 p-6">
-                    <Clock className="text-hotel-gold" />
-                    <div>
-                      <h3 className="font-medium mb-1">Room Service</h3>
-                      <p className="text-sm text-gray-600">Available daily from 6:00 AM to 11:00 PM</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <div className="mt-12 text-center">
-                <h3 className="text-xl font-semibold mb-4">Executive & Premium Rooms</h3>
-                <p className="text-gray-700 mb-6">
-                  Our Amber and Emerald rooms include additional amenities:
-                </p>
-                <div className="flex flex-wrap justify-center gap-4 max-w-2xl mx-auto">
-                  <Badge variant="outline" className="bg-gray-50 px-3 py-1">Mini Gym Access</Badge>
-                  <Badge variant="outline" className="bg-gray-50 px-3 py-1">Mini Refrigerator (Emerald only)</Badge>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="section-padding bg-white py-16">
-          <div className="hotel-container">
-            <div className="max-w-6xl mx-auto text-center">
-              <h2 className="hotel-title mb-6">Ready to Experience Comfort?</h2>
-              <p className="text-lg mb-8 text-gray-700 max-w-3xl mx-auto">
-                Book your stay today and enjoy our comfortable accommodations, impeccable service, 
-                and the perfect blend of comfort and elegance.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  variant="hotel" 
-                  size="lg" 
-                  className="font-medium"
-                  onClick={handleBookNow}
-                >
-                  Book Your Room Now
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="font-medium border-hotel-gold text-hotel-gold hover:bg-hotel-gold hover:text-white"
-                  onClick={() => navigate('/suites')}
-                >
-                  Explore Our Suites
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <RoomsAmenities />
+        <RoomsCTA />
       </div>
       <Footer />
     </>
