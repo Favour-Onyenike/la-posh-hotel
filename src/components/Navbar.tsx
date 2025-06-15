@@ -12,10 +12,9 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Helper function to get the correct image path for production
+  // Helper function to get the correct image path
   const getImagePath = (imageName: string) => {
-    const isProduction = import.meta.env.PROD;
-    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+    return `/lovable-uploads/${imageName}`;
   };
 
   useEffect(() => {

@@ -96,11 +96,9 @@ const Rooms = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Helper function to get proper image paths for GitHub Pages deployment
+  // Helper function to get the correct image path
   const getImagePath = (imageName: string) => {
-    const isGitHubPages = window.location.hostname.includes('github.io');
-    const basePath = isGitHubPages ? '/la-posh-hotel-app' : '';
-    return `${basePath}/lovable-uploads/${imageName}`;
+    return `/lovable-uploads/${imageName}`;
   };
   
   useEffect(() => {

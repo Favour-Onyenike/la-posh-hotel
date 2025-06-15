@@ -2,10 +2,9 @@
 import React from 'react';
 
 const BookingHero = () => {
-  // Helper function to get the correct image path for production
+  // Helper function to get the correct image path
   const getImagePath = (imageName: string) => {
-    const isProduction = import.meta.env.PROD;
-    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+    return `/lovable-uploads/${imageName}`;
   };
 
   return (

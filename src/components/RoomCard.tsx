@@ -26,10 +26,9 @@ const RoomCard = ({
   className,
   onBookNow 
 }: RoomCardProps) => {
-  // Helper function to get the correct image path for production
+  // Helper function to get the correct image path
   const getImagePath = (imageName: string) => {
-    const isProduction = import.meta.env.PROD;
-    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+    return `/lovable-uploads/${imageName}`;
   };
 
   // If imageUrl contains 'lovable-uploads/', extract just the filename and use getImagePath
