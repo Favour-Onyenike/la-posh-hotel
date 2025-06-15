@@ -12,6 +12,12 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Helper function to get the correct image path for production
+  const getImagePath = (imageName: string) => {
+    const isProduction = import.meta.env.PROD;
+    return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -66,7 +72,7 @@ const Navbar = () => {
           {/* Logo on the left */}
           <Link to="/" className="flex items-center" onClick={handleNavClick}>
             <img 
-              src="/lovable-uploads/bbd7d628-218e-45e5-a2f6-5dd221ccc495.png" 
+              src={getImagePath("bbd7d628-218e-45e5-a2f6-5dd221ccc495.png")}
               alt="LA POSH Signature Suites" 
               className="h-12 md:h-16"
             />
