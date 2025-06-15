@@ -6,40 +6,47 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Star, Wifi, Car, Utensils, Dumbbell, TreePine, Zap } from "lucide-react";
 
 const Facilities = () => {
+  // Helper function to get proper image paths for GitHub Pages deployment
+  const getImagePath = (imageName: string) => {
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const basePath = isGitHubPages ? '/la-posh-hotel-app' : '';
+    return `${basePath}/lovable-uploads/${imageName}`;
+  };
+
   // Updated facility items with icons for better mobile presentation
   const facilityItems = [
     {
       title: "Restaurant",
       description: "Experience exquisite cuisine at our in-house restaurant offering a blend of local delicacies and international dishes prepared by our expert chefs.",
-      imageSrc: "/lovable-uploads/5554f5f5-c5dc-46b2-b735-61e278864872.png",
+      imageSrc: getImagePath("5554f5f5-c5dc-46b2-b735-61e278864872.png"),
       icon: Utensils,
       highlights: ["Local & International Cuisine", "Expert Chefs", "Indoor & Outdoor Seating"]
     },
     {
       title: "Executive Rooms",
       description: "Spacious and elegantly furnished suites designed for ultimate comfort and relaxation with premium amenities.",
-      imageSrc: "/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png",
+      imageSrc: getImagePath("1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png"),
       icon: Wifi,
       highlights: ["King-sized Beds", "Smart TVs", "High-speed WiFi"]
     },
     {
       title: "24/7 Power Supply",
       description: "Uninterrupted power supply through our integrated system of solar inverters, generators and dedicated transformer.",
-      imageSrc: "/lovable-uploads/2041bcf9-cce4-478f-95c0-b002a66664b5.png",
+      imageSrc: getImagePath("2041bcf9-cce4-478f-95c0-b002a66664b5.png"),
       icon: Zap,
       highlights: ["Solar Powered", "Backup Generators", "Eco-friendly Solution"]
     },
     {
       title: "Fitness Center",
       description: "Stay fit during your stay with our well-equipped gym featuring cardio machines, free weights, and training equipment.",
-      imageSrc: "/lovable-uploads/d9d5cdb1-1c16-4557-8c64-39e713537d74.png",
+      imageSrc: getImagePath("d9d5cdb1-1c16-4557-8c64-39e713537d74.png"),
       icon: Dumbbell,
       highlights: ["Cardio Equipment", "Free Weights", "Fresh Towels Available"]
     },
     {
       title: "Outdoor Recreation Area",
       description: "Enjoy our outdoor seating area with entertainment options including pool table and various games for leisure.",
-      imageSrc: "/lovable-uploads/9423b162-188e-46ac-a0ac-33fbdf219e2c.png",
+      imageSrc: getImagePath("9423b162-188e-46ac-a0ac-33fbdf219e2c.png"),
       icon: TreePine,
       highlights: ["Pool Table", "Outdoor Seating", "Multiple Game Options"]
     }
@@ -52,7 +59,7 @@ const Facilities = () => {
         {/* Hero Section - Reduced height for mobile */}
         <section 
           className="py-16 md:py-32 lg:py-40 bg-cover bg-center relative overflow-hidden"
-          style={{ backgroundImage: "url('/lovable-uploads/e9be561a-1ed6-476f-aab8-fd04aaef0620.png')" }}
+          style={{ backgroundImage: `url('${getImagePath('e9be561a-1ed6-476f-aab8-fd04aaef0620.png')}')` }}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
           <div className="hotel-container relative z-10">
