@@ -20,6 +20,11 @@ const AdminRegister = () => {
   const [searchParams] = useSearchParams();
   const inviteToken = searchParams.get('token');
 
+  // Helper function to get the correct image path
+  const getImagePath = (imageName: string) => {
+    return `/lovable-uploads/${imageName}`;
+  };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -115,7 +120,7 @@ const AdminRegister = () => {
     <div 
       className="min-h-screen flex items-center justify-center p-4 relative"
       style={{
-        backgroundImage: `url('/lovable-uploads/f8680508-9ea2-4bdd-8a4c-d7e685e886bd.png')`,
+        backgroundImage: `url('${getImagePath('f8680508-9ea2-4bdd-8a4c-d7e685e886bd.png')}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -127,7 +132,7 @@ const AdminRegister = () => {
       <Card className="w-full max-w-md relative z-10 bg-white/95 backdrop-blur-sm">
         <CardHeader className="text-center">
           <img 
-            src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
+            src={getImagePath('62098d96-b078-48ab-9a8e-c9421cbf891e.png')}
             alt="La Posh Signature Suites" 
             className="h-12 w-auto mx-auto mb-4"
           />

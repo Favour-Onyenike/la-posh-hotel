@@ -20,6 +20,11 @@ const AdminLogin = () => {
   const { user, isAdmin } = useAuth();
   const { toast } = useToast();
 
+  // Helper function to get the correct image path
+  const getImagePath = (imageName: string) => {
+    return `/lovable-uploads/${imageName}`;
+  };
+
   // Redirect if already authenticated as admin
   useEffect(() => {
     if (user && isAdmin) {
@@ -96,7 +101,7 @@ const AdminLogin = () => {
     <div 
       className="min-h-screen flex items-center justify-center px-4"
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/lovable-uploads/b841abff-1a31-4104-9335-b652fe261765.png')`,
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${getImagePath('b841abff-1a31-4104-9335-b652fe261765.png')}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -114,7 +119,7 @@ const AdminLogin = () => {
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-4">
             <img 
-              src="/lovable-uploads/62098d96-b078-48ab-9a8e-c9421cbf891e.png" 
+              src={getImagePath('62098d96-b078-48ab-9a8e-c9421cbf891e.png')}
               alt="La Posh Signature Suites" 
               className="h-12 w-auto mx-auto"
             />
