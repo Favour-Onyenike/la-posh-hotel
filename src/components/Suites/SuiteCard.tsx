@@ -25,6 +25,37 @@ interface SuiteCardProps {
 const SuiteCard = ({ suite }: SuiteCardProps) => {
   const navigate = useNavigate();
   
+  // Helper function to get proper image paths for GitHub Pages deployment
+  const getImagePath = (imageName: string) => {
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
+    const isProduction = import.meta.env.PROD;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
+  };
+
+  // Helper function to determine if an image URL needs path transformation
+  const getProcessedImageUrl = (imageUrl: string | null) => {
+    if (!imageUrl) return '/placeholder.svg';
+    
+    // If it's a Supabase storage URL or external URL, use as-is
+    if (imageUrl.includes('supabase') || imageUrl.startsWith('http')) {
+      return imageUrl;
+    }
+    // If it's a local lovable-uploads path, apply getImagePath transformation
+    if (imageUrl.includes('lovable-uploads/')) {
+      const imageName = imageUrl.split('lovable-uploads/')[1];
+      return getImagePath(imageName);
+    }
+    // For any other case, try to extract filename and apply transformation
+    const imageName = imageUrl.split('/').pop() || imageUrl;
+    return getImagePath(imageName);
+  };
+  
   const handleBookNow = () => {
     navigate('/booking', { state: { roomType: `${suite.name} ${suite.room_number}`, roomPrice: suite.price_per_night } });
   };
@@ -36,7 +67,7 @@ const SuiteCard = ({ suite }: SuiteCardProps) => {
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
       <div className="relative h-48 overflow-hidden">
         <img 
-          src={suite.image_url || '/placeholder.svg'} 
+          src={getProcessedImageUrl(suite.image_url)} 
           alt={displayName}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
         />
