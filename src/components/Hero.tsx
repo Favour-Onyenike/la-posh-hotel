@@ -1,100 +1,85 @@
 
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { Calendar, MapPin } from "lucide-react";
+import { Star, Calendar, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
-  const navigate = useNavigate();
-  
-  const handleExploreRooms = () => {
-    navigate('/rooms');
-  };
-  
-  const handleBookNow = () => {
-    navigate('/booking');
+  // Helper function to get correct image path for GitHub Pages
+  const getImagePath = (filename: string) => {
+    const basePath = import.meta.env.MODE === 'production' ? '/la-posh-hotel' : '';
+    return `${basePath}/lovable-uploads/${filename}`;
   };
 
-  const handleAddReview = () => {
-    navigate('/add-review');
-  };
-  
   return (
-    <div className="relative h-screen md:h-screen w-full">
-      {/* Background Image with Overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('/lovable-uploads/8f6cc8d0-723a-47fc-a70b-5c04e60040c6.png')",
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ 
+          backgroundImage: `url('${getImagePath('bbd7d628-218e-45e5-a2f6-5dd221ccc495.png')}')` 
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/30" />
+        <div className="absolute inset-0 bg-black/40"></div>
       </div>
-
+      
       {/* Content */}
-      <div className="relative h-full flex flex-col justify-center px-4">
-        <div className="max-w-4xl animate-fade-in ml-8 md:ml-16 lg:ml-24 text-left">
-          <h1 className="hotel-title mb-4 text-5xl md:text-6xl lg:text-7xl tracking-tight text-white">
-            Welcome to La-posh Signature Suites
-          </h1>
-          <p className="hotel-subtitle mb-8 opacity-90 text-xl md:text-2xl text-white">
-            we are focused on providing clients with the highest level of comfort and excellence at affordable rates
-          </p>
-          <div className="flex flex-wrap justify-start gap-4">
-            <Button
-              variant="hotel" 
-              size="lg"
-              onClick={handleExploreRooms}
+      <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in">
+          Welcome to{" "}
+          <span className="text-hotel-gold block mt-2">La Posh</span>
+        </h1>
+        <p className="text-xl md:text-2xl mb-8 animate-fade-in-delay-1">
+          Experience luxury redefined at Lagos' most prestigious hotel
+        </p>
+        
+        {/* Star Rating */}
+        <div className="flex justify-center gap-2 mb-8 animate-fade-in-delay-2">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <Star key={star} className="text-hotel-gold fill-hotel-gold" size={24} />
+          ))}
+        </div>
+        
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-delay-3">
+          <Link to="/booking">
+            <Button 
+              size="lg" 
+              className="bg-hotel-gold hover:bg-hotel-gold/90 text-white px-8 py-4 text-lg font-semibold w-full sm:w-auto"
+            >
+              Book Your Stay
+            </Button>
+          </Link>
+          <Link to="/rooms">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="border-white text-white hover:bg-white hover:text-hotel-navy px-8 py-4 text-lg font-semibold w-full sm:w-auto"
             >
               Explore Rooms
             </Button>
-            <Button
-              className="px-6 py-3 bg-transparent border-2 border-white text-white font-sans font-medium transition-all duration-300 hover:bg-white hover:text-hotel-navy"
-              onClick={handleBookNow}
-            >
-              Book Now
-            </Button>
-            
+          </Link>
+        </div>
+        
+        {/* Quick Info */}
+        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm animate-fade-in-delay-4">
+          <div className="flex items-center gap-2">
+            <MapPin size={16} />
+            <span>Victoria Island, Lagos</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Calendar size={16} />
+            <span>Open 24/7</span>
           </div>
         </div>
       </div>
-
-      {/* Booking Banner */}
-      <div className="absolute -bottom-24 md:-bottom-16 left-1/2 transform -translate-x-1/2 w-full max-w-5xl">
-        <div className="mx-4 md:mx-6 bg-white rounded-lg shadow-xl grid grid-cols-1 md:grid-cols-3 overflow-hidden">
-          <div className="p-6 flex items-center border-b md:border-b-0 md:border-r border-gray-200">
-            <Calendar className="text-hotel-gold mr-4" size={24} />
-            <div>
-              <h3 className="font-semibold text-hotel-navy">Check-in / Check-out</h3>
-             
-              <button className="text-hotel-gold font-medium hover:text-hotel-navy transition-colors"
-              onClick={handleBookNow}>
-              select your dates
-            </button>
-            </div>
-          </div>
-          <div className="p-6 flex items-center border-b md:border-b-0 md:border-r border-gray-200">
-            <MapPin className="text-hotel-gold mr-4" size={24} />
-            <div>
-              <h3 className="font-semibold text-hotel-navy">Destination</h3>
-              <p className="text-gray-600 text-sm">La-posh signature suites</p>
-            </div>
-          </div>
-          <div className="p-6 flex items-center justify-between">
-            <div>
-              <h3 className="font-semibold text-hotel-navy">Book Your Stay Now</h3>
-              <p className="text-gray-600 text-sm">Affordable rates</p>
-            </div>
-            <button className="text-hotel-gold font-medium hover:text-hotel-navy transition-colors"
-              onClick={handleBookNow}>
-              View Details
-            </button>
-          </div>
+      
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,107 +1,153 @@
+
 import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Footer from "@/components/Footer";
-import CounterBar from "@/components/CounterBar";
 import RecentReviews from "@/components/RecentReviews";
 import Events from "@/components/Events";
-import { Star, Utensils, Wifi, Car, Clock, Glasses, MapPin, Sparkles } from "lucide-react";
-import { cn } from "@/lib/utils";
+import CounterBar from "@/components/CounterBar";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
-const Feature = ({ icon: Icon, title, description }) => {
-  return (
-    <div className="flex flex-col items-center text-center p-6">
-      <div className="bg-hotel-beige p-4 rounded-full mb-4">
-        <Icon className="text-hotel-gold" size={24} />
-      </div>
-      <h3 className="font-serif text-xl font-semibold mb-2 text-black">{title}</h3>
-      <p className="text-black">{description}</p>
-    </div>
-  );
-};
-
-const RoomPreview = ({ image, title, price, description, currency = "₦" }) => {
-  return (
-    <div className="group">
-      <div className="relative overflow-hidden mb-4">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-all duration-300"></div>
-      </div>
-      <h3 className="font-serif text-xl font-semibold mb-2 text-black">{title}</h3>
-      <p className="text-hotel-gold font-medium mb-2">{currency}{price.toLocaleString()} per night</p>
-      <p className="text-black mb-4">{description}</p>
-      <Button variant="hotel" size="default">
-        Book Now
-      </Button>
-    </div>
-  );
-};
+import { MapPin, Phone, Mail, Wifi, Car, Coffee, Dumbbell } from "lucide-react";
 
 const Index = () => {
-  const handleNavClick = () => {
-    window.scrollTo(0, 0);
+  // Helper function to get correct image path for GitHub Pages
+  const getImagePath = (filename: string) => {
+    const basePath = import.meta.env.MODE === 'production' ? '/la-posh-hotel' : '';
+    return `${basePath}/lovable-uploads/${filename}`;
   };
 
   return (
-    <>
+    <div className="min-h-screen">
       <Navbar />
+      
+      {/* Hero Section */}
       <Hero />
-
-      {/* About Section - Updated to center align on mobile */}
-      <section className="section-padding bg-white py-20 mt-24">
+      
+      {/* About Section */}
+      <section className="py-20 bg-white">
         <div className="hotel-container">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center justify-center mb-8">
-              <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
-              <h2 className="hotel-subtitle text-black text-3xl uppercase font-bold">OUR STORY</h2>
-              <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              <div className="prose prose-lg max-w-none text-center md:text-left">
-                <p className="mb-6 text-black text-lg leading-relaxed">
-                  Welcome to La Posh Signature Hotel & Suites, where luxury meets elegance and
-                  sophistication. Located in the heart of the Abraka Town, our hotel offers an
-                  unparalleled hospitality experience, blending modern amenities with timeless
-                  charm.
-                </p>
-                <p className="mb-6 text-black text-lg leading-relaxed">
-                  Our story began with a passion for creating unforgettable experiences, and a
-                  commitment to excellence in every detail. From our lavish rooms and suites, to
-                  our world-class dining and entertainment options, every aspect of our hotel is
-                  designed to exceed your expectations.
-                </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="animate-fade-in">
+              <div className="flex items-center mb-6">
+                <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
+                <h2 className="hotel-subtitle text-black">ABOUT US</h2>
               </div>
-              <div className="rounded-lg overflow-hidden shadow-xl border-2 border-hotel-gold/20 hover:shadow-2xl transition-all duration-300 hover-scale h-[300px]">
-                <img 
-                  src="/lovable-uploads/442a4b2f-8a6f-4bd7-9c4d-a0a37dfb8260.png" 
-                  alt="Hotel Exterior" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-            
-            <div className="bg-hotel-beige p-8 rounded-lg shadow-md border-l-4 border-hotel-gold mb-8">
-              <p className="text-black text-lg italic text-center">
-                "Whether you're a discerning business traveler, a romantic couple, or a family
-                on vacation, we invite you to experience the La Posh difference. Let us pamper
-                you with our signature blend of luxury, comfort, and genuine hospitality."
+              <h3 className="hotel-title mb-6">Experience Unparalleled Luxury</h3>
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                La Posh Signature Hotel & Suites stands as a beacon of sophistication in the heart of Lagos. 
+                Our commitment to excellence ensures every guest experiences the pinnacle of comfort and service.
               </p>
-            </div>
-
-            <div className="flex justify-center">
-              <Link to="/about" onClick={handleNavClick}>
+              <p className="text-gray-600 mb-8">
+                From our elegantly appointed rooms to our world-class amenities, every detail has been 
+                carefully crafted to exceed your expectations and create unforgettable memories.
+              </p>
+              <Link to="/about">
                 <Button variant="hotel" size="lg">
-                  Discover Our Full Story
+                  Learn More About Us
                 </Button>
               </Link>
             </div>
+            <div className="animate-fade-in-delay-1">
+              <img 
+                src={getImagePath('1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png')}
+                alt="Luxury hotel lobby" 
+                className="rounded-lg shadow-xl w-full h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-hotel-beige">
+        <div className="hotel-container">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center mb-6">
+              <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
+              <h2 className="hotel-subtitle text-black">AMENITIES</h2>
+              <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
+            </div>
+            <h3 className="hotel-title mb-6">Premium Facilities</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { icon: Wifi, title: "Free WiFi", desc: "High-speed internet throughout the property" },
+              { icon: Car, title: "Valet Parking", desc: "Complimentary parking service for all guests" },
+              { icon: Coffee, title: "Restaurant", desc: "Fine dining with international cuisine" },
+              { icon: Dumbbell, title: "Fitness Center", desc: "State-of-the-art gym equipment" }
+            ].map((feature, index) => (
+              <div 
+                key={index} 
+                className="text-center p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <feature.icon className="mx-auto mb-4 text-hotel-gold" size={48} />
+                <h4 className="text-xl font-semibold mb-2 text-hotel-navy">{feature.title}</h4>
+                <p className="text-gray-600">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Rooms Preview */}
+      <section className="py-20 bg-white">
+        <div className="hotel-container">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center mb-6">
+              <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
+              <h2 className="hotel-subtitle text-black">ACCOMMODATIONS</h2>
+              <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
+            </div>
+            <h3 className="hotel-title mb-6">Luxurious Rooms & Suites</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                image: getImagePath('1ab4d322-ad33-47ce-b765-091d8b14f781.png'),
+                title: "Deluxe Room",
+                desc: "Spacious rooms with modern amenities"
+              },
+              {
+                image: getImagePath('442a4b2f-8a6f-4bd7-9c4d-a0a37dfb8260.png'),
+                title: "Executive Suite",
+                desc: "Premium suites with separate living area"
+              },
+              {
+                image: getImagePath('8f6cc8d0-723a-47fc-a70b-5c04e60040c6.png'),
+                title: "Presidential Suite",
+                desc: "Ultimate luxury with panoramic city views"
+              }
+            ].map((room, index) => (
+              <div 
+                key={index} 
+                className="group cursor-pointer animate-fade-in"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <div className="overflow-hidden rounded-lg shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <img 
+                    src={room.image} 
+                    alt={room.title}
+                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="mt-4 text-center">
+                  <h4 className="text-xl font-semibold mb-2 text-hotel-navy">{room.title}</h4>
+                  <p className="text-gray-600">{room.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-center mt-12">
+            <Link to="/rooms">
+              <Button variant="hotel" size="lg">
+                View All Rooms
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -109,86 +155,24 @@ const Index = () => {
       {/* Counter Bar */}
       <CounterBar />
 
-      {/* Features Section */}
-      <section className="section-padding bg-white">
+      {/* Reviews Section */}
+      <section className="py-20 bg-gray-50">
         <div className="hotel-container">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="hotel-title text-black mb-4">Experience Premium Amenities</h2>
-            <p className="text-black">
-              Indulge in the finest features and services designed for your comfort and convenience
-            </p>
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center mb-6">
+              <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
+              <h2 className="hotel-subtitle text-black">TESTIMONIALS</h2>
+              <div className="h-0.5 bg-hotel-gold w-12 ml-4"></div>
+            </div>
+            <h3 className="hotel-title mb-6">What Our Guests Say</h3>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Feature
-              icon={Star}
-              title="5-Star Accommodations"
-              description="Luxurious rooms and suites featuring premium amenities and elegant decor"
-            />
-            <Feature
-              icon={Clock}
-              title="24-Hour Room Service"
-              description="Enjoy delicious meals and refreshments delivered to your room at any hour"
-            />
-            <Feature
-              icon={Wifi}
-              title="Complimentary Wi-Fi"
-              description="High-speed internet connectivity throughout the hotel premises"
-            />
-            <Feature
-              icon={Utensils}
-              title="Restaurant"
-              description="Savor exquisite cuisine prepared by our  chefs in an elegant setting"
-            />
-            <Feature
-              icon={Glasses}
-              title="Exclusive Bar"
-              description="Unwind with premium drinks and cocktails in our  lounge bar"
-            />
-            <Feature
-              icon={Car}
-              title="Secure Parking"
-              description="secure parking facilities for all our guests"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Rooms Preview */}
-      <section className="section-padding bg-hotel-beige">
-        <div className="hotel-container">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="hotel-title text-black mb-4">Our Luxury Accommodations</h2>
-            <p className="text-black">
-              Choose from our selection of meticulously designed rooms and suites
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <RoomPreview
-              image="/lovable-uploads/1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png"
-              title="Executive Room"
-              price={40000}
-              description="Elegant room with king-size bed, city views, and modern amenities"
-            />
-            <RoomPreview
-              image="/lovable-uploads/1ab4d322-ad33-47ce-b765-091d8b14f781.png"
-              title="Standard Suite"
-              price={80000}
-              description="Spacious suite with separate living area and premium amenities"
-            />
-            <RoomPreview
-              image="/lovable-uploads/bc6140b3-ddd4-4e67-a150-73a6930b623d.png"
-              title="Mini Suite"
-              price={45000}
-              description="Our finest accommodation with panoramic views and luxurious features"
-            />
-          </div>
-
+          <RecentReviews />
           <div className="text-center mt-12">
-            <Button variant="hotel" size="lg">
-              View All Rooms & Suites
-            </Button>
+            <Link to="/add-review">
+              <Button variant="outline" className="border-hotel-gold text-hotel-gold hover:bg-hotel-gold hover:text-white">
+                Share Your Experience
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -196,60 +180,51 @@ const Index = () => {
       {/* Events Section */}
       <Events />
 
-      {/* Testimonials - Updated to display real reviews */}
-      <section className="relative section-padding">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-fixed opacity-20"
-          style={{
-            backgroundImage:
-              "url('/lovable-uploads/b0b33b9b-6fb9-4d30-836e-20c55bc93064.png')",
-          }}
-        />
-        <div className="hotel-container relative z-10">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="hotel-title text-black mb-4">What Our Guests Say</h2>
-            <p className="text-black">
-              Hear from those who have experienced our hospitality
-            </p>
-          </div>
-
-          <RecentReviews />
-          
-          <div className="flex justify-center mt-10">
-            <Link to="/add-review">
-              <Button variant="hotel" size="lg">
-                Add Your Review
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="section-padding bg-hotel-beige">
+      {/* Contact Section */}
+      <section className="py-20 bg-hotel-navy">
         <div className="hotel-container">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="hotel-title text-black mb-6">Experience Luxury at La-Posh</h2>
-            <p className="text-black mb-8">
-              Book your stay now and discover why our guests return again and again for our
-              exceptional service and unparalleled comfort.
-            </p>
-            <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Button variant="hotel" size="lg" onClick={handleNavClick} className="w-full sm:w-auto">
-                Book Your Stay
-              </Button>
-              <Link to="/contact" onClick={handleNavClick} className="w-full sm:w-auto">
-                <Button variant="hotel" size="lg" className="w-full sm:w-auto">
-                  Contact Us
-                </Button>
-              </Link>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="text-white">
+              <div className="flex items-center mb-6">
+                <div className="h-0.5 bg-hotel-gold w-12 mr-4"></div>
+                <h2 className="hotel-subtitle">CONTACT US</h2>
+              </div>
+              <h3 className="hotel-title mb-6">Get in Touch</h3>
+              <div className="space-y-4">
+                <div className="flex items-center">
+                  <MapPin className="text-hotel-gold mr-4" size={20} />
+                  <span>123 Victoria Island, Lagos, Nigeria</span>
+                </div>
+                <div className="flex items-center">
+                  <Phone className="text-hotel-gold mr-4" size={20} />
+                  <span>+234 123 456 7890</span>
+                </div>
+                <div className="flex items-center">
+                  <Mail className="text-hotel-gold mr-4" size={20} />
+                  <span>info@laposhhotel.com</span>
+                </div>
+              </div>
+              <div className="mt-8">
+                <Link to="/contact">
+                  <Button variant="outline" className="border-white text-white hover:bg-white hover:text-hotel-navy">
+                    Contact Us
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className="animate-fade-in-delay-1">
+              <img 
+                src={getImagePath('cee30f59-ce42-4cfa-ba4e-405a7c5339d1.png')}
+                alt="Hotel contact" 
+                className="rounded-lg shadow-xl w-full h-auto"
+              />
             </div>
           </div>
         </div>
       </section>
 
       <Footer />
-    </>
+    </div>
   );
 };
 
