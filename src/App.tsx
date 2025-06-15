@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Index from '@/pages/Index';
 import Rooms from '@/pages/Rooms';
 import Suites from '@/pages/Suites';
