@@ -36,5 +36,14 @@ export default defineConfig(({ mode }) => ({
         }
       }
     }
+  },
+  experimental: {
+    renderBuiltUrl(filename, { hostType }) {
+      if (hostType === 'js') {
+        return { js: `new URL("${filename}", import.meta.url).href` };
+      } else {
+        return filename;
+      }
+    }
   }
 }));
