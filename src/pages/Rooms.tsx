@@ -65,7 +65,7 @@ const RoomCard = ({ room }: { room: Room }) => {
   
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
-      <div className="relative h-40 overflow-hidden">
+      <div className="relative h-56 overflow-hidden">
         <img 
           src={processImageUrl(room.image_url)} 
           alt={displayName}

@@ -63,7 +63,7 @@ const RoomCard = ({
         <img
           src={processImageUrl(imageUrl)}
           alt={name}
-          className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-all duration-300"></div>
       </div>
