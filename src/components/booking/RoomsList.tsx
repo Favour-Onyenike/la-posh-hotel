@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Room } from '@/types/supabase';
 import RoomCard from '@/components/RoomCard';
@@ -20,7 +19,7 @@ const RoomsList = ({ filteredRooms, loading, onBookRoom }: RoomsListProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {filteredRooms.length === 0 ? (
         <div className="col-span-full text-center py-12">
           <div className="text-gray-500">
