@@ -33,6 +33,7 @@ const Booking = () => {
   } = useBookingLogic();
 
   const onBookRoom = async (room: Room) => {
+    console.log('Booking room:', room.id);
     const bookableRoom = await handleBookRoom(room);
     if (bookableRoom) {
       setSelectedRoom(bookableRoom);
@@ -41,7 +42,7 @@ const Booking = () => {
 
   const handleBookingSuccess = () => {
     setSelectedRoom(null);
-    fetchRooms();
+    fetchRooms(); // Refresh rooms data
     toast({
       title: 'Booking Successful! 🎉',
       description: 'Your booking has been submitted successfully.',
@@ -51,6 +52,23 @@ const Booking = () => {
   const handleCancelBooking = () => {
     setSelectedRoom(null);
   };
+
+  // Convert date strings to Date objects for BookingForm
+  const getDateFromString = (dateString: string): Date => {
+    if (!dateString) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      return tomorrow;
+    }
+    return new Date(dateString);
+  };
+
+  const checkInDateObj = getDateFromString(checkInDate);
+  const checkOutDateObj = getDateFromString(checkOutDate || (() => {
+    const dayAfterCheckIn = new Date(checkInDateObj);
+    dayAfterCheckIn.setDate(dayAfterCheckIn.getDate() + 1);
+    return dayAfterCheckIn.toISOString().split('T')[0];
+  })());
 
   if (selectedRoom) {
     return (
@@ -71,8 +89,8 @@ const Booking = () => {
               room={selectedRoom} 
               onBookingComplete={handleBookingSuccess}
               onCancel={handleCancelBooking}
-              checkInDate={checkInDate ? new Date(checkInDate) : new Date()}
-              checkOutDate={checkOutDate ? new Date(checkOutDate) : new Date()}
+              checkInDate={checkInDateObj}
+              checkOutDate={checkOutDateObj}
             />
           </div>
         </div>
