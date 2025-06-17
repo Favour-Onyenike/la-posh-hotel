@@ -8,11 +8,23 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Copy, Plus, Users } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getImagePath } from '@/utils/imageUtils';
 
 const InviteManagement = () => {
   const [generatedLink, setGeneratedLink] = useState('');
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Helper function to get correct base URL for GitHub Pages
+  const getBaseUrl = () => {
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    const isProduction = import.meta.env.PROD;
+    
+    if (isGitHubPages || isProduction) {
+      return `${window.location.origin}/la-posh-hotel`;
+    }
+    return window.location.origin;
+  };
 
   // Fetch existing invite tokens
   const { data: inviteTokens = [] } = useQuery({
@@ -45,7 +57,8 @@ const InviteManagement = () => {
       return data;
     },
     onSuccess: (data) => {
-      const inviteUrl = `${window.location.origin}/admin/register?token=${data.token}`;
+      const baseUrl = getBaseUrl();
+      const inviteUrl = `${baseUrl}/#/admin/register?token=${data.token}`;
       setGeneratedLink(inviteUrl);
       queryClient.invalidateQueries({ queryKey: ['invite-tokens'] });
       toast({
@@ -94,6 +107,11 @@ const InviteManagement = () => {
     return new Date(expiresAt) < new Date();
   };
 
+  const generateInviteLink = (token: string) => {
+    const baseUrl = getBaseUrl();
+    return `${baseUrl}/#/admin/register?token=${token}`;
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -135,7 +153,7 @@ const InviteManagement = () => {
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
-                This link expires in 24 hours and can only be used once.
+                This link expires in 7 days and can only be used once.
               </p>
             </div>
           )}
@@ -192,7 +210,7 @@ const InviteManagement = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => {
-                        const inviteUrl = `${window.location.origin}/admin/register?token=${token.token}`;
+                        const inviteUrl = generateInviteLink(token.token);
                         copyToClipboard(inviteUrl);
                       }}
                     >
