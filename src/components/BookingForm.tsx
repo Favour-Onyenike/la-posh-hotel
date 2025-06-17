@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -121,7 +120,7 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
         guest_phone: formData.guest_phone.trim() || null,
         special_requests: formData.special_requests.trim() || null,
         total_price: totalPrice,
-        status: 'pending'
+        status: 'confirmed'
       }).select().single();
 
       if (bookingError) {
@@ -131,10 +130,26 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
 
       console.log('Booking created successfully:', bookingData);
 
-      toast({
-        title: 'Booking Successful!',
-        description: 'Your booking request has been submitted. You will receive a confirmation email shortly.',
-      });
+      // Update room availability status to 'taken'
+      const { error: roomUpdateError } = await supabase
+        .from('rooms')
+        .update({ availability_status: 'taken' })
+        .eq('id', room.id);
+
+      if (roomUpdateError) {
+        console.error('Error updating room status:', roomUpdateError);
+        // Don't throw error here as booking was successful
+        toast({
+          title: 'Booking Successful!',
+          description: 'Your booking has been confirmed, but there was an issue updating room status.',
+        });
+      } else {
+        console.log('Room status updated to taken');
+        toast({
+          title: 'Booking Successful!',
+          description: 'Your booking request has been confirmed and the room is now reserved.',
+        });
+      }
 
       onBookingComplete();
     } catch (error) {
