@@ -51,6 +51,7 @@ export const useRevenuePermissions = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['revenuePermissions'] });
       toast({
         title: "Permission granted",
         description: "Revenue viewing permission has been granted successfully.",
@@ -85,6 +86,7 @@ export const useRevenuePermissions = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['revenuePermissions'] });
       toast({
         title: "Permission revoked",
         description: "Revenue viewing permission has been revoked successfully.",
