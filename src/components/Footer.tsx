@@ -4,13 +4,30 @@ import { Link } from "react-router-dom";
 import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from "lucide-react";
 
 const Footer = () => {
+  // Helper function to get the correct image path
+  const getImagePath = (imageName: string) => {
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
+    const isProduction = import.meta.env.PROD;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
+  };
+
   return (
     <footer className="bg-black text-white pt-16 pb-8">
       <div className="hotel-container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Hotel Info */}
           <div>
-            <h3 className="font-serif text-2xl font-bold mb-4">La-Posh</h3>
+            <img 
+              src={getImagePath('2866f720-5c75-4bf2-82ea-9a880afc0852.png')}
+              alt="La-Posh Signature Suites" 
+              className="h-16 w-auto mb-4"
+            />
             <p className="mb-4 text-gray-300">
               Experience luxury redefined in the heart of the city. Our hotel combines
               elegant design with impeccable service to create unforgettable stays.
