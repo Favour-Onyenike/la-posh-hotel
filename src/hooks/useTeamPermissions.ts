@@ -51,6 +51,7 @@ export const useTeamPermissions = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['teamPermissions'] });
       toast({
         title: "Permission granted",
         description: "Team management permission has been granted successfully.",
@@ -85,6 +86,7 @@ export const useTeamPermissions = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['teamPermissions'] });
       toast({
         title: "Permission revoked",
         description: "Team management permission has been revoked successfully.",
