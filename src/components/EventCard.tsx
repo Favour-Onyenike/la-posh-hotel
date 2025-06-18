@@ -28,7 +28,7 @@ const EventCard = ({ title, description, eventDate, imageUrl }: EventCardProps) 
     : imageUrl || "/placeholder.svg";
 
   return (
-    <div className="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
+    <div className="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 max-w-sm mx-auto">
       <div className="relative overflow-hidden">
         <img
           src={processedImageUrl}
