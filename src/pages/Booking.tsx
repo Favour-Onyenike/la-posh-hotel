@@ -10,6 +10,8 @@ import RoomsList from '@/components/booking/RoomsList';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useBookingLogic } from '@/hooks/useBookingLogic';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Calendar, Users, Home } from 'lucide-react';
 
 const Booking = () => {
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
@@ -32,26 +34,21 @@ const Booking = () => {
     fetchRooms
   } = useBookingLogic();
 
+  // Check if all required booking parameters are filled
+  const isBookingParametersComplete = checkInDate && checkOutDate && guests > 0 && roomTypeFilter !== 'all';
+
   const onBookRoom = async (room: Room) => {
+    // Validate that all required parameters are filled before proceeding
+    if (!isBookingParametersComplete) {
+      toast({
+        title: 'Missing Information',
+        description: 'Please select check-in date, check-out date, number of guests, and room type before booking.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     console.log('Booking room:', room.id);
-    
-    // Set default dates if not selected
-    let checkInDateToUse = checkInDate;
-    let checkOutDateToUse = checkOutDate;
-    
-    if (!checkInDateToUse) {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      checkInDateToUse = tomorrow.toISOString().split('T')[0];
-      setCheckInDate(checkInDateToUse);
-    }
-    
-    if (!checkOutDateToUse) {
-      const dayAfterCheckIn = new Date(checkInDateToUse);
-      dayAfterCheckIn.setDate(dayAfterCheckIn.getDate() + 1);
-      checkOutDateToUse = dayAfterCheckIn.toISOString().split('T')[0];
-      setCheckOutDate(checkOutDateToUse);
-    }
     
     const bookableRoom = await handleBookRoom(room);
     if (bookableRoom) {
@@ -61,7 +58,7 @@ const Booking = () => {
 
   const handleBookingSuccess = () => {
     setSelectedRoom(null);
-    fetchRooms(); // Refresh rooms data
+    fetchRooms();
     toast({
       title: 'Booking Successful! 🎉',
       description: 'Your booking has been submitted successfully.',
@@ -74,22 +71,13 @@ const Booking = () => {
 
   // Convert date strings to Date objects for BookingForm
   const getDateFromString = (dateString: string): Date => {
-    if (!dateString) {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      return tomorrow;
-    }
     return new Date(dateString);
   };
 
   const checkInDateObj = getDateFromString(checkInDate);
-  const checkOutDateObj = getDateFromString(checkOutDate || (() => {
-    const dayAfterCheckIn = new Date(checkInDateObj);
-    dayAfterCheckIn.setDate(dayAfterCheckIn.getDate() + 1);
-    return dayAfterCheckIn.toISOString().split('T')[0];
-  })());
+  const checkOutDateObj = getDateFromString(checkOutDate);
 
-  if (selectedRoom) {
+  if (selectedRoom && isBookingParametersComplete) {
     return (
       <>
         <Navbar />
@@ -140,10 +128,42 @@ const Booking = () => {
               filteredRoomsCount={filteredRooms.length}
             />
 
+            {/* Show alert if booking parameters are incomplete */}
+            {!isBookingParametersComplete && (
+              <Alert className="mb-6 border-orange-200 bg-orange-50">
+                <AlertDescription className="flex items-center gap-2 text-orange-800">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      <span className={checkInDate && checkOutDate ? 'text-green-600' : ''}>
+                        Dates {checkInDate && checkOutDate ? '✓' : '(Required)'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Users className="h-4 w-4" />
+                      <span className={guests > 0 ? 'text-green-600' : ''}>
+                        Guests {guests > 0 ? '✓' : '(Required)'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Home className="h-4 w-4" />
+                      <span className={roomTypeFilter !== 'all' ? 'text-green-600' : ''}>
+                        Room Type {roomTypeFilter !== 'all' ? '✓' : '(Required)'}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="ml-auto">
+                    Please complete all fields above to book a room
+                  </span>
+                </AlertDescription>
+              </Alert>
+            )}
+
             <RoomsList
               filteredRooms={filteredRooms}
               loading={loading}
               onBookRoom={onBookRoom}
+              showBookingButton={isBookingParametersComplete}
             />
           </div>
         </div>
