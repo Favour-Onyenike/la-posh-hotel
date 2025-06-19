@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -58,6 +59,17 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
       return;
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.guest_email.trim())) {
+      toast({
+        title: 'Invalid Email',
+        description: 'Please enter a valid email address.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     if (!isValidDateRange) {
       toast({
         title: 'Invalid Dates',
@@ -79,10 +91,13 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
     setLoading(true);
 
     try {
+      const checkInDateString = format(checkInDate, 'yyyy-MM-dd');
+      const checkOutDateString = format(checkOutDate, 'yyyy-MM-dd');
+
       console.log('Creating booking with data:', {
         room_id: room.id,
-        check_in_date: format(checkInDate, 'yyyy-MM-dd'),
-        check_out_date: format(checkOutDate, 'yyyy-MM-dd'),
+        check_in_date: checkInDateString,
+        check_out_date: checkOutDateString,
         guest_name: formData.guest_name,
         guest_email: formData.guest_email,
         total_price: totalPrice,
@@ -92,8 +107,8 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
       // Check room availability before booking
       const { data: availabilityCheck, error: availabilityError } = await supabase.rpc('is_room_available', {
         room_id_param: room.id,
-        check_in_param: format(checkInDate, 'yyyy-MM-dd'),
-        check_out_param: format(checkOutDate, 'yyyy-MM-dd')
+        check_in_param: checkInDateString,
+        check_out_param: checkOutDateString
       });
 
       if (availabilityError) {
@@ -113,8 +128,8 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
       // Create booking
       const { data: bookingData, error: bookingError } = await supabase.from('bookings').insert({
         room_id: room.id,
-        check_in_date: format(checkInDate, 'yyyy-MM-dd'),
-        check_out_date: format(checkOutDate, 'yyyy-MM-dd'),
+        check_in_date: checkInDateString,
+        check_out_date: checkOutDateString,
         guest_name: formData.guest_name.trim(),
         guest_email: formData.guest_email.trim(),
         guest_phone: formData.guest_phone.trim() || null,
@@ -130,26 +145,10 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
 
       console.log('Booking created successfully:', bookingData);
 
-      // Update room availability status to 'taken'
-      const { error: roomUpdateError } = await supabase
-        .from('rooms')
-        .update({ availability_status: 'taken' })
-        .eq('id', room.id);
-
-      if (roomUpdateError) {
-        console.error('Error updating room status:', roomUpdateError);
-        // Don't throw error here as booking was successful
-        toast({
-          title: 'Booking Successful!',
-          description: 'Your booking has been confirmed, but there was an issue updating room status.',
-        });
-      } else {
-        console.log('Room status updated to taken');
-        toast({
-          title: 'Booking Successful!',
-          description: 'Your booking request has been confirmed and the room is now reserved.',
-        });
-      }
+      toast({
+        title: 'Booking Successful!',
+        description: 'Your booking has been confirmed successfully.',
+      });
 
       onBookingComplete();
     } catch (error) {

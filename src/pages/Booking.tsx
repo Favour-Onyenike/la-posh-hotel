@@ -34,6 +34,25 @@ const Booking = () => {
 
   const onBookRoom = async (room: Room) => {
     console.log('Booking room:', room.id);
+    
+    // Set default dates if not selected
+    let checkInDateToUse = checkInDate;
+    let checkOutDateToUse = checkOutDate;
+    
+    if (!checkInDateToUse) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      checkInDateToUse = tomorrow.toISOString().split('T')[0];
+      setCheckInDate(checkInDateToUse);
+    }
+    
+    if (!checkOutDateToUse) {
+      const dayAfterCheckIn = new Date(checkInDateToUse);
+      dayAfterCheckIn.setDate(dayAfterCheckIn.getDate() + 1);
+      checkOutDateToUse = dayAfterCheckIn.toISOString().split('T')[0];
+      setCheckOutDate(checkOutDateToUse);
+    }
+    
     const bookableRoom = await handleBookRoom(room);
     if (bookableRoom) {
       setSelectedRoom(bookableRoom);

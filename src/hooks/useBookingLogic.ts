@@ -114,17 +114,6 @@ export const useBookingLogic = () => {
     try {
       console.log('Attempting to book room:', room.id);
       
-      const isAvailable = await checkRoomAvailability(room);
-      
-      if (!isAvailable) {
-        toast({
-          title: 'Room Unavailable',
-          description: 'This room is not available for the selected dates.',
-          variant: 'destructive',
-        });
-        return null;
-      }
-
       // Validate dates if they are provided
       if (checkInDate && checkOutDate) {
         const checkIn = new Date(checkInDate);
@@ -145,6 +134,28 @@ export const useBookingLogic = () => {
           toast({
             title: 'Invalid Date Range',
             description: 'Check-out date must be after check-in date.',
+            variant: 'destructive',
+          });
+          return null;
+        }
+
+        // Check room availability for the selected dates
+        const isAvailable = await checkRoomAvailability(room);
+        
+        if (!isAvailable) {
+          toast({
+            title: 'Room Unavailable',
+            description: 'This room is not available for the selected dates.',
+            variant: 'destructive',
+          });
+          return null;
+        }
+      } else {
+        // If no dates are selected, just check if room is generally available
+        if (room.availability_status !== 'available') {
+          toast({
+            title: 'Room Unavailable',
+            description: 'This room is currently not available.',
             variant: 'destructive',
           });
           return null;
