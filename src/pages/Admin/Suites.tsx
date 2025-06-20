@@ -22,13 +22,6 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -589,18 +582,15 @@ const Suites = () => {
               <Label htmlFor="availability">
                 Availability Status <span className="text-destructive">*</span>
               </Label>
-              <Select 
-                value={availabilityStatus} 
-                onValueChange={(value) => setAvailabilityStatus(value as Room['availability_status'])}
+              <select
+                id="availability"
+                value={availabilityStatus}
+                onChange={(e) => setAvailabilityStatus(e.target.value as Room['availability_status'])}
+                className="w-full p-2 border rounded-md"
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select availability" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="available">Available</SelectItem>
-                  <SelectItem value="taken">Taken</SelectItem>
-                </SelectContent>
-              </Select>
+                <option value="available">Available</option>
+                <option value="taken">Taken</option>
+              </select>
             </div>
             
             <div className="space-y-2">
