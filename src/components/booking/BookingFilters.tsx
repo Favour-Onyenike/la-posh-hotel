@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Filter } from 'lucide-react';
 
 interface BookingFiltersProps {
@@ -64,27 +65,31 @@ const BookingFilters = ({
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Guests</label>
-              <select
-                value={guests}
-                onChange={(e) => setGuests(parseInt(e.target.value))}
-                className="w-full p-2 border rounded-md"
-              >
-                {[1, 2, 3, 4, 5, 6].map(num => (
-                  <option key={num} value={num}>{num} Guest{num > 1 ? 's' : ''}</option>
-                ))}
-              </select>
+              <Select value={guests.toString()} onValueChange={(value) => setGuests(parseInt(value))}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select guests" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[1, 2, 3, 4, 5, 6].map(num => (
+                    <SelectItem key={num} value={num.toString()}>
+                      {num} Guest{num > 1 ? 's' : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Room Type</label>
-              <select
-                value={roomTypeFilter}
-                onChange={(e) => setRoomTypeFilter(e.target.value)}
-                className="w-full p-2 border rounded-md"
-              >
-                <option value="all">All Types</option>
-                <option value="room">Rooms</option>
-                <option value="suite">Suites</option>
-              </select>
+              <Select value={roomTypeFilter} onValueChange={setRoomTypeFilter}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select room type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="room">Rooms</SelectItem>
+                  <SelectItem value="suite">Suites</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <div className="mt-4 flex items-center gap-4">
