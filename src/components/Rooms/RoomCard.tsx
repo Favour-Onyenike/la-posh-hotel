@@ -21,9 +21,11 @@ import { getImagePath, processImageUrl } from "@/utils/imageUtils";
 
 interface RoomCardProps {
   room: Room;
+  isDateBasedAvailable?: boolean;
+  showAvailabilityTag?: boolean;
 }
 
-const RoomCard = ({ room }: RoomCardProps) => {
+const RoomCard = ({ room, isDateBasedAvailable = true, showAvailabilityTag = true }: RoomCardProps) => {
   const navigate = useNavigate();
   
   const handleBookNow = () => {
@@ -32,6 +34,9 @@ const RoomCard = ({ room }: RoomCardProps) => {
   
   // Capitalize the room name for display
   const displayName = `${room.name.charAt(0).toUpperCase() + room.name.slice(1)} ${room.room_number}`;
+  
+  // Determine the actual availability to show
+  const isActuallyAvailable = room.availability_status === 'available' && isDateBasedAvailable;
   
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
@@ -44,6 +49,15 @@ const RoomCard = ({ room }: RoomCardProps) => {
         <div className="absolute top-0 right-0 bg-hotel-gold text-white px-2 py-1 m-2 rounded-md text-xs font-medium">
           Room
         </div>
+        {showAvailabilityTag && (
+          <div className={`absolute top-0 left-0 px-2 py-1 m-2 rounded-md text-xs font-medium ${
+            isActuallyAvailable 
+              ? 'bg-green-500 text-white' 
+              : 'bg-red-500 text-white'
+          }`}>
+            {isActuallyAvailable ? 'Available' : 'Not Available'}
+          </div>
+        )}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
           <p className="text-white font-bold text-lg">{displayName}</p>
           <p className="text-white/90 text-xs">₦{room.price_per_night.toLocaleString()}/night</p>
@@ -81,7 +95,15 @@ const RoomCard = ({ room }: RoomCardProps) => {
         <div className="text-hotel-gold font-bold text-center">
           ₦{room.price_per_night.toLocaleString()}<span className="text-xs font-normal text-gray-500">/night</span>
         </div>
-        <Button variant="hotel" size="sm" onClick={handleBookNow} className="w-full text-xs">Book Now</Button>
+        <Button 
+          variant="hotel" 
+          size="sm" 
+          onClick={handleBookNow} 
+          className="w-full text-xs"
+          disabled={!isActuallyAvailable}
+        >
+          {isActuallyAvailable ? 'Book Now' : 'Not Available'}
+        </Button>
       </CardFooter>
     </Card>
   );
