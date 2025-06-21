@@ -49,6 +49,12 @@ const handler = async (req: Request): Promise<Response> => {
       });
     };
 
+    // Calculate nights and price per night for breakdown
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
+    const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+    const pricePerNight = nights > 0 ? totalPrice / nights : 0;
+
     const emailHtml = `
       <!DOCTYPE html>
       <html>
@@ -145,9 +151,31 @@ const handler = async (req: Request): Promise<Response> => {
               font-weight: 500;
               font-size: 15px;
             }
-            .total-price { 
-              font-size: 20px; 
-              font-weight: 700; 
+            .price-breakdown {
+              background: #fff;
+              border: 1px solid #e9ecef;
+              border-radius: 8px;
+              padding: 20px;
+              margin: 20px 0;
+            }
+            .price-breakdown h4 {
+              color: #2c3e50;
+              font-size: 16px;
+              margin-bottom: 15px;
+              font-weight: 600;
+            }
+            .price-row {
+              display: flex;
+              justify-content: space-between;
+              padding: 8px 0;
+              font-size: 14px;
+            }
+            .price-total {
+              border-top: 2px solid #D4AF37;
+              padding-top: 10px;
+              margin-top: 10px;
+              font-weight: 700;
+              font-size: 18px;
               color: #D4AF37;
             }
             .info-section {
@@ -289,8 +317,20 @@ const handler = async (req: Request): Promise<Response> => {
                   <span class="detail-value">${formatDate(checkOutDate)}</span>
                 </div>
                 <div class="detail-row">
-                  <span class="detail-label">Total Amount</span>
-                  <span class="detail-value total-price">₦${totalPrice.toLocaleString()}</span>
+                  <span class="detail-label">Duration</span>
+                  <span class="detail-value">${nights} night${nights > 1 ? 's' : ''}</span>
+                </div>
+              </div>
+
+              <div class="price-breakdown">
+                <h4>Price Breakdown</h4>
+                <div class="price-row">
+                  <span>₦${pricePerNight.toLocaleString()} × ${nights} night${nights > 1 ? 's' : ''}</span>
+                  <span>₦${totalPrice.toLocaleString()}</span>
+                </div>
+                <div class="price-row price-total">
+                  <span>Total Amount</span>
+                  <span>₦${totalPrice.toLocaleString()}</span>
                 </div>
               </div>
               
