@@ -36,10 +36,19 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
 
   const { toast } = useToast();
 
-  // Validate dates
+  // Validate dates and calculate nights more carefully
   const isValidDateRange = checkInDate && checkOutDate && checkInDate < checkOutDate;
   const nights = isValidDateRange ? differenceInDays(checkOutDate, checkInDate) : 0;
   const totalPrice = nights * room.price_per_night;
+
+  // Add debugging logs to trace the price calculation
+  console.log('Price calculation debug:', {
+    checkInDate: checkInDate,
+    checkOutDate: checkOutDate,
+    nights: nights,
+    pricePerNight: room.price_per_night,
+    totalPrice: totalPrice
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -101,7 +110,8 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
         guest_name: formData.guest_name,
         guest_email: formData.guest_email,
         total_price: totalPrice,
-        nights: nights
+        nights: nights,
+        status: 'pending'
       });
 
       // Check room availability before booking
@@ -125,7 +135,7 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
         return;
       }
 
-      // Create booking
+      // Create booking with 'pending' status
       const { data: bookingData, error: bookingError } = await supabase.from('bookings').insert({
         room_id: room.id,
         check_in_date: checkInDateString,
@@ -135,7 +145,7 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
         guest_phone: formData.guest_phone.trim() || null,
         special_requests: formData.special_requests.trim() || null,
         total_price: totalPrice,
-        status: 'confirmed'
+        status: 'pending'
       }).select().single();
 
       if (bookingError) {
@@ -146,8 +156,8 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
       console.log('Booking created successfully:', bookingData);
 
       toast({
-        title: 'Booking Successful!',
-        description: 'Your booking has been confirmed successfully.',
+        title: 'Booking Submitted!',
+        description: 'Your booking has been submitted and is pending admin approval.',
       });
 
       onBookingComplete();
@@ -318,7 +328,7 @@ const BookingForm = ({ room, checkInDate, checkOutDate, onBookingComplete, onCan
                   className="flex-1"
                   disabled={loading || !isValidDateRange}
                 >
-                  {loading ? 'Processing...' : 'Confirm Booking'}
+                  {loading ? 'Processing...' : 'Submit Booking'}
                 </Button>
               </div>
             </form>
