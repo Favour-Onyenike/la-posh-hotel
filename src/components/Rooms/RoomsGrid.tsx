@@ -11,32 +11,29 @@ interface RoomsGridProps {
 }
 
 const RoomsGrid = ({ rooms, checkInDate, checkOutDate }: RoomsGridProps) => {
-  const [availabilityMap, setAvailabilityMap] = useState<Record<string, boolean>>({});
+  const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (checkInDate && checkOutDate && rooms.length > 0) {
-      console.log('Checking availability for date range:', checkInDate, 'to', checkOutDate);
-      checkRoomAvailabilities();
+      console.log('Filtering rooms for date range:', checkInDate, 'to', checkOutDate);
+      filterAvailableRooms();
     } else {
-      // If no dates selected, assume all rooms with 'available' status are available
-      const defaultAvailability: Record<string, boolean> = {};
-      rooms.forEach(room => {
-        defaultAvailability[room.id] = room.availability_status === 'available';
-      });
-      console.log('No dates selected, using default availability:', defaultAvailability);
-      setAvailabilityMap(defaultAvailability);
+      // If no dates selected, show all rooms with 'available' status
+      const defaultAvailableRooms = rooms.filter(room => room.availability_status === 'available');
+      console.log('No dates selected, showing all available rooms:', defaultAvailableRooms.length);
+      setAvailableRooms(defaultAvailableRooms);
     }
   }, [rooms, checkInDate, checkOutDate]);
 
-  const checkRoomAvailabilities = async () => {
+  const filterAvailableRooms = async () => {
     setLoading(true);
     try {
       const availabilityChecks = await Promise.all(
         rooms.map(async (room) => {
           if (room.availability_status !== 'available') {
             console.log(`Room ${room.id} is not available (status: ${room.availability_status})`);
-            return { roomId: room.id, isAvailable: false };
+            return { room, isAvailable: false };
           }
 
           console.log(`Checking availability for room ${room.id} from ${checkInDate} to ${checkOutDate}`);
@@ -48,62 +45,60 @@ const RoomsGrid = ({ rooms, checkInDate, checkOutDate }: RoomsGridProps) => {
 
           if (error) {
             console.error('Error checking availability for room:', room.id, error);
-            return { roomId: room.id, isAvailable: false };
+            return { room, isAvailable: false };
           }
 
           console.log(`Room ${room.id} availability result:`, data);
-          return { roomId: room.id, isAvailable: data || false };
+          return { room, isAvailable: data || false };
         })
       );
 
-      const newAvailabilityMap: Record<string, boolean> = {};
-      availabilityChecks.forEach(({ roomId, isAvailable }) => {
-        newAvailabilityMap[roomId] = isAvailable;
-      });
+      // Filter to only include available rooms
+      const filteredRooms = availabilityChecks
+        .filter(({ isAvailable }) => isAvailable)
+        .map(({ room }) => room);
 
-      console.log('Final availability map:', newAvailabilityMap);
-      setAvailabilityMap(newAvailabilityMap);
+      console.log('Filtered available rooms:', filteredRooms.length, 'out of', rooms.length);
+      setAvailableRooms(filteredRooms);
     } catch (error) {
-      console.error('Error checking room availabilities:', error);
+      console.error('Error filtering room availabilities:', error);
+      setAvailableRooms([]);
     } finally {
       setLoading(false);
     }
   };
 
-  if (rooms.length === 0) {
+  if (loading) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">No rooms available at the moment.</p>
+        <p className="text-gray-600">Checking room availability...</p>
+      </div>
+    );
+  }
+
+  if (availableRooms.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-600">
+          {checkInDate && checkOutDate 
+            ? 'No rooms are available for the selected dates.' 
+            : 'No rooms available at the moment.'
+          }
+        </p>
       </div>
     );
   }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {rooms.map((room) => {
-        const isDateBasedAvailable = availabilityMap[room.id] ?? true;
-        const showAvailabilityTag = !!checkInDate && !!checkOutDate;
-        
-        console.log(`Rendering room ${room.id}:`, {
-          isDateBasedAvailable,
-          showAvailabilityTag,
-          roomStatus: room.availability_status
-        });
-        
-        return (
-          <RoomCard 
-            key={room.id} 
-            room={room} 
-            isDateBasedAvailable={isDateBasedAvailable}
-            showAvailabilityTag={showAvailabilityTag}
-          />
-        );
-      })}
-      {loading && (
-        <div className="col-span-full text-center py-4">
-          <p className="text-gray-600">Checking availability...</p>
-        </div>
-      )}
+      {availableRooms.map((room) => (
+        <RoomCard 
+          key={room.id} 
+          room={room} 
+          isDateBasedAvailable={true}
+          showAvailabilityTag={false}
+        />
+      ))}
     </div>
   );
 };
