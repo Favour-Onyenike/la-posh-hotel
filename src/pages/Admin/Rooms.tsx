@@ -34,6 +34,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Plus, Trash2, Edit, Hotel, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import RoomTimelineDialog from '@/components/Admin/RoomTimelineDialog';
 
 const Rooms = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -58,6 +59,10 @@ const Rooms = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [uploading, setUploading] = useState(false);
+  
+  // Timeline dialog state
+  const [isTimelineDialogOpen, setIsTimelineDialogOpen] = useState(false);
+  const [timelineRoom, setTimelineRoom] = useState<Room | null>(null);
   
   const { toast } = useToast();
 
@@ -118,7 +123,7 @@ const Rooms = () => {
       return nextNumber.toString().padStart(2, '0');
     } catch (error) {
       console.error('Error generating room number:', error);
-      return '01'; // fallback to 01 if there's an error
+      return '01';
     }
   };
 
@@ -167,12 +172,10 @@ const Rooms = () => {
       let finalImageUrl = imageUrl;
       let finalRoomNumber = roomNumber;
 
-      // Auto-generate room number if not provided - based on room name
       if (!finalRoomNumber) {
         finalRoomNumber = await generateRoomNumber(name);
       }
 
-      // If there's a file to upload
       if (imageFile) {
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
@@ -197,7 +200,6 @@ const Rooms = () => {
         finalImageUrl = publicURL.publicUrl;
       }
 
-      // Add the room to the database
       const { error: insertError } = await supabase
         .from('rooms')
         .insert({
@@ -221,7 +223,6 @@ const Rooms = () => {
         description: 'Room added successfully',
       });
 
-      // Refresh the rooms list
       fetchRooms();
       resetForm();
       setIsAddDialogOpen(false);
@@ -245,12 +246,10 @@ const Rooms = () => {
       let finalImageUrl = imageUrl;
       let finalRoomNumber = roomNumber;
 
-      // Auto-generate room number if not provided - based on room name
       if (!finalRoomNumber) {
         finalRoomNumber = await generateRoomNumber(name);
       }
 
-      // If there's a file to upload
       if (imageFile) {
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
@@ -275,7 +274,6 @@ const Rooms = () => {
         finalImageUrl = publicURL.publicUrl;
       }
 
-      // Update the room in the database
       const { error: updateError } = await supabase
         .from('rooms')
         .update({
@@ -300,7 +298,6 @@ const Rooms = () => {
         description: 'Room updated successfully',
       });
 
-      // Refresh the rooms list
       fetchRooms();
       resetForm();
       setIsEditDialogOpen(false);
@@ -317,18 +314,34 @@ const Rooms = () => {
   };
 
   const handleQuickStatusUpdate = async (roomId: string, newStatus: Room['availability_status']) => {
+    // If changing to 'taken', show timeline dialog
+    if (newStatus === 'taken') {
+      const room = rooms.find(r => r.id === roomId);
+      if (room) {
+        setTimelineRoom(room);
+        setIsTimelineDialogOpen(true);
+      }
+      return;
+    }
+
+    // If changing to 'available', clear timeline dates
     try {
       const { error } = await supabase
         .from('rooms')
-        .update({ availability_status: newStatus })
+        .update({ 
+          availability_status: newStatus,
+          taken_from: null,
+          taken_until: null
+        })
         .eq('id', roomId);
 
       if (error) throw error;
 
-      // Update local state
       setRooms(prevRooms => 
         prevRooms.map(room => 
-          room.id === roomId ? { ...room, availability_status: newStatus } : room
+          room.id === roomId 
+            ? { ...room, availability_status: newStatus, taken_from: null, taken_until: null } 
+            : room
         )
       );
 
@@ -341,6 +354,46 @@ const Rooms = () => {
       toast({
         title: 'Error',
         description: 'Failed to update room status',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleTimelineConfirm = async (roomId: string, takenFrom?: string, takenUntil?: string) => {
+    try {
+      const { error } = await supabase
+        .from('rooms')
+        .update({ 
+          availability_status: 'taken',
+          taken_from: takenFrom || null,
+          taken_until: takenUntil || null
+        })
+        .eq('id', roomId);
+
+      if (error) throw error;
+
+      setRooms(prevRooms => 
+        prevRooms.map(room => 
+          room.id === roomId 
+            ? { 
+                ...room, 
+                availability_status: 'taken' as Room['availability_status'],
+                taken_from: takenFrom || null,
+                taken_until: takenUntil || null
+              } 
+            : room
+        )
+      );
+
+      toast({
+        title: 'Timeline Set',
+        description: 'Room timeline has been updated',
+      });
+    } catch (error) {
+      console.error('Error setting room timeline:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to set room timeline',
         variant: 'destructive',
       });
     }
@@ -364,7 +417,6 @@ const Rooms = () => {
 
       if (error) throw error;
 
-      // Update local state
       setRooms(prevRooms => 
         prevRooms.map(room => 
           room.id === roomId ? { ...room, price_per_night: newPrice } : room
@@ -476,6 +528,33 @@ const Rooms = () => {
   const confirmDelete = (room: Room) => {
     setSelectedRoom(room);
     setIsDeleteDialogOpen(true);
+  };
+
+  // Helper function to check if room is currently taken based on timeline
+  const isRoomCurrentlyTaken = (room: Room) => {
+    if (room.availability_status !== 'taken') return false;
+    
+    const today = new Date().toISOString().split('T')[0];
+    
+    // If no timeline dates, consider permanently taken
+    if (!room.taken_from && !room.taken_until) return true;
+    
+    // If has start date but no end date, taken from start date onwards
+    if (room.taken_from && !room.taken_until) {
+      return today >= room.taken_from;
+    }
+    
+    // If has both dates, check if today is within range
+    if (room.taken_from && room.taken_until) {
+      return today >= room.taken_from && today < room.taken_until;
+    }
+    
+    // If has end date but no start date, taken until end date
+    if (!room.taken_from && room.taken_until) {
+      return today < room.taken_until;
+    }
+    
+    return false;
   };
 
   const renderRoomDialog = (isEdit: boolean) => {
@@ -742,16 +821,26 @@ const Rooms = () => {
                       {room.name} {room.room_number}
                     </div>
                     <div className="absolute left-2 top-2">
-                      <Badge className={room.availability_status === 'available' ? 'bg-green-500' : 'bg-red-500'}>
-                        {room.availability_status === 'available' ? 'Available' : 'Taken'}
+                      <Badge className={isRoomCurrentlyTaken(room) ? 'bg-red-500' : 'bg-green-500'}>
+                        {isRoomCurrentlyTaken(room) ? 'Taken' : 'Available'}
                       </Badge>
                     </div>
+                    {room.taken_from && room.taken_until && (
+                      <div className="absolute bottom-2 left-2 right-2 rounded-md bg-black/70 px-2 py-1 text-xs text-white">
+                        Taken: {room.taken_from} to {room.taken_until}
+                      </div>
+                    )}
+                    {room.taken_from && !room.taken_until && (
+                      <div className="absolute bottom-2 left-2 right-2 rounded-md bg-black/70 px-2 py-1 text-xs text-white">
+                        Taken from: {room.taken_from}
+                      </div>
+                    )}
                   </div>
                   <CardHeader className="p-4">
                     <div className="flex items-center justify-between">
                       <CardTitle className="line-clamp-1 text-lg">{room.name}</CardTitle>
                       <div className="flex items-center gap-2">
-                        <p className="font-bold text-primary">${Number(room.price_per_night).toFixed(2)}</p>
+                        <p className="font-bold text-primary">₦{Number(room.price_per_night).toFixed(2)}</p>
                       </div>
                     </div>
                   </CardHeader>
@@ -804,16 +893,16 @@ const Rooms = () => {
                         <div className="flex gap-1">
                           <Button
                             size="sm"
-                            variant={room.availability_status === 'available' ? 'default' : 'outline'} 
-                            className={`h-8 w-full ${room.availability_status === 'available' ? 'bg-green-500 hover:bg-green-600' : ''}`}
+                            variant={!isRoomCurrentlyTaken(room) ? 'default' : 'outline'} 
+                            className={`h-8 w-full ${!isRoomCurrentlyTaken(room) ? 'bg-green-500 hover:bg-green-600' : ''}`}
                             onClick={() => handleQuickStatusUpdate(room.id, 'available')}
                           >
                             Available
                           </Button>
                           <Button 
                             size="sm"
-                            variant={room.availability_status === 'taken' ? 'default' : 'outline'}
-                            className={`h-8 w-full ${room.availability_status === 'taken' ? 'bg-red-500 hover:bg-red-600' : ''}`}
+                            variant={isRoomCurrentlyTaken(room) ? 'default' : 'outline'}
+                            className={`h-8 w-full ${isRoomCurrentlyTaken(room) ? 'bg-red-500 hover:bg-red-600' : ''}`}
                             onClick={() => handleQuickStatusUpdate(room.id, 'taken')}
                           >
                             Taken
@@ -852,6 +941,17 @@ const Rooms = () => {
 
       {/* Edit Room Dialog */}
       {renderRoomDialog(true)}
+
+      {/* Timeline Dialog */}
+      <RoomTimelineDialog
+        room={timelineRoom}
+        isOpen={isTimelineDialogOpen}
+        onClose={() => {
+          setIsTimelineDialogOpen(false);
+          setTimelineRoom(null);
+        }}
+        onConfirm={handleTimelineConfirm}
+      />
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>

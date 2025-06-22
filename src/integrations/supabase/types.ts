@@ -332,6 +332,8 @@ export type Database = {
           price_per_night: number
           room_number: string
           room_type: string
+          taken_from: string | null
+          taken_until: string | null
           updated_at: string
         }
         Insert: {
@@ -346,6 +348,8 @@ export type Database = {
           price_per_night: number
           room_number: string
           room_type: string
+          taken_from?: string | null
+          taken_until?: string | null
           updated_at?: string
         }
         Update: {
@@ -360,6 +364,8 @@ export type Database = {
           price_per_night?: number
           room_number?: string
           room_type?: string
+          taken_from?: string | null
+          taken_until?: string | null
           updated_at?: string
         }
         Relationships: []

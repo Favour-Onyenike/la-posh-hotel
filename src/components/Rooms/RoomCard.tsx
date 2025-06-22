@@ -35,8 +35,35 @@ const RoomCard = ({ room, isDateBasedAvailable = true, showAvailabilityTag = tru
   // Capitalize the room name for display
   const displayName = `${room.name.charAt(0).toUpperCase() + room.name.slice(1)} ${room.room_number}`;
   
-  // Determine the actual availability - both general status AND date-specific availability must be true
-  const isActuallyAvailable = room.availability_status === 'available' && isDateBasedAvailable;
+  // Helper function to check if room is currently taken based on timeline
+  const isRoomCurrentlyTaken = () => {
+    if (room.availability_status !== 'taken') return false;
+    
+    const today = new Date().toISOString().split('T')[0];
+    
+    // If no timeline dates, consider permanently taken
+    if (!room.taken_from && !room.taken_until) return true;
+    
+    // If has start date but no end date, taken from start date onwards
+    if (room.taken_from && !room.taken_until) {
+      return today >= room.taken_from;
+    }
+    
+    // If has both dates, check if today is within range
+    if (room.taken_from && room.taken_until) {
+      return today >= room.taken_from && today < room.taken_until;
+    }
+    
+    // If has end date but no start date, taken until end date
+    if (!room.taken_from && room.taken_until) {
+      return today < room.taken_until;
+    }
+    
+    return false;
+  };
+  
+  // Determine the actual availability - consider both timeline and date-specific availability
+  const isActuallyAvailable = !isRoomCurrentlyTaken() && isDateBasedAvailable;
   
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg flex flex-col h-full">
