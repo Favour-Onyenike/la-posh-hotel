@@ -1,14 +1,19 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import AdminLayout from '@/components/Admin/AdminLayout';
 import RoomAvailabilityManager from '@/components/Admin/RoomAvailabilityManager';
+import RoomTimelineDialog from '@/components/Admin/RoomTimelineDialog';
 import { useDashboardData } from '@/hooks/useDashboardData';
 import { useRoomAvailability } from '@/hooks/useRoomAvailability';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BedDouble, Star } from 'lucide-react';
+import { Room } from '@/types/supabase';
 
 const RoomAvailability = () => {
+  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  const [isTimelineDialogOpen, setIsTimelineDialogOpen] = useState(false);
+  
   const {
     totalRooms,
     totalSuites,
@@ -24,6 +29,32 @@ const RoomAvailability = () => {
     setRooms,
     setAvailableRooms
   );
+
+  const handleRoomToggle = (roomId: string, currentStatus: string) => {
+    // If changing from available to taken, show timeline dialog
+    if (currentStatus === 'available') {
+      const room = rooms.find(r => r.id === roomId);
+      if (room) {
+        setSelectedRoom(room);
+        setIsTimelineDialogOpen(true);
+      }
+    } else {
+      // If changing from taken to available, just toggle normally
+      toggleRoomAvailability(roomId, currentStatus);
+    }
+  };
+
+  const handleTimelineConfirm = (roomId: string, takenFrom?: string, takenUntil?: string) => {
+    // Update the room with timeline and set status to taken
+    toggleRoomAvailability(roomId, 'available', takenFrom, takenUntil);
+    setIsTimelineDialogOpen(false);
+    setSelectedRoom(null);
+  };
+
+  const handleTimelineCancel = () => {
+    setIsTimelineDialogOpen(false);
+    setSelectedRoom(null);
+  };
 
   return (
     <AdminLayout>
@@ -80,7 +111,15 @@ const RoomAvailability = () => {
         <RoomAvailabilityManager
           rooms={rooms}
           loading={loading}
-          onToggleAvailability={toggleRoomAvailability}
+          onToggleAvailability={handleRoomToggle}
+        />
+
+        {/* Timeline Dialog */}
+        <RoomTimelineDialog
+          room={selectedRoom}
+          isOpen={isTimelineDialogOpen}
+          onClose={handleTimelineCancel}
+          onConfirm={handleTimelineConfirm}
         />
 
         {/* Additional Information */}
@@ -95,6 +134,7 @@ const RoomAvailability = () => {
             <div className="space-y-2 text-sm text-muted-foreground">
               <p>• <span className="font-medium text-green-600">Available</span> - Room is ready for new bookings</p>
               <p>• <span className="font-medium text-red-600">Reserved</span> - Room is currently occupied or under maintenance</p>
+              <p>• When marking a room as taken, you can set a timeline for automatic availability restoration</p>
               <p>• Changes take effect immediately and will be reflected in the booking system</p>
             </div>
           </CardContent>
