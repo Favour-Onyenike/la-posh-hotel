@@ -10,30 +10,37 @@ interface RoomsGridProps {
   checkOutDate?: string;
 }
 
+interface RoomWithAvailability extends Room {
+  isDateBasedAvailable: boolean;
+}
+
 const RoomsGrid = ({ rooms, checkInDate, checkOutDate }: RoomsGridProps) => {
-  const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
+  const [roomsWithAvailability, setRoomsWithAvailability] = useState<RoomWithAvailability[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (checkInDate && checkOutDate && rooms.length > 0) {
       console.log('Filtering rooms for date range:', checkInDate, 'to', checkOutDate);
-      filterAvailableRooms();
+      checkRoomAvailabilities();
     } else {
-      // If no dates selected, show all rooms with 'available' status
-      const defaultAvailableRooms = rooms.filter(room => room.availability_status === 'available');
-      console.log('No dates selected, showing all available rooms:', defaultAvailableRooms.length);
-      setAvailableRooms(defaultAvailableRooms);
+      // If no dates selected, show all rooms with default availability based on status
+      const defaultRooms = rooms.map(room => ({
+        ...room,
+        isDateBasedAvailable: room.availability_status === 'available'
+      }));
+      console.log('No dates selected, showing all rooms with status-based availability');
+      setRoomsWithAvailability(defaultRooms);
     }
   }, [rooms, checkInDate, checkOutDate]);
 
-  const filterAvailableRooms = async () => {
+  const checkRoomAvailabilities = async () => {
     setLoading(true);
     try {
       const availabilityChecks = await Promise.all(
         rooms.map(async (room) => {
           if (room.availability_status !== 'available') {
             console.log(`Room ${room.id} is not available (status: ${room.availability_status})`);
-            return { room, isAvailable: false };
+            return { ...room, isDateBasedAvailable: false };
           }
 
           console.log(`Checking availability for room ${room.id} from ${checkInDate} to ${checkOutDate}`);
@@ -45,24 +52,21 @@ const RoomsGrid = ({ rooms, checkInDate, checkOutDate }: RoomsGridProps) => {
 
           if (error) {
             console.error('Error checking availability for room:', room.id, error);
-            return { room, isAvailable: false };
+            return { ...room, isDateBasedAvailable: false };
           }
 
           console.log(`Room ${room.id} availability result:`, data);
-          return { room, isAvailable: data || false };
+          return { ...room, isDateBasedAvailable: data || false };
         })
       );
 
-      // Filter to only include available rooms
-      const filteredRooms = availabilityChecks
-        .filter(({ isAvailable }) => isAvailable)
-        .map(({ room }) => room);
-
-      console.log('Filtered available rooms:', filteredRooms.length, 'out of', rooms.length);
-      setAvailableRooms(filteredRooms);
+      // Filter to only show available rooms when dates are selected
+      const availableRooms = availabilityChecks.filter(room => room.isDateBasedAvailable);
+      console.log('Filtered available rooms:', availableRooms.length, 'out of', rooms.length);
+      setRoomsWithAvailability(availableRooms);
     } catch (error) {
       console.error('Error filtering room availabilities:', error);
-      setAvailableRooms([]);
+      setRoomsWithAvailability([]);
     } finally {
       setLoading(false);
     }
@@ -76,7 +80,7 @@ const RoomsGrid = ({ rooms, checkInDate, checkOutDate }: RoomsGridProps) => {
     );
   }
 
-  if (availableRooms.length === 0) {
+  if (roomsWithAvailability.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-gray-600">
@@ -91,12 +95,12 @@ const RoomsGrid = ({ rooms, checkInDate, checkOutDate }: RoomsGridProps) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {availableRooms.map((room) => (
+      {roomsWithAvailability.map((room) => (
         <RoomCard 
           key={room.id} 
           room={room} 
-          isDateBasedAvailable={true}
-          showAvailabilityTag={false}
+          isDateBasedAvailable={room.isDateBasedAvailable}
+          showAvailabilityTag={true}
         />
       ))}
     </div>
