@@ -35,7 +35,7 @@ const RoomCard = ({ room, isDateBasedAvailable = true, showAvailabilityTag = tru
   // Capitalize the room name for display
   const displayName = `${room.name.charAt(0).toUpperCase() + room.name.slice(1)} ${room.room_number}`;
   
-  // Determine the actual availability to show
+  // Determine the actual availability - both general status AND date-specific availability must be true
   const isActuallyAvailable = room.availability_status === 'available' && isDateBasedAvailable;
   
   return (
