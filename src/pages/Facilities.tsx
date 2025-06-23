@@ -1,12 +1,23 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Loader from "@/components/ui/loader";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Star, Wifi, Car, Utensils, Dumbbell, TreePine, Zap } from "lucide-react";
 
 const Facilities = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   // Helper function to get proper image paths for both production and development (GitHub Pages or local)
   const getImagePath = (imageName: string) => {
     // Check for deployment on GitHub Pages
@@ -58,6 +69,10 @@ const Facilities = () => {
       highlights: ["Pool Table", "Outdoor Seating", "Multiple Game Options"]
     }
   ];
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -226,4 +241,3 @@ const Facilities = () => {
 };
 
 export default Facilities;
-
