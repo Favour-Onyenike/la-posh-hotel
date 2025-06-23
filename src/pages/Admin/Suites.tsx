@@ -24,7 +24,6 @@ const Suites = () => {
     addSuite, 
     updateSuite, 
     deleteSuite, 
-    updateSuiteStatus, 
     updateSuitePrice 
   } = useSuiteOperations();
   
@@ -94,17 +93,6 @@ const Suites = () => {
     }
   };
 
-  const handleStatusUpdate = async (suiteId: string, newStatus: Room['availability_status']) => {
-    const success = await updateSuiteStatus(suiteId, newStatus);
-    if (success) {
-      setSuites(prevSuites => 
-        prevSuites.map(suite => 
-          suite.id === suiteId ? { ...suite, availability_status: newStatus } : suite
-        )
-      );
-    }
-  };
-
   const handlePriceUpdate = async (suiteId: string, newPrice: number) => {
     const success = await updateSuitePrice(suiteId, newPrice);
     if (success) {
@@ -160,7 +148,6 @@ const Suites = () => {
                   suite={suite}
                   onEdit={openEditDialog}
                   onDelete={confirmDelete}
-                  onStatusUpdate={handleStatusUpdate}
                   onPriceUpdate={handlePriceUpdate}
                 />
               ))

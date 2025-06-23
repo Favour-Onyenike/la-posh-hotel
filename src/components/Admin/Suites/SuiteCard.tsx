@@ -18,7 +18,6 @@ interface SuiteCardProps {
   suite: Room;
   onEdit: (suite: Room) => void;
   onDelete: (suite: Room) => void;
-  onStatusUpdate: (suiteId: string, status: Room['availability_status']) => void;
   onPriceUpdate: (suiteId: string, price: number) => void;
 }
 
@@ -26,7 +25,6 @@ const SuiteCard: React.FC<SuiteCardProps> = ({
   suite,
   onEdit,
   onDelete,
-  onStatusUpdate,
   onPriceUpdate,
 }) => {
   return (
@@ -77,7 +75,7 @@ const SuiteCard: React.FC<SuiteCardProps> = ({
           )}
         </div>
         
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="mt-4">
           <div className="space-y-1">
             <Label htmlFor={`price-${suite.id}`} className="text-xs">Update Price (₦)</Label>
             <div className="flex gap-1">
@@ -99,27 +97,6 @@ const SuiteCard: React.FC<SuiteCardProps> = ({
                   }
                 }}
               />
-            </div>
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor={`status-${suite.id}`} className="text-xs">Availability</Label>
-            <div className="flex gap-1">
-              <Button
-                size="sm"
-                variant={suite.availability_status === 'available' ? 'default' : 'outline'} 
-                className={`h-8 w-full ${suite.availability_status === 'available' ? 'bg-green-500 hover:bg-green-600' : ''}`}
-                onClick={() => onStatusUpdate(suite.id, 'available')}
-              >
-                Available
-              </Button>
-              <Button 
-                size="sm"
-                variant={suite.availability_status === 'taken' ? 'default' : 'outline'}
-                className={`h-8 w-full ${suite.availability_status === 'taken' ? 'bg-red-500 hover:bg-red-600' : ''}`}
-                onClick={() => onStatusUpdate(suite.id, 'taken')}
-              >
-                Taken
-              </Button>
             </div>
           </div>
         </div>
