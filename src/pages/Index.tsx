@@ -1,11 +1,12 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import CounterBar from "@/components/CounterBar";
 import RecentReviews from "@/components/RecentReviews";
 import Events from "@/components/Events";
+import Loader from "@/components/ui/loader";
 import { Star, Utensils, Wifi, Car, Clock, Glasses, MapPin, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,16 @@ const RoomPreview = ({ image, title, price, description, currency = "₦" }) => 
 };
 
 const Index = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleNavClick = () => {
     window.scrollTo(0, 0);
   };
@@ -54,6 +65,10 @@ const Index = () => {
     const isProduction = import.meta.env.PROD;
     return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>

@@ -1,7 +1,8 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Loader from "@/components/ui/loader";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -9,11 +10,25 @@ import { Button } from "@/components/ui/button";
 import { Star, StarHalf, Sparkles, History, Clock, Users, Award, Target, CheckCircle } from "lucide-react";
 
 const About = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   // Helper function to get the correct image path for production
   const getImagePath = (imageName: string) => {
     const isProduction = import.meta.env.PROD;
     return isProduction ? `/la-posh-hotel/lovable-uploads/${imageName}` : `/lovable-uploads/${imageName}`;
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>
