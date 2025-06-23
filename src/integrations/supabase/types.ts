@@ -53,6 +53,33 @@ export type Database = {
           },
         ]
       }
+      admin_notifications: {
+        Row: {
+          admin_id: string
+          created_at: string
+          id: string
+          last_seen_at: string
+          notification_type: string
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          notification_type: string
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          notification_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       admin_permissions: {
         Row: {
           admin_id: string
@@ -424,6 +451,14 @@ export type Database = {
       }
       has_admin_permission: {
         Args: { user_id: string; permission: string }
+        Returns: boolean
+      }
+      has_new_items: {
+        Args: {
+          admin_id_param: string
+          notification_type_param: string
+          table_name_param: string
+        }
         Returns: boolean
       }
       is_room_available: {
