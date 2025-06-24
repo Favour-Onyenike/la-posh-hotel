@@ -3,170 +3,240 @@ import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Loader from "@/components/ui/loader";
-import { 
-  Wifi, 
-  Car, 
-  Utensils, 
-  Dumbbell, 
-  Waves, 
-  Wine,
-  Shield, 
-  Headphones 
-} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Star, Wifi, Car, Utensils, Dumbbell, TreePine, Zap } from "lucide-react";
 
 const Facilities = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false);
+      setLoading(false);
     }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 bg-white z-50 flex items-center justify-center">
-        <Loader className="w-8 h-8 text-hotel-gold" />
-      </div>
-    );
-  }
+  // Helper function to get proper image paths for both production and development (GitHub Pages or local)
+  const getImagePath = (imageName: string) => {
+    // Check for deployment on GitHub Pages
+    const isGitHubPages = window.location.pathname.startsWith("/la-posh-hotel");
+    // Also check for Vite's production flag for Netlify/static hosting too
+    const isProduction = import.meta.env.PROD;
+    // Prefer GitHub Pages detection if possible, fallback to PROD for Netlify/etc.
+    if (isGitHubPages || isProduction) {
+      return `/la-posh-hotel/lovable-uploads/${imageName}`;
+    }
+    return `/lovable-uploads/${imageName}`;
+  };
 
-  const facilities = [
+  // Updated facility items to use getImagePath for every image
+  const facilityItems = [
     {
-      icon: Wifi,
-      title: "Free Wi-Fi",
-      description: "High-speed internet access throughout the property"
-    },
-    {
-      icon: Car,
-      title: "Parking",
-      description: "Complimentary valet parking for all guests"
-    },
-    {
+      title: "Restaurant",
+      description: "Experience exquisite cuisine at our in-house restaurant offering a blend of local delicacies and international dishes prepared by our expert chefs.",
+      imageSrc: getImagePath("5554f5f5-c5dc-46b2-b735-61e278864872.png"),
       icon: Utensils,
-      title: "Fine Dining",
-      description: "Gourmet restaurant featuring international cuisine"
+      highlights: ["Local & International Cuisine", "Expert Chefs", "Indoor & Outdoor Seating"]
     },
     {
-      icon: Dumbbell,
+      title: "Executive Rooms",
+      description: "Spacious and elegantly furnished suites designed for ultimate comfort and relaxation with premium amenities.",
+      imageSrc: getImagePath("1a1acbbc-64f6-44d1-8b5d-f0109e02f03e.png"),
+      icon: Wifi,
+      highlights: ["King-sized Beds", "Smart TVs", "High-speed WiFi"]
+    },
+    {
+      title: "24/7 Power Supply",
+      description: "Uninterrupted power supply through our integrated system of solar inverters, generators and dedicated transformer.",
+      imageSrc: getImagePath("2041bcf9-cce4-478f-95c0-b002a66664b5.png"),
+      icon: Zap,
+      highlights: ["Solar Powered", "Backup Generators", "Eco-friendly Solution"]
+    },
+    {
       title: "Fitness Center",
-      description: "State-of-the-art gym equipment and personal training"
+      description: "Stay fit during your stay with our well-equipped gym featuring cardio machines, free weights, and training equipment.",
+      imageSrc: getImagePath("d9d5cdb1-1c16-4557-8c64-39e713537d74.png"),
+      icon: Dumbbell,
+      highlights: ["Cardio Equipment", "Free Weights", "Fresh Towels Available"]
     },
     {
-      icon: Waves,
-      title: "Swimming Pool",
-      description: "Outdoor pool with stunning city views"
-    },
-    {
-      icon: Wine,
-      title: "Exclusive Bar",
-      description: "Premium cocktails and finest wines collection"
-    },
-    {
-      icon: Shield,
-      title: "24/7 Security",
-      description: "Round-the-clock security and concierge services"
-    },
-    {
-      icon: Headphones,
-      title: "Room Service",
-      description: "24-hour room service for your convenience"
+      title: "Outdoor Recreation Area",
+      description: "Enjoy our outdoor seating area with entertainment options including pool table and various games for leisure.",
+      imageSrc: getImagePath("9423b162-188e-46ac-a0ac-33fbdf219e2c.png"),
+      icon: TreePine,
+      highlights: ["Pool Table", "Outdoor Seating", "Multiple Game Options"]
     }
   ];
 
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
-    <div className="min-h-screen bg-white">
+    <>
       <Navbar />
-      
-      {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center justify-center">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/lovable-uploads/28419863-c4a4-4fb6-a14e-c864333d1966.png')"
-          }}
-        />
-        <div className="relative text-center text-white">
-          <h1 className="text-5xl font-bold mb-4">Our Facilities</h1>
-          <p className="text-xl max-w-2xl">
-            Experience luxury with our world-class amenities and services
-          </p>
-        </div>
-      </section>
-
-      {/* Facilities Grid */}
-      <section className="py-20 px-4">
-        <div className="hotel-container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Premium Amenities
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Discover the exceptional facilities that make your stay unforgettable
-            </p>
+      <div className="pt-20 pb-16">
+        {/* Hero Section - Reduced height for mobile */}
+        <section 
+          className="py-16 md:py-32 lg:py-40 bg-cover bg-center relative overflow-hidden"
+          style={{ backgroundImage: `url('${getImagePath('e9be561a-1ed6-476f-aab8-fd04aaef0620.png')}')` }}
+        >
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+          <div className="hotel-container relative z-10">
+            <div className="max-w-6xl mx-auto text-center animate-fade-in px-4">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-serif">Our Facilities</h1>
+              <p className="text-lg md:text-xl text-white mb-6">
+                Luxury amenities for an unforgettable stay
+              </p>
+              <div className="flex justify-center gap-1 mt-6">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="text-hotel-gold fill-hotel-gold" size={20} />
+                ))}
+              </div>
+            </div>
           </div>
+        </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {facilities.map((facility, index) => {
-              const IconComponent = facility.icon;
-              return (
-                <div 
-                  key={index}
-                  className="text-center p-6 rounded-lg hover:shadow-lg transition-shadow duration-300 bg-gray-50"
-                >
-                  <div className="mb-4 flex justify-center">
-                    <IconComponent size={48} className="text-hotel-gold" />
+        {/* Facilities Introduction - More compact for mobile */}
+        <section className="bg-white py-12 md:py-20">
+          <div className="hotel-container">
+            <div className="max-w-4xl mx-auto text-center px-4">              
+              <h2 className="text-2xl md:text-3xl font-serif font-bold mb-6 text-black">Premium Amenities</h2>
+              <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-4">
+                At La Posh Signature Hotel & Suites, we pride ourselves on offering a comprehensive range of 
+                premium facilities designed to enhance your stay.
+              </p>
+              <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+                Every amenity has been carefully crafted to exceed your expectations and create memorable experiences.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Mobile-First Facilities Layout */}
+        <section className="bg-gray-50 py-8 md:py-16">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="space-y-6 md:space-y-8">
+              {facilityItems.map((item, index) => {
+                const IconComponent = item.icon;
+                return (
+                  <div 
+                    key={index}
+                    className="bg-white rounded-xl shadow-lg overflow-hidden"
+                  >
+                    {/* Mobile Layout - Optimized for touch and readability */}
+                    <div className="md:hidden">
+                      {/* Image with better aspect ratio for mobile */}
+                      <div className="relative h-48">
+                        <img 
+                          src={item.imageSrc} 
+                          alt={item.title} 
+                          className="w-full h-full object-cover"
+                        />
+                        {/* Icon overlay */}
+                        <div className="absolute top-4 right-4 bg-white/90 p-2 rounded-full">
+                          <IconComponent className="text-hotel-gold" size={20} />
+                        </div>
+                      </div>
+                      
+                      {/* Content with better spacing */}
+                      <div className="p-6">
+                        <h3 className="text-xl font-serif font-bold mb-3 text-black">{item.title}</h3>
+                        <p className="text-gray-700 text-sm leading-relaxed mb-4">{item.description}</p>
+                        
+                        {/* Highlights for mobile */}
+                        <div className="space-y-2">
+                          {item.highlights.map((highlight, idx) => (
+                            <div key={idx} className="flex items-center text-sm text-gray-600">
+                              <div className="w-2 h-2 bg-hotel-gold rounded-full mr-3 flex-shrink-0"></div>
+                              <span>{highlight}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Desktop Layout - Keep existing alternating design */}
+                    <div className="hidden md:grid md:grid-cols-2">
+                      {index % 2 === 0 ? (
+                        <>
+                          <div className="h-64 md:h-72">
+                            <img 
+                              src={item.imageSrc} 
+                              alt={item.title} 
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="p-8 flex flex-col justify-center">
+                            <div className="flex items-center mb-4">
+                              <IconComponent className="text-hotel-gold mr-3" size={24} />
+                              <h3 className="text-2xl font-serif font-bold text-black">{item.title}</h3>
+                            </div>
+                            <p className="text-gray-700 leading-relaxed mb-4">{item.description}</p>
+                            <div className="space-y-2">
+                              {item.highlights.map((highlight, idx) => (
+                                <div key={idx} className="flex items-center text-gray-600">
+                                  <div className="w-2 h-2 bg-hotel-gold rounded-full mr-3 flex-shrink-0"></div>
+                                  <span>{highlight}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="p-8 flex flex-col justify-center">
+                            <div className="flex items-center mb-4">
+                              <IconComponent className="text-hotel-gold mr-3" size={24} />
+                              <h3 className="text-2xl font-serif font-bold text-black">{item.title}</h3>
+                            </div>
+                            <p className="text-gray-700 leading-relaxed mb-4">{item.description}</p>
+                            <div className="space-y-2">
+                              {item.highlights.map((highlight, idx) => (
+                                <div key={idx} className="flex items-center text-gray-600">
+                                  <div className="w-2 h-2 bg-hotel-gold rounded-full mr-3 flex-shrink-0"></div>
+                                  <span>{highlight}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="h-64 md:h-72">
+                            <img 
+                              src={item.imageSrc} 
+                              alt={item.title} 
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900">
-                    {facility.title}
-                  </h3>
-                  <p className="text-gray-600">
-                    {facility.description}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Additional Info Section */}
-      <section className="py-20 bg-gray-900 text-white">
-        <div className="hotel-container text-center">
-          <h2 className="text-4xl font-bold mb-8">
-            More Than Just Accommodation
-          </h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto text-gray-300">
-            At LA POSH Signature Suites, we believe in providing an experience that goes beyond expectations. 
-            Every facility is designed with your comfort and luxury in mind.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            <div className="p-6">
-              <h3 className="text-2xl font-semibold mb-4 text-hotel-gold">Premium Location</h3>
-              <p className="text-gray-300">
-                Strategically located in the heart of the city with easy access to major attractions
-              </p>
-            </div>
-            <div className="p-6">
-              <h3 className="text-2xl font-semibold mb-4 text-hotel-gold">Exceptional Service</h3>
-              <p className="text-gray-300">
-                Our dedicated staff ensures every moment of your stay is perfectly crafted
-              </p>
-            </div>
-            <div className="p-6">
-              <h3 className="text-2xl font-semibold mb-4 text-hotel-gold">Luxury Standards</h3>
-              <p className="text-gray-300">
-                Every detail meets the highest standards of luxury and sophistication
-              </p>
+                );
+              })}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
+        {/* CTA Section - More compact for mobile */}
+        <section className="bg-hotel-beige py-12 md:py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-2xl md:text-3xl font-serif font-bold mb-4 md:mb-6">Experience Luxury at La Posh</h2>
+              <p className="text-base md:text-lg mb-6 md:mb-8 text-gray-700">
+                Indulge in our world-class facilities and impeccable service. Book your stay today and 
+                discover the epitome of luxury and comfort.
+              </p>
+              <Button variant="hotel" size="lg" className="font-medium px-8 py-3">
+                Book Your Stay Now
+              </Button>
+            </div>
+          </div>
+        </section>
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 
