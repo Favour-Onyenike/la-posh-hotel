@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Loader } from "@/components/ui/loader";
+import Loader from "@/components/ui/loader";
 import { 
   Wifi, 
   Car, 
