@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import Loader from "@/components/ui/loader";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Star, Wifi, Car, Utensils, Dumbbell, TreePine, Zap } from "lucide-react";
 
 const Facilities = () => {
@@ -51,11 +50,7 @@ const Facilities = () => {
     {
       title: "24/7 Power Supply",
       description: "Uninterrupted power supply through our integrated system of solar inverters, generators and dedicated transformer.",
-      images: [
-        getImagePath("4b378e2a-6b29-4ca9-840f-1194616c3122.png"),
-        getImagePath("750be932-e523-4fd3-8d6e-06fa37dee2da.png"),
-        getImagePath("cdc64932-b3d2-496e-b080-581c173c3a89.png")
-      ],
+      imageSrc: getImagePath("2041bcf9-cce4-478f-95c0-b002a66664b5.png"),
       icon: Zap,
       highlights: ["Solar Powered", "Backup Generators", "Eco-friendly Solution"]
     },
@@ -133,31 +128,13 @@ const Facilities = () => {
                   >
                     {/* Mobile Layout - Optimized for touch and readability */}
                     <div className="md:hidden">
-                      {/* Image or Carousel with better aspect ratio for mobile */}
+                      {/* Image with better aspect ratio for mobile */}
                       <div className="relative h-48">
-                        {item.images ? (
-                          <Carousel className="w-full h-full">
-                            <CarouselContent>
-                              {item.images.map((image, imgIndex) => (
-                                <CarouselItem key={imgIndex}>
-                                  <img 
-                                    src={image} 
-                                    alt={`${item.title} ${imgIndex + 1}`} 
-                                    className="w-full h-48 object-cover"
-                                  />
-                                </CarouselItem>
-                              ))}
-                            </CarouselContent>
-                            <CarouselPrevious className="left-2" />
-                            <CarouselNext className="right-2" />
-                          </Carousel>
-                        ) : (
-                          <img 
-                            src={item.imageSrc} 
-                            alt={item.title} 
-                            className="w-full h-full object-cover"
-                          />
-                        )}
+                        <img 
+                          src={item.imageSrc} 
+                          alt={item.title} 
+                          className="w-full h-full object-cover"
+                        />
                         {/* Icon overlay */}
                         <div className="absolute top-4 right-4 bg-white/90 p-2 rounded-full">
                           <IconComponent className="text-hotel-gold" size={20} />
@@ -186,29 +163,11 @@ const Facilities = () => {
                       {index % 2 === 0 ? (
                         <>
                           <div className="h-64 md:h-72">
-                            {item.images ? (
-                              <Carousel className="w-full h-full">
-                                <CarouselContent>
-                                  {item.images.map((image, imgIndex) => (
-                                    <CarouselItem key={imgIndex}>
-                                      <img 
-                                        src={image} 
-                                        alt={`${item.title} ${imgIndex + 1}`} 
-                                        className="w-full h-64 md:h-72 object-cover"
-                                      />
-                                    </CarouselItem>
-                                  ))}
-                                </CarouselContent>
-                                <CarouselPrevious className="left-2" />
-                                <CarouselNext className="right-2" />
-                              </Carousel>
-                            ) : (
-                              <img 
-                                src={item.imageSrc} 
-                                alt={item.title} 
-                                className="w-full h-full object-cover"
-                              />
-                            )}
+                            <img 
+                              src={item.imageSrc} 
+                              alt={item.title} 
+                              className="w-full h-full object-cover"
+                            />
                           </div>
                           <div className="p-8 flex flex-col justify-center">
                             <div className="flex items-center mb-4">
@@ -244,29 +203,11 @@ const Facilities = () => {
                             </div>
                           </div>
                           <div className="h-64 md:h-72">
-                            {item.images ? (
-                              <Carousel className="w-full h-full">
-                                <CarouselContent>
-                                  {item.images.map((image, imgIndex) => (
-                                    <CarouselItem key={imgIndex}>
-                                      <img 
-                                        src={image} 
-                                        alt={`${item.title} ${imgIndex + 1}`} 
-                                        className="w-full h-64 md:h-72 object-cover"
-                                      />
-                                    </CarouselItem>
-                                  ))}
-                                </CarouselContent>
-                                <CarouselPrevious className="left-2" />
-                                <CarouselNext className="right-2" />
-                              </Carousel>
-                            ) : (
-                              <img 
-                                src={item.imageSrc} 
-                                alt={item.title} 
-                                className="w-full h-full object-cover"
-                              />
-                            )}
+                            <img 
+                              src={item.imageSrc} 
+                              alt={item.title} 
+                              className="w-full h-full object-cover"
+                            />
                           </div>
                         </>
                       )}

@@ -138,7 +138,7 @@ const Gallery = () => {
                   return (
                     <div 
                       key={item.id}
-                      className="overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group h-24 sm:h-48 md:h-64 cursor-pointer"
+                      className="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group h-24 sm:h-48 md:h-64 cursor-pointer"
                       onClick={() => handleImageClick(processedImageUrl)}
                     >
                       <img 
@@ -184,7 +184,7 @@ const Gallery = () => {
             <img 
               src={enlargedImage} 
               alt="Enlarged view"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain rounded-lg"
               onClick={(e) => e.stopPropagation()}
             />
           </div>
