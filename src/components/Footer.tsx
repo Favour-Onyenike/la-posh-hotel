@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from "lucide-react";
 
 const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <footer className="bg-black text-white pt-16 pb-8">
       <div className="hotel-container">
@@ -33,19 +37,16 @@ const Footer = () => {
             <h4 className="font-serif text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-hotel-gold transition-colors">About</Link>
+                <Link to="/about" onClick={scrollToTop} className="text-gray-300 hover:text-hotel-gold transition-colors">About</Link>
               </li>
               <li>
-                <Link to="/rooms" className="text-gray-300 hover:text-hotel-gold transition-colors">Rooms & Suites</Link>
+                <Link to="/rooms" onClick={scrollToTop} className="text-gray-300 hover:text-hotel-gold transition-colors">Rooms & Suites</Link>
               </li>
               <li>
-                <Link to="/facilities" className="text-gray-300 hover:text-hotel-gold transition-colors">Facilities</Link>
+                <Link to="/facilities" onClick={scrollToTop} className="text-gray-300 hover:text-hotel-gold transition-colors">Facilities</Link>
               </li>
               <li>
-                <Link to="/gallery" className="text-gray-300 hover:text-hotel-gold transition-colors">Gallery</Link>
-              </li>
-              <li>
-                <Link to="/dining" className="text-gray-300 hover:text-hotel-gold transition-colors">Dining</Link>
+                <Link to="/gallery" onClick={scrollToTop} className="text-gray-300 hover:text-hotel-gold transition-colors">Gallery</Link>
               </li>
             </ul>
           </div>

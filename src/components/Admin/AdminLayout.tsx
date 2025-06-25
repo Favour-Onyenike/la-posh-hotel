@@ -1,12 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTeamPermissions } from '@/hooks/useTeamPermissions';
+import { useAdminNotifications } from '@/hooks/useAdminNotifications';
 import AdminProfileDropdown from './AdminProfileDropdown';
+import NotificationBadge from './NotificationBadge';
 import { 
   LayoutDashboard, 
   Calendar, 
@@ -28,6 +30,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const { signOut, user, profile } = useAuth();
   const { hasTeamPermission, isPrimaryAdmin } = useTeamPermissions();
+  const { notifications, markAsRead } = useAdminNotifications();
 
   // Helper function to get the correct image path
   const getImagePath = (imageName: string) => {
@@ -47,17 +50,48 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-    { name: 'Bookings', href: '/admin/bookings', icon: Calendar },
+    { 
+      name: 'Bookings', 
+      href: '/admin/bookings', 
+      icon: Calendar,
+      hasNotification: notifications.bookings,
+      notificationType: 'booking'
+    },
     { name: 'Rooms', href: '/admin/rooms', icon: BedDouble },
     { name: 'Suites', href: '/admin/suites', icon: Star },
     { name: 'Room Availability', href: '/admin/room-availability', icon: ToggleLeft },
-    { name: 'Reviews', href: '/admin/reviews', icon: MessageSquare },
+    { 
+      name: 'Reviews', 
+      href: '/admin/reviews', 
+      icon: MessageSquare,
+      hasNotification: notifications.reviews,
+      notificationType: 'review'
+    },
     { name: 'Gallery', href: '/admin/gallery', icon: Images },
     { name: 'Events', href: '/admin/events', icon: CalendarDays },
     // Only show Team link if user has permission
     ...(canAccessTeam ? [{ name: 'Team', href: '/admin/team', icon: UserPlus }] : []),
-    { name: 'Activity Logs', href: '/admin/activity-logs', icon: MessageSquare },
+    { 
+      name: 'Activity Logs', 
+      href: '/admin/activity-logs', 
+      icon: MessageSquare,
+      hasNotification: notifications.activity_logs,
+      notificationType: 'activity_log'
+    },
   ];
+
+  // Mark notifications as read when visiting pages
+  useEffect(() => {
+    const currentPath = location.pathname;
+    
+    if (currentPath === '/admin/bookings' && notifications.bookings) {
+      markAsRead('booking');
+    } else if (currentPath === '/admin/reviews' && notifications.reviews) {
+      markAsRead('review');
+    } else if (currentPath === '/admin/activity-logs' && notifications.activity_logs) {
+      markAsRead('activity_log');
+    }
+  }, [location.pathname, notifications, markAsRead]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -122,7 +156,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                     to={item.href}
                     onClick={() => setSidebarOpen(false)}
                     className={cn(
-                      "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors",
+                      "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors relative",
                       isActive
                         ? "bg-blue-600 text-white"
                         : "text-gray-300 hover:bg-gray-700 hover:text-white"
@@ -130,6 +164,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                   >
                     <item.icon className="mr-3 h-5 w-5" />
                     {item.name}
+                    {item.hasNotification && (
+                      <NotificationBadge show={true} className="absolute top-2 left-8" />
+                    )}
                   </Link>
                 </li>
               );
