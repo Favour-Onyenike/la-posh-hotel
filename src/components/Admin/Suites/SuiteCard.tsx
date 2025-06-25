@@ -29,7 +29,7 @@ const SuiteCard: React.FC<SuiteCardProps> = ({
 }) => {
   return (
     <Card className="overflow-hidden">
-      <div className="relative aspect-video">
+      <div className="relative aspect-[4/3]">
         <img
           src={suite.image_url || '/placeholder.svg'}
           alt={suite.name}
@@ -47,35 +47,35 @@ const SuiteCard: React.FC<SuiteCardProps> = ({
           </Badge>
         </div>
       </div>
-      <CardHeader className="p-4">
+      <CardHeader className="p-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="line-clamp-1 text-lg">{suite.name}</CardTitle>
+          <CardTitle className="line-clamp-1 text-base">{suite.name}</CardTitle>
           <div className="flex items-center gap-2">
-            <p className="font-bold text-primary">₦{Number(suite.price_per_night).toLocaleString()}</p>
+            <p className="font-bold text-primary text-sm">₦{Number(suite.price_per_night).toLocaleString()}</p>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-4 pt-0">
-        <p className="line-clamp-2 text-sm text-muted-foreground">
+      <CardContent className="p-3 pt-0">
+        <p className="line-clamp-2 text-xs text-muted-foreground mb-2">
           {suite.description}
         </p>
-        <div className="mt-2 flex items-center">
-          <p className="text-sm">Capacity: <span className="font-medium">{suite.capacity} guests</span></p>
+        <div className="flex items-center mb-2">
+          <p className="text-xs">Capacity: <span className="font-medium">{suite.capacity} guests</span></p>
         </div>
-        <div className="mt-2 flex flex-wrap gap-1">
-          {suite.features && suite.features.slice(0, 3).map((feature, index) => (
-            <span key={index} className="rounded-full bg-muted px-2 py-1 text-xs">
+        <div className="mb-3 flex flex-wrap gap-1">
+          {suite.features && suite.features.slice(0, 2).map((feature, index) => (
+            <span key={index} className="rounded-full bg-muted px-2 py-0.5 text-xs">
               {feature}
             </span>
           ))}
-          {suite.features && suite.features.length > 3 && (
-            <span className="rounded-full bg-muted px-2 py-1 text-xs">
-              +{suite.features.length - 3} more
+          {suite.features && suite.features.length > 2 && (
+            <span className="rounded-full bg-muted px-2 py-0.5 text-xs">
+              +{suite.features.length - 2} more
             </span>
           )}
         </div>
         
-        <div className="mt-4">
+        <div>
           <div className="space-y-1">
             <Label htmlFor={`price-${suite.id}`} className="text-xs">Update Price (₦)</Label>
             <div className="flex gap-1">
@@ -85,7 +85,7 @@ const SuiteCard: React.FC<SuiteCardProps> = ({
                 min="0" 
                 step="0.01"
                 defaultValue={suite.price_per_night}
-                className="h-8 text-xs"
+                className="h-7 text-xs"
                 onBlur={(e) => {
                   if (e.target.value && parseFloat(e.target.value) !== suite.price_per_night) {
                     onPriceUpdate(suite.id, parseFloat(e.target.value));
@@ -101,21 +101,23 @@ const SuiteCard: React.FC<SuiteCardProps> = ({
           </div>
         </div>
       </CardContent>
-      <CardFooter className="border-t p-4">
+      <CardFooter className="border-t p-3">
         <div className="flex w-full justify-between">
           <Button
             variant="outline"
             size="sm"
             onClick={() => onEdit(suite)}
+            className="h-7 text-xs px-2"
           >
-            <Edit size={16} className="mr-1" /> Edit
+            <Edit size={12} className="mr-1" /> Edit
           </Button>
           <Button
             variant="destructive"
             size="sm"
             onClick={() => onDelete(suite)}
+            className="h-7 text-xs px-2"
           >
-            <Trash2 size={16} className="mr-1" /> Delete
+            <Trash2 size={12} className="mr-1" /> Delete
           </Button>
         </div>
       </CardFooter>
