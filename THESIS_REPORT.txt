@@ -1,5 +1,3 @@
-
-
 # La Posh Signature Hotel & Suites - Complete Management System
 ## Final Year Project Thesis Report
 
@@ -42,1469 +40,155 @@ This thesis presents the development of a comprehensive hotel management system 
 
 ### 1.1 Background
 
-The hospitality industry has undergone significant digital transformation, with hotels increasingly relying on comprehensive management systems to streamline operations, enhance guest experiences, and optimize revenue. Traditional hotel management often involves manual processes that are prone to errors, inefficient resource allocation, and poor guest satisfaction.
+The hospitality industry has undergone significant digital transformation over the past decade, with hotels increasingly relying on comprehensive management systems to streamline operations, enhance guest experiences, and optimize revenue generation. Traditional hotel management practices often involve manual processes that are prone to human error, inefficient resource allocation, and suboptimal guest satisfaction rates. The modern hospitality landscape demands sophisticated technological solutions that can handle complex booking scenarios, real-time availability management, and comprehensive administrative oversight while maintaining the highest standards of data security and user experience.
+
+The emergence of cloud-based solutions and modern web technologies has revolutionized how hotels manage their operations. Contemporary hotel management systems must integrate seamlessly with existing business processes while providing intuitive interfaces for both guests and administrative staff. The need for real-time data synchronization, automated status management, and comprehensive audit trails has become paramount in ensuring operational efficiency and regulatory compliance.
+
+La Posh Signature Hotel & Suites, as a premium hospitality establishment, required a management system that could reflect its commitment to excellence while providing robust functionality for handling complex booking scenarios, administrative tasks, and guest services. The traditional approach of using disparate systems for different operational aspects was no longer sustainable in an environment where real-time information flow and seamless integration are essential for competitive advantage.
 
 ### 1.2 Problem Statement
 
-La Posh Signature Hotel & Suites required a modern, secure, and user-friendly management system that could:
-- Handle online bookings with real-time availability checking
-- Automatically manage room status transitions from available to taken
-- Provide comprehensive administrative controls
-- Ensure data security and user privacy
-- Offer scalable architecture for future expansion
-- Integrate modern UI/UX principles for optimal user experience
+La Posh Signature Hotel & Suites faced several critical challenges in their existing operational framework that necessitated the development of a comprehensive digital management solution. The primary challenge was the lack of an integrated system that could handle online bookings with real-time availability checking and automatic room status management. The manual processes previously employed were time-consuming, error-prone, and unable to provide the level of service expected by modern hotel guests.
+
+The absence of automatic room status transitions from available to occupied upon booking confirmation created significant operational inefficiencies. Staff members were required to manually update room availability across multiple systems, leading to potential double bookings, inventory discrepancies, and guest dissatisfaction. This manual approach also introduced delays in the booking process and increased the likelihood of human error during peak booking periods.
+
+Furthermore, the hotel lacked comprehensive administrative controls that could provide real-time insights into operational performance, booking trends, and resource utilization. The existing systems did not offer adequate security measures to protect sensitive guest information and financial data, nor did they provide the audit trails necessary for regulatory compliance and operational accountability.
+
+The challenge extended to the guest experience, where potential customers expected modern, user-friendly booking interfaces that could provide instant confirmation and seamless interaction with hotel services. The absence of such capabilities placed the hotel at a competitive disadvantage and limited its ability to attract and retain customers who had become accustomed to sophisticated online booking experiences.
 
 ### 1.3 Objectives
 
-#### Primary Objectives:
-1. Develop a full-stack hotel management system with booking capabilities
-2. Implement automatic room status management upon booking confirmation
-3. Implement secure authentication and authorization mechanisms
-4. Create an intuitive admin dashboard for hotel operations management
-5. Design a responsive public-facing website for guest interactions
+The primary objective of this project was to develop a comprehensive, secure, and user-friendly hotel management system that would address all identified operational challenges while providing a foundation for future expansion and enhancement. The system needed to handle online bookings with sophisticated real-time availability checking capabilities, ensuring that room inventory was accurately maintained and updated instantaneously upon booking confirmation.
 
-#### Secondary Objectives:
-1. Implement real-time availability checking
-2. Create comprehensive audit logging for administrative actions
-3. Develop role-based permission systems
-4. Ensure mobile responsiveness across all platforms
+A critical objective was the implementation of automatic room status management functionality that would eliminate manual intervention in the booking process. The system was designed to automatically transition room status from available to occupied upon successful booking confirmation, thereby reducing human error and improving operational efficiency. This automation needed to be robust enough to handle various booking scenarios while providing graceful error handling for exceptional circumstances.
+
+The development of secure authentication and authorization mechanisms formed another essential objective. The system required multi-layered security implementation including Row-Level Security policies, role-based access control, and comprehensive audit logging to ensure data protection and regulatory compliance. The security framework needed to accommodate different user roles including guests, administrators, and primary administrators, each with appropriate access levels and permissions.
+
+Creating an intuitive administrative dashboard for comprehensive hotel operations management was a key objective that would enable staff to monitor real-time booking statistics, manage room availability, oversee guest services, and generate operational reports. The dashboard needed to provide actionable insights while maintaining ease of use for non-technical administrative staff.
+
+The design and implementation of a responsive public-facing website for guest interactions represented another significant objective. This interface needed to provide seamless booking experiences across all device types while maintaining the hotel's brand identity and premium service standards. The guest interface required integration with the booking system to provide real-time availability information and instant booking confirmation.
 
 ### 1.4 Scope and Limitations
 
-**Scope:**
-- Web-based application accessible via modern browsers
-- Real-time booking system with automatic availability management
-- Multi-role administrative system
-- Guest review and event management
-- Gallery and content management
-- Automatic room status transitions (available → taken)
+The scope of this project encompassed the development of a comprehensive web-based hotel management system accessible through modern web browsers on desktop and mobile devices. The system included a sophisticated real-time booking system with automatic room availability management, ensuring that inventory status was maintained accurately across all booking channels and administrative interfaces.
 
-**Limitations:**
-- No native mobile application development
-- Payment gateway integration not implemented
-- Third-party hotel channel integration not included
+The project scope included the development of a multi-role administrative system capable of handling various operational aspects including booking management, room status oversight, guest services coordination, and system administration. The administrative functionality extended to comprehensive audit logging, security monitoring, and performance analytics to support operational decision-making and regulatory compliance requirements.
+
+Guest review and event management capabilities were incorporated within the project scope to provide additional value-added services that would enhance the overall guest experience and hotel marketing efforts. The system included gallery and content management functionality to enable dynamic presentation of hotel facilities and services.
+
+The automatic room status transition functionality, representing a core innovation of the system, was designed to handle both individual rooms and suites with identical precision and reliability. This feature encompassed error handling mechanisms to ensure system stability even in exceptional circumstances.
+
+However, the project operated within certain defined limitations that were established to maintain focus and ensure deliverable quality within the available timeframe and resources. The development did not include native mobile applications for iOS or Android platforms, focusing instead on responsive web design that provided optimal experiences across all device types through web browsers.
+
+Payment gateway integration was not implemented in the current version of the system, though the architecture was designed to accommodate such integration in future development phases. This limitation was established to prioritize core booking and management functionality while ensuring that the system foundation could support financial transaction processing in subsequent versions.
+
+Third-party hotel channel integration, such as connections to booking platforms like Booking.com or Expedia, was not included in the current scope. The system was designed as a standalone solution for direct bookings through the hotel's own channels, though the architecture supports future integration with external booking platforms.
 
 ### 1.5 Project Motivation
 
-[Add your personal motivation for choosing this project here]
+The motivation for undertaking this project stemmed from the recognition that the hospitality industry represents a critical sector where technology can significantly impact operational efficiency, guest satisfaction, and business success. The opportunity to develop a comprehensive solution that addresses real-world challenges faced by hotel operations provided an ideal context for applying theoretical computer science knowledge to practical problem-solving scenarios.
+
+The personal motivation for selecting this project arose from the desire to work with modern web technologies and gain hands-on experience with full-stack development principles. The complexity of hotel management systems, involving multiple user roles, real-time data processing, and sophisticated security requirements, presented an excellent opportunity to develop skills in system architecture, database design, and user experience optimization.
+
+The project offered the chance to explore advanced concepts in web application security, particularly Row-Level Security implementation and role-based access control systems. These security considerations are increasingly important in modern web applications, and the hotel management context provided a realistic scenario for implementing and testing comprehensive security measures.
+
+The automatic room status management feature represented an opportunity to develop innovative solutions that could provide genuine value to hotel operations. The challenge of ensuring data consistency, handling concurrent access scenarios, and providing graceful error handling offered valuable learning experiences in system reliability and robustness.
+
+Furthermore, the project aligned with the growing trend toward digital transformation in traditional industries, providing insights into how technology can be leveraged to modernize established business processes. The experience gained from this project would be directly applicable to similar transformation initiatives across various sectors.
+
+The academic motivation included the opportunity to document and analyze the complete software development lifecycle, from initial requirements gathering through deployment and maintenance considerations. This comprehensive approach provided valuable experience in project management, technical documentation, and systematic problem-solving methodologies that are essential for professional software development careers.
+
+### 1.6 Significance of the Study
+
+This study contributes to the growing body of knowledge surrounding digital transformation in the hospitality industry, demonstrating how modern web technologies can be effectively applied to solve complex operational challenges. The comprehensive documentation of the development process, including challenges encountered and solutions implemented, provides valuable insights for other researchers and practitioners working on similar projects.
+
+The innovative automatic room status management system developed as part of this project represents a significant contribution to hotel management technology. The approach taken to ensure data consistency while maintaining system performance offers a model that could be adapted and refined for various hospitality management scenarios.
+
+The security implementation documented in this study provides practical examples of how to implement comprehensive data protection measures in web applications handling sensitive personal and financial information. The Row-Level Security policies and role-based access control systems developed demonstrate best practices that extend beyond the hospitality industry to any application requiring sophisticated user permission management.
+
+The project's emphasis on user experience design and responsive web development contributes to the understanding of how to create intuitive interfaces for complex business applications. The balance achieved between functionality and usability provides insights that are valuable for future hospitality technology projects and other customer-facing business applications.
+
+### 1.7 Operational Definitions
+
+**Hotel Management System:** A comprehensive software application designed to handle various aspects of hotel operations including booking management, room inventory control, guest services, administrative functions, and operational reporting.
+
+**Automatic Room Status Management:** A system feature that automatically updates room availability status from "available" to "taken" upon successful booking confirmation without requiring manual intervention from administrative staff.
+
+**Row-Level Security (RLS):** A database security feature that enables fine-grained access control by restricting which rows of data different users can access based on their identity and permissions.
+
+**Real-time Availability:** The system's capability to provide instantaneous updates of room availability status across all interfaces and booking channels as changes occur.
+
+**Role-based Access Control (RBAC):** A security model that restricts system access and functionality based on the roles assigned to individual users within the organization.
+
+**Responsive Web Design:** An approach to web development that ensures optimal viewing and interaction experiences across a wide range of devices and screen sizes.
+
+**Full-stack Development:** The practice of developing both client-side (frontend) and server-side (backend) portions of web applications using integrated technologies and frameworks.
+
+**Backend-as-a-Service (BaaS):** A cloud computing model that provides developers with backend services such as database management, authentication, and hosting without requiring server-side programming.
+
+**Single Page Application (SPA):** A web application that dynamically rewrites the current page rather than loading entire new pages from the server, providing a more fluid user experience.
+
+**Application Programming Interface (API):** A set of protocols and tools that allows different software applications to communicate and share data with each other.
 
 ---
 
 ## 2. Literature Review
 
-### 2.1 Hotel Management Systems Evolution
-
-Hotel management systems have evolved from simple reservation books to sophisticated digital platforms. Research by Smith et al. (2023) demonstrates that modern hotel management systems can increase operational efficiency by up to 40% while reducing booking errors by 85%.
-
-[Add citation: Smith, J., Anderson, K., & Brown, L. (2023). Digital Transformation in Hospitality Management. Journal of Hotel Technology, 15(3), 245-267.]
-
-### 2.2 Web Application Architectures
-
-The shift toward serverless architectures and Backend-as-a-Service (BaaS) solutions has revolutionized web application development. Studies by Johnson & Lee (2024) show that applications using BaaS platforms like Supabase demonstrate 60% faster development cycles compared to traditional backend development.
-
-[Add citation: Johnson, M., & Lee, S. (2024). Serverless Architecture Adoption in Modern Web Development. ACM Computing Surveys, 56(2), 1-34.]
-
-### 2.3 Security in Web Applications
-
-According to the OWASP Top 10 (2023), authentication vulnerabilities remain the most critical security risks in web applications. Implementing Row-Level Security (RLS) has been shown to reduce data breach risks by up to 70% (Security Research Institute, 2024).
-
-[Add citation: OWASP Foundation. (2023). OWASP Top 10 - 2023. Retrieved from https://owasp.org/Top10/]
-
-### 2.4 User Experience in Hospitality Technology
-
-Research by the Hotel Technology Association (2024) indicates that 78% of guests prefer hotels with modern, intuitive booking systems, directly correlating with increased customer satisfaction and return rates.
-
-[Add citation: Hotel Technology Association. (2024). Guest Technology Preferences Survey. HTA Annual Report, 12, 89-102.]
-
-### 2.5 React.js in Enterprise Applications
-
-[Add literature review section about React.js usage in enterprise applications here]
-
-### 2.6 Database Security and PostgreSQL
-
-[Add literature review section about database security best practices here]
-
----
+// ... keep existing code
 
 ## 3. System Requirements Analysis
 
-### 3.1 Functional Requirements
-
-#### 3.1.1 Guest-Facing Requirements
-- **FR1:** Users shall be able to view available rooms and suites
-- **FR2:** Users shall be able to make bookings with date selection
-- **FR3:** Users shall be able to view hotel gallery and events
-- **FR4:** Users shall be able to submit reviews and ratings
-- **FR5:** Users shall be able to contact the hotel
-
-#### 3.1.2 Administrative Requirements
-- **FR6:** Admins shall authenticate securely to access the system
-- **FR7:** Admins shall manage room availability and bookings
-- **FR8:** Admins shall moderate reviews and manage content
-- **FR9:** Primary admins shall manage team permissions
-- **FR10:** System shall log all administrative activities
-
-#### 3.1.3 System Requirements
-- **FR11:** System shall automatically update room status to 'taken' upon booking confirmation
-- **FR12:** System shall prevent double bookings through real-time availability checking
-- **FR13:** System shall maintain booking history and audit trails
-
-### 3.2 Non-Functional Requirements
-
-#### 3.2.1 Performance Requirements
-- **NFR1:** Page load times shall not exceed 3 seconds
-- **NFR2:** System shall support up to 1000 concurrent users
-- **NFR3:** Database queries shall execute within 500ms
-- **NFR4:** Room status updates shall be immediate upon booking confirmation
-
-#### 3.2.2 Security Requirements
-- **NFR5:** All data transmission shall be encrypted (HTTPS)
-- **NFR6:** User passwords shall be hashed and salted
-- **NFR7:** Administrative actions shall be logged and auditable
-- **NFR8:** Row-Level Security shall protect user data
-
-#### 3.2.3 Usability Requirements
-- **NFR9:** Interface shall be responsive across all device types
-- **NFR10:** System shall provide clear error messages
-- **NFR11:** Administrative interface shall be intuitive for non-technical users
-
-### 3.3 Use Case Diagrams
-
-**[SCREENSHOT NEEDED: Create a use case diagram showing Guest, Admin, and Primary Admin actors with their respective use cases]**
-
-**Recommended Tool:** Draw.io or Lucidchart
-**Elements to Include:**
-- Guest actor: View Rooms, Make Booking, Submit Review, Contact Hotel
-- Admin actor: Login, Manage Bookings, Manage Rooms, View Analytics
-- Primary Admin actor: All admin functions + Manage Team, View Logs
-- System boundary showing hotel management system
-
-### 3.4 Requirements Traceability Matrix
-
-**[TABLE NEEDED: Requirements traceability matrix linking requirements to design elements and test cases]**
-
-| Requirement ID | Description | Design Element | Test Case |
-|---------------|-------------|----------------|-----------|
-| FR1 | View available rooms | RoomsGrid component | TC001 |
-| FR11 | Auto room status update | BookingForm logic | TC011 |
-| NFR4 | Immediate status updates | Real-time subscriptions | TC025 |
-
----
+// ... keep existing code
 
 ## 4. System Design and Architecture
 
-### 4.1 Architecture Overview
-
-The system implements a modern three-tier architecture:
-
-**[UML DIAGRAM NEEDED: System Architecture Diagram]**
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Presentation Tier                    │
-│                    (React.js App)                       │
-│  ┌─────────────────┐  ┌─────────────────┐              │
-│  │   Public Site   │  │  Admin Dashboard │              │
-│  │   - Home        │  │  - Analytics     │              │
-│  │   - Rooms       │  │  - Bookings      │              │
-│  │   - Booking     │  │  - Rooms Mgmt    │              │
-│  │   - Reviews     │  │  - User Mgmt     │              │
-│  └─────────────────┘  └─────────────────┘              │
-└─────────────────────────────────────────────────────────┘
-                            │
-                    ┌───────▼───────┐
-                    │   API Layer   │
-                    │  (Supabase)   │
-                    └───────┬───────┘
-                            │
-┌─────────────────────────────────────────────────────────┐
-│                     Data Tier                           │
-│                   (PostgreSQL)                          │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐       │
-│  │  Core Data  │ │ Auth Data   │ │ Audit Data  │       │
-│  │  - Rooms    │ │ - Users     │ │ - Logs      │       │
-│  │  - Bookings │ │ - Profiles  │ │ - Activity  │       │
-│  │  - Reviews  │ │ - Sessions  │ │ - Security  │       │
-│  └─────────────┘ └─────────────┘ └─────────────┘       │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 4.2 Technology Stack
-
-#### Frontend Technologies:
-- **React 18.3.1:** Component-based UI library
-- **TypeScript:** Type-safe JavaScript development
-- **Tailwind CSS:** Utility-first CSS framework
-- **Shadcn/UI:** Pre-built component library
-- **React Router:** Client-side routing
-- **TanStack Query:** Data fetching and caching
-
-#### Backend Technologies:
-- **Supabase:** Backend-as-a-Service platform
-- **PostgreSQL:** Relational database management
-- **Edge Functions:** Serverless computing
-- **Row-Level Security:** Database-level access control
-
-#### Development Tools:
-- **Vite:** Build tool and development server
-- **ESLint:** Code linting and quality
-- **Git:** Version control system
-
-### 4.3 System Component Diagram
-
-**[UML DIAGRAM NEEDED: Component Diagram showing relationship between React components, Supabase services, and database tables]**
-
-**Recommended Tool:** PlantUML or Draw.io
-**Components to Include:**
-- React Components (BookingForm, AdminDashboard, RoomCard)
-- Supabase Services (Auth, Database, Edge Functions)
-- Database Tables (rooms, bookings, profiles, admin_activity_logs)
-- External Services (Resend for emails)
-
-### 4.4 Data Flow Diagrams
-
-#### 4.4.1 Booking Process Flow
-**[UML DIAGRAM NEEDED: Data Flow Diagram for booking process]**
-
-**Flow Steps:**
-1. Guest selects room and dates
-2. System checks availability
-3. Guest enters booking details
-4. System creates booking record
-5. System updates room status to 'taken'
-6. Confirmation email sent
-7. Admin notification triggered
-
-#### 4.4.2 Admin Authentication Flow
-**[UML DIAGRAM NEEDED: Data Flow Diagram for admin authentication]**
-
-**Flow Steps:**
-1. Admin enters credentials
-2. Supabase Auth validates
-3. System checks admin role
-4. Session token generated
-5. Dashboard access granted
-6. Activity logged
-
-#### 4.4.3 Review Submission Flow
-**[UML DIAGRAM NEEDED: Data Flow Diagram for review submission]**
-
-**Flow Steps:**
-1. Guest submits review
-2. System validates input
-3. Review stored in database
-4. Admin notification sent
-5. Review appears pending approval
-
-### 4.5 Sequence Diagrams
-
-#### 4.5.1 User Booking Sequence
-**[UML DIAGRAM NEEDED: Sequence diagram showing complete booking process from user request to confirmation]**
-
-**Actors:** Guest, React App, Supabase, Database, Email Service
-**Messages:** Select Room, Check Availability, Submit Booking, Update Status, Send Confirmation
-
-#### 4.5.2 Admin Login Sequence
-**[UML DIAGRAM NEEDED: Sequence diagram showing admin authentication process]**
-
-**Actors:** Admin, React App, Supabase Auth, Database
-**Messages:** Login Request, Authenticate, Verify Role, Create Session, Return Dashboard
-
----
+// ... keep existing code
 
 ## 5. Database Design
 
-### 5.1 Entity Relationship Diagram
-
-**[UML DIAGRAM NEEDED: Complete ER diagram showing all entities, relationships, and cardinalities]**
-
-**Recommended Tool:** MySQL Workbench or ERDPlus
-**Entities to Include:**
-- profiles (admin users)
-- rooms (hotel rooms and suites)
-- bookings (reservations)
-- reviews (guest feedback)
-- admin_activity_logs (audit trail)
-- admin_permissions (role-based access)
-- events (hotel events)
-- gallery (image management)
-
-### 5.2 Database Schema
-
-#### 5.2.1 Core Tables
-
-**profiles Table:**
-```sql
-CREATE TABLE profiles (
-    id UUID PRIMARY KEY REFERENCES auth.users(id),
-    email TEXT NOT NULL,
-    full_name TEXT,
-    username TEXT,
-    role app_role NOT NULL DEFAULT 'user',
-    avatar_url TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `supabase/migrations/[latest-migration].sql`
-**Lines to Capture:** Complete profiles table creation with constraints and indexes
-
-**rooms Table:**
-```sql
-CREATE TABLE rooms (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL,
-    description TEXT NOT NULL,
-    room_type TEXT NOT NULL,
-    room_number TEXT NOT NULL UNIQUE,
-    price_per_night NUMERIC NOT NULL,
-    capacity INTEGER NOT NULL,
-    image_url TEXT,
-    features TEXT[],
-    availability_status TEXT DEFAULT 'available',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-```
-
-**bookings Table:**
-```sql
-CREATE TABLE bookings (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES profiles(id),
-    room_id UUID REFERENCES rooms(id),
-    guest_name TEXT NOT NULL,
-    guest_email TEXT NOT NULL,
-    guest_phone TEXT,
-    check_in_date DATE NOT NULL,
-    check_out_date DATE NOT NULL,
-    status TEXT DEFAULT 'pending',
-    total_price NUMERIC NOT NULL,
-    special_requests TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-```
-
-#### 5.2.2 Administrative Tables
-
-**admin_permissions Table:**
-```sql
-CREATE TABLE admin_permissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    admin_id UUID NOT NULL REFERENCES profiles(id),
-    permission_type TEXT NOT NULL,
-    granted_by UUID NOT NULL REFERENCES profiles(id),
-    granted_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-```
-
-**admin_activity_logs Table:**
-```sql
-CREATE TABLE admin_activity_logs (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    admin_id UUID NOT NULL REFERENCES profiles(id),
-    action TEXT NOT NULL,
-    target_resource TEXT,
-    target_id UUID,
-    details JSONB,
-    ip_address INET,
-    user_agent TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-```
-
-### 5.3 Database Normalization
-
-The database follows Third Normal Form (3NF) principles:
-- **1NF:** All tables have atomic values and unique column names
-- **2NF:** All non-key attributes are fully dependent on primary keys
-- **3NF:** No transitive dependencies exist
-
-**[ANALYSIS NEEDED: Detailed normalization analysis with examples]**
-
-### 5.4 Indexing Strategy
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** Database indexes from Supabase dashboard
-**Elements to Capture:** Index definitions for frequently queried columns
-
----
+// ... keep existing code
 
 ## 6. Implementation
 
-### 6.1 Frontend Implementation
-
-#### 6.1.1 React Component Architecture
-
-The frontend follows a component-based architecture with the following structure:
-
-```
-src/
-├── components/
-│   ├── ui/              # Shadcn UI components
-│   ├── Admin/           # Admin-specific components
-│   ├── BookingForm.tsx  # Guest booking interface with auto-status update
-│   ├── RoomCard.tsx     # Room display component
-│   └── ReviewCard.tsx   # Review display component
-├── pages/
-│   ├── Index.tsx        # Homepage
-│   ├── Rooms.tsx        # Room listing
-│   ├── Booking.tsx      # Booking page
-│   └── Admin/           # Admin pages
-├── contexts/
-│   └── AuthContext.tsx  # Authentication state management
-├── hooks/
-│   ├── useDashboardData.ts
-│   ├── useRoomAvailability.ts
-│   └── useTeamPermissions.ts
-└── integrations/
-    └── supabase/        # Supabase client configuration
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/components/BookingForm.tsx`
-**Lines to Capture:** Main booking form component structure (lines 1-50)
-
-#### 6.1.2 State Management
-
-The application uses React Context for global state management:
-
-```typescript
-// AuthContext implementation
-interface AuthContextType {
-  user: User | null;
-  signIn: (email: string, password: string) => Promise<void>;
-  signOut: () => Promise<void>;
-  loading: boolean;
-}
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/contexts/AuthContext.tsx`
-**Lines to Capture:** AuthContext interface and provider implementation (lines 15-45)
-
-#### 6.1.3 Routing Implementation
-
-React Router handles client-side navigation with protected routes:
-
-```typescript
-// Protected route implementation
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
-  
-  if (loading) return <LoadingSpinner />;
-  if (!user) return <Navigate to="/admin/login" />;
-  
-  return <>{children}</>;
-};
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/components/Admin/ProtectedRoute.tsx`
-**Lines to Capture:** Complete protected route implementation
-
-### 6.2 Backend Implementation
-
-#### 6.2.1 Supabase Configuration
-
-The backend leverages Supabase for:
-- Authentication and user management
-- Real-time database operations
-- Row-Level Security policies
-- Edge Functions for serverless computing
-
-```typescript
-// Supabase client configuration
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/integrations/supabase/client.ts`
-**Lines to Capture:** Complete Supabase client configuration
-
-#### 6.2.2 Database Operations
-
-Custom hooks handle database operations:
-
-```typescript
-// Room availability hook
-export const useRoomAvailability = () => {
-  return useQuery({
-    queryKey: ['room-availability'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('rooms')
-        .select('*')
-        .eq('availability_status', 'available');
-      
-      if (error) throw error;
-      return data;
-    }
-  });
-};
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/hooks/useRoomAvailability.ts`
-**Lines to Capture:** Complete room availability hook implementation
-
-### 6.3 Key Features Implementation
-
-#### 6.3.1 Booking System with Automatic Status Management
-
-The booking system implements automatic room status transitions upon successful booking confirmation:
-
-```typescript
-// Automatic room status update implementation
-const handleBookingConfirmation = async (bookingData: BookingData) => {
-  try {
-    // Create booking record
-    const { data: booking, error: bookingError } = await supabase
-      .from('bookings')
-      .insert({
-        ...bookingData,
-        status: 'confirmed'
-      })
-      .select()
-      .single();
-
-    if (bookingError) throw bookingError;
-
-    // Automatically update room status to 'taken'
-    const { error: roomUpdateError } = await supabase
-      .from('rooms')
-      .update({ availability_status: 'taken' })
-      .eq('id', bookingData.room_id);
-
-    if (roomUpdateError) {
-      console.error('Error updating room status:', roomUpdateError);
-      // Handle gracefully - booking is still successful
-    }
-
-    return booking;
-  } catch (error) {
-    console.error('Booking error:', error);
-    throw error;
-  }
-};
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/hooks/useBookingLogic.ts`
-**Lines to Capture:** Complete booking confirmation logic with status update (lines 45-85)
-
-**Key Features:**
-- **Atomic Operations:** Booking creation and room status update in sequence
-- **Error Handling:** Graceful handling of status update failures
-- **Real-time Updates:** Immediate availability status changes
-- **Universal Application:** Works for both rooms and suites
-
-#### 6.3.2 Admin Dashboard
-
-The admin dashboard provides comprehensive room and booking management:
-
-```typescript
-// Admin dashboard with real-time status monitoring
-const AdminDashboard = () => {
-  const { data: roomStats } = useQuery({
-    queryKey: ['room-statistics'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('rooms')
-        .select('availability_status')
-        .order('updated_at', { ascending: false });
-      
-      return {
-        available: data?.filter(r => r.availability_status === 'available').length || 0,
-        taken: data?.filter(r => r.availability_status === 'taken').length || 0,
-        total: data?.length || 0
-      };
-    }
-  });
-
-  return (
-    <div className="dashboard-stats">
-      <StatCard title="Available Rooms" value={roomStats?.available} />
-      <StatCard title="Occupied Rooms" value={roomStats?.taken} />
-      <StatCard title="Total Rooms" value={roomStats?.total} />
-    </div>
-  );
-};
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/pages/Admin/Dashboard.tsx`
-**Lines to Capture:** Dashboard statistics component and room status monitoring (lines 25-65)
-
-#### 6.3.3 Review System
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/components/ReviewForm.tsx`
-**Lines to Capture:** Review submission form with validation
-
-#### 6.3.4 Gallery Management
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/pages/Admin/Gallery.tsx`
-**Lines to Capture:** Gallery management interface with image upload
-
----
+// ... keep existing code
 
 ## 7. Security Implementation
 
-### 7.1 Authentication Security
-
-The system implements multi-layered authentication security:
-
-#### 7.1.1 Supabase Auth Integration
-- JWT-based authentication
-- Secure session management
-- Password hashing with bcrypt
-- Email verification for new accounts
-
-#### 7.1.2 Admin Authentication
-```typescript
-// Admin login with enhanced security
-const handleAdminLogin = async (email: string, password: string) => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  
-  if (error) throw error;
-  
-  // Verify admin role
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', data.user.id)
-    .single();
-    
-  if (profile?.role !== 'admin') {
-    throw new Error('Unauthorized access');
-  }
-};
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/pages/AdminLogin.tsx`
-**Lines to Capture:** Admin login form and authentication logic (lines 30-70)
-
-### 7.2 Row-Level Security (RLS)
-
-Database-level security policies protect sensitive data:
-
-```sql
--- Admin permissions RLS policy
-CREATE POLICY "Admins can manage permissions" ON admin_permissions
-  FOR ALL USING (
-    EXISTS (
-      SELECT 1 FROM profiles 
-      WHERE id = auth.uid() 
-      AND role = 'admin'
-    )
-  );
-
--- Booking privacy policy
-CREATE POLICY "Users can view own bookings" ON bookings
-  FOR SELECT USING (
-    user_id = auth.uid() OR 
-    EXISTS (
-      SELECT 1 FROM profiles 
-      WHERE id = auth.uid() 
-      AND role = 'admin'
-    )
-  );
-
--- Room status update policy
-CREATE POLICY "System can update room status" ON rooms
-  FOR UPDATE USING (
-    EXISTS (
-      SELECT 1 FROM profiles 
-      WHERE id = auth.uid() 
-      AND role IN ('admin', 'system')
-    )
-  );
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** Supabase Dashboard RLS Policies
-**Section to Capture:** Complete RLS policies for all tables
-
-### 7.3 Permission-Based Access Control
-
-#### 7.3.1 Role Hierarchy
-- **Guest:** View public content, make bookings
-- **Admin:** Manage bookings, rooms, reviews
-- **Primary Admin:** Full system access, user management
-
-#### 7.3.2 Granular Permissions
-- **Revenue Access:** View financial data
-- **Team Management:** Invite and manage admins
-- **Activity Logs:** View audit trails
-- **Room Management:** Update availability status
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/hooks/useTeamPermissions.ts`
-**Lines to Capture:** Permission checking logic and role-based access
-
-### 7.4 Data Protection
-
-#### 7.4.1 Encryption
-- HTTPS for all data transmission
-- Database encryption at rest
-- Secure environment variable management
-
-#### 7.4.2 Input Validation
-- Form validation using Zod schemas
-- SQL injection prevention through parameterized queries
-- XSS protection with content sanitization
-
-### 7.5 Security Audit Logging
-
-All administrative actions and system operations are logged for security auditing:
-
-```typescript
-// Activity logging implementation with room status tracking
-const logAdminActivity = async (action: string, details: any) => {
-  await supabase.from('admin_activity_logs').insert({
-    admin_id: user.id,
-    action,
-    details: {
-      ...details,
-      timestamp: new Date().toISOString(),
-      automated: action.includes('room_status_update')
-    },
-    ip_address: await getClientIP(),
-    user_agent: navigator.userAgent,
-  });
-};
-
-// Automatic logging for room status changes
-const logRoomStatusChange = async (roomId: string, oldStatus: string, newStatus: string) => {
-  await logAdminActivity('automated_room_status_update', {
-    room_id: roomId,
-    old_status: oldStatus,
-    new_status: newStatus,
-    trigger: 'booking_confirmation'
-  });
-};
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `src/components/Admin/ActivityLogs/useActivityLogs.ts`
-**Lines to Capture:** Activity logging implementation with security audit features
-
----
+// ... keep existing code
 
 ## 8. Testing and Validation
 
-### 8.1 Testing Strategy
-
-#### 8.1.1 Unit Testing
-- Component testing with React Testing Library
-- Hook testing for custom React hooks
-- Database function testing
-- Room status update function testing
-
-#### 8.1.2 Integration Testing
-- API endpoint testing
-- Database integration testing
-- Authentication flow testing
-- Booking workflow with status updates
-
-#### 8.1.3 End-to-End Testing
-- Complete user journey testing
-- Admin workflow testing
-- Cross-browser compatibility testing
-- Room status transition testing
-
-### 8.2 Test Cases
-
-#### 8.2.1 Booking System Tests
-
-**Test Case 1: Successful Booking with Status Update**
-- **Input:** Valid guest details, available room, valid dates
-- **Expected:** Booking created with 'confirmed' status, room status changed to 'taken'
-- **Result:** ✅ PASS - Booking confirmed, room status updated automatically
-
-**Test Case 2: Double Booking Prevention**
-- **Input:** Booking request for already booked dates
-- **Expected:** Error message, no booking created, room status unchanged
-- **Result:** ✅ PASS - System prevents double booking, displays appropriate error
-
-**Test Case 3: Room Status Update Failure Handling**
-- **Input:** Valid booking, database error during status update
-- **Expected:** Booking successful, graceful error handling for status update
-- **Result:** ✅ PASS - Booking completes, error logged, no system crash
-
-**Test Case 4: Suite Booking Status Update**
-- **Input:** Valid guest details, available suite, valid dates
-- **Expected:** Suite booking confirmed, suite status changed to 'taken'
-- **Result:** ✅ PASS - Suite booking works identically to room booking
-
-#### 8.2.2 Admin Authentication Tests
-
-**Test Case 5: Valid Admin Login**
-- **Input:** Correct admin credentials
-- **Expected:** Successful authentication, redirect to dashboard
-- **Result:** ✅ PASS - Admin authenticated, dashboard loads with correct permissions
-
-**Test Case 6: Invalid Credentials**
-- **Input:** Incorrect password
-- **Expected:** Error message, remain on login page
-- **Result:** ✅ PASS - Authentication fails, error displayed, no access granted
-
-**[SCREENSHOT NEEDED: Test results dashboard or console output showing passed/failed tests]**
-**Location:** Browser Developer Tools Console during test execution
-**Elements to Capture:** Test suite results, pass/fail statistics, error messages
-
-### 8.3 Performance Testing
-
-#### 8.3.1 Load Testing
-- Concurrent user simulation
-- Database query performance
-- Response time measurements
-- Room status update performance under load
-
-**[SCREENSHOT NEEDED: Performance testing results showing load times and response times]**
-**Tool:** Browser DevTools Network tab or Lighthouse report
-**Metrics to Capture:** Page load times, database query times, status update latency
-
-#### 8.3.2 Stress Testing
-- System behavior under extreme load
-- Memory usage monitoring
-- Error rate analysis
-- Status update reliability under stress
-
-### 8.4 Security Testing
-
-#### 8.4.1 Penetration Testing
-- SQL injection attempts
-- XSS vulnerability testing
-- Authentication bypass attempts
-- Unauthorized room status modification attempts
-
-#### 8.4.2 Access Control Testing
-- Role-based permission verification
-- RLS policy effectiveness
-- Unauthorized access prevention
-- Room status update authorization
-
-### 8.5 User Acceptance Testing
-
-#### 8.5.1 Guest User Testing
-- Booking flow testing
-- Status update confirmation
-- User experience evaluation
-
-#### 8.5.2 Admin User Testing
-- Dashboard functionality testing
-- Real-time status monitoring
-- Administrative controls validation
-
-### 8.6 Test Results Summary
-
-**[TABLE NEEDED: Comprehensive test results table showing pass/fail status for all test cases]**
-
-| Test Case | Category | Status | Execution Time | Notes |
-|----------|----------|---------|----------------|-------|
-| TC001 | Booking System | ✅ PASS | 1.2s | Status update automatic |
-| TC002 | Booking System | ✅ PASS | 0.8s | Conflict detection works |
-| TC003 | Error Handling | ✅ PASS | 1.5s | Graceful degradation |
-| TC004 | Suite Booking | ✅ PASS | 1.3s | Same as room booking |
-| TC005 | Admin Auth | ✅ PASS | 0.9s | Role verification works |
-
----
+// ... keep existing code
 
 ## 9. User Interface Design
 
-### 9.1 Design Principles
-
-#### 9.1.1 User-Centered Design
-- Intuitive navigation patterns
-- Consistent visual hierarchy
-- Accessible design standards (WCAG 2.1)
-
-#### 9.1.2 Responsive Design
-- Mobile-first approach
-- Breakpoint strategy for various screen sizes
-- Touch-friendly interface elements
-
-### 9.2 Design System
-
-#### 9.2.1 Color Palette
-- **Primary:** Luxury gold and deep blue
-- **Secondary:** Warm neutrals
-- **Accent:** Subtle highlights for interactive elements
-
-**[SCREENSHOT NEEDED: Color palette visualization from design system]**
-**Tool:** Figma or design system documentation
-**Elements to Show:** Primary, secondary, and accent colors with hex codes
-
-#### 9.2.2 Typography
-- **Headings:** Inter font family
-- **Body:** System font stack for optimal performance
-- **Hierarchy:** Clear distinction between heading levels
-
-#### 9.2.3 Component Library
-Built on Shadcn/UI components:
-- Buttons with consistent styling
-- Form elements with validation states
-- Cards for content organization
-- Navigation components
-
-**[SCREENSHOT NEEDED: Component library showcase]**
-**File to Screenshot:** `src/components/ui/` directory or Storybook
-**Elements to Show:** Button variants, form components, card layouts
-
-### 9.3 Wireframes
-
-#### 9.3.1 Homepage Wireframe
-**[WIREFRAME NEEDED: Homepage layout showing header, hero section, room preview, and footer]**
-
-**[SCREENSHOT NEEDED: Actual homepage implementation]**
-**File to Screenshot:** Homepage at `/` route
-**Elements to Capture:** Full page layout, navigation, hero section, featured rooms
-
-#### 9.3.2 Booking Page Wireframe
-**[WIREFRAME NEEDED: Booking page layout showing room selection, date picker, and guest information form]**
-
-**[SCREENSHOT NEEDED: Booking page implementation]**
-**File to Screenshot:** Booking page at `/booking` route
-**Elements to Capture:** Room grid, filtering options, booking form
-
-#### 9.3.3 Admin Dashboard Wireframe
-**[WIREFRAME NEEDED: Admin dashboard layout showing navigation, statistics cards, and quick actions]**
-
-**[SCREENSHOT NEEDED: Admin dashboard implementation]**
-**File to Screenshot:** Admin dashboard at `/admin/dashboard` route
-**Elements to Capture:** Statistics cards, navigation sidebar, booking management table
-
-### 9.4 User Experience Flow
-
-#### 9.4.1 Guest Booking Journey
-1. Homepage → View rooms
-2. Room selection → Check availability
-3. Date selection → Guest information
-4. Booking confirmation → Email confirmation
-
-**[UML DIAGRAM NEEDED: User journey flowchart for guest booking process]**
-
-**Elements to Include:**
-- Decision points (dates available?)
-- Process steps (enter guest info)
-- System responses (send confirmation)
-- Error paths (booking failed)
-
-#### 9.4.2 Admin Management Flow
-1. Admin login → Dashboard overview
-2. Navigation to specific management area
-3. Perform administrative action
-4. Confirmation and logging
-
-**[UML DIAGRAM NEEDED: Admin workflow flowchart]**
-
-### 9.5 Accessibility Features
-
-#### 9.5.1 WCAG 2.1 Compliance
-- Keyboard navigation support
-- Screen reader compatibility
-- Color contrast ratios meeting AA standards
-- Alternative text for images
-
-#### 9.5.2 Usability Enhancements
-- Clear error messages
-- Loading states for async operations
-- Confirmation dialogs for destructive actions
-
-**[SCREENSHOT NEEDED: Accessibility testing results]**
-**Tool:** Lighthouse accessibility audit or axe DevTools
-**Elements to Show:** Accessibility score, specific compliance checks
-
-### 9.6 Mobile Optimization
-
-#### 9.6.1 Mobile-Specific Features
-- Touch-optimized button sizes
-- Swipe gestures for galleries
-- Responsive navigation menu
-
-#### 9.6.2 Performance Optimization
-- Optimized images for mobile
-- Minimal JavaScript for faster loading
-- Progressive enhancement approach
-
-**[SCREENSHOT NEEDED: Mobile responsive design]**
-**Device:** Mobile phone view of booking page
-**Elements to Show:** Responsive layout, mobile navigation, touch-friendly elements
-
----
+// ... keep existing code
 
 ## 10. Deployment and Performance
 
-### 10.1 Deployment Architecture
-
-#### 10.1.1 Production Environment
-- **Frontend:** Deployed on Vercel/Netlify
-- **Backend:** Supabase cloud infrastructure
-- **Database:** PostgreSQL with automatic backups
-- **CDN:** Global content delivery network
-
-#### 10.1.2 CI/CD Pipeline
-```yaml
-# GitHub Actions workflow
-name: Deploy to Production
-on:
-  push:
-    branches: [main]
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
-      - name: Install dependencies
-        run: npm install
-      - name: Build application
-        run: npm run build
-      - name: Deploy to production
-        run: npm run deploy
-```
-
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `.github/workflows/deploy.yml`
-**Lines to Capture:** Complete CI/CD pipeline configuration
-
-### 10.2 Performance Optimization
-
-#### 10.2.1 Frontend Optimization
-- **Code Splitting:** Dynamic imports for route-based splitting
-- **Image Optimization:** WebP format with fallbacks
-- **Caching Strategy:** Service worker for offline functionality
-- **Bundle Analysis:** Regular monitoring of bundle size
-
-#### 10.2.2 Database Optimization
-- **Indexing:** Strategic indexes on frequently queried columns
-- **Query Optimization:** Efficient SQL queries with proper joins
-- **Connection Pooling:** Managed by Supabase infrastructure
-
-#### 10.2.3 Performance Metrics
-
-**Page Load Times:**
-- Homepage: < 2 seconds
-- Booking page: < 3 seconds
-- Admin dashboard: < 2.5 seconds
-
-**Database Performance:**
-- Average query time: < 200ms
-- 99th percentile: < 500ms
-
-**[SCREENSHOT NEEDED: Performance testing results chart showing load times and response times]**
-**Tool:** Lighthouse report or performance monitoring dashboard
-**Metrics to Show:** Performance scores, Core Web Vitals, load times
-
-### 10.3 Monitoring and Analytics
-
-#### 10.3.1 Application Monitoring
-- Error tracking with Sentry integration
-- Performance monitoring
-- Uptime monitoring
-
-#### 10.3.2 User Analytics
-- Page view tracking
-- User interaction analytics
-- Conversion funnel analysis
-
-**[SCREENSHOT NEEDED: Analytics dashboard showing user metrics and performance data]**
-**Tool:** Google Analytics or monitoring dashboard
-**Metrics to Show:** User sessions, page views, bounce rate, conversion rate
-
-### 10.4 Scalability Considerations
-
-#### 10.4.1 Horizontal Scaling
-- Serverless architecture benefits
-- Auto-scaling database connections
-- CDN for global content delivery
-
-#### 10.4.2 Future Scaling Plans
-- Database sharding strategies
-- Microservices migration path
-- Multi-region deployment
-
-### 10.5 Backup and Recovery
-
-#### 10.5.1 Data Backup Strategy
-- Automated daily database backups
-- Point-in-time recovery capability
-- Geographic backup distribution
-
-#### 10.5.2 Disaster Recovery
-- Recovery time objective (RTO): < 4 hours
-- Recovery point objective (RPO): < 1 hour
-- Tested recovery procedures
-
----
+// ... keep existing code
 
 ## 11. User Manual and Documentation
 
-### 11.1 Guest User Guide
-
-#### 11.1.1 Making a Booking
-1. Navigate to the Rooms page
-2. Select desired room type
-3. Choose check-in and check-out dates
-4. Fill in guest information
-5. Submit booking request
-6. Receive confirmation email
-
-**[SCREENSHOT NEEDED: Step-by-step booking process screenshots]**
-**Files to Screenshot:** 
-- `/rooms` - Room selection page
-- `/booking` - Booking form
-- Email confirmation (if available)
-
-#### 11.1.2 Viewing Hotel Information
-- Browse room galleries
-- Read reviews from other guests
-- Check upcoming events
-- Contact hotel for inquiries
-
-**[SCREENSHOT NEEDED: Hotel information pages]**
-**Files to Screenshot:**
-- `/gallery` - Gallery page
-- `/` - Homepage with reviews section
-- `/contact` - Contact form
-
-### 11.2 Admin User Guide
-
-#### 11.2.1 Dashboard Overview
-The admin dashboard provides:
-- Real-time booking statistics
-- Room occupancy rates
-- Recent activity overview
-- Quick action buttons
-
-**[SCREENSHOT NEEDED: Admin dashboard overview]**
-**File to Screenshot:** `/admin/dashboard` - Main dashboard page
-**Elements to Capture:** Statistics cards, recent activity, navigation menu
-
-#### 11.2.2 Managing Bookings
-- View all bookings with status indicators
-- Confirm or cancel bookings
-- Update booking details
-- Search and filter functionality
-
-**[SCREENSHOT NEEDED: Booking management interface]**
-**File to Screenshot:** `/admin/bookings` - Booking management page
-**Elements to Capture:** Booking table, status indicators, action buttons
-
-#### 11.2.3 Room Management
-- Update room availability
-- Modify room details and pricing
-- Upload room images
-- Set maintenance modes
-
-**[SCREENSHOT NEEDED: Room management interface]**
-**File to Screenshot:** `/admin/rooms` - Room management page
-**Elements to Capture:** Room list, edit forms, availability controls
-
-#### 11.2.4 User Management (Primary Admin)
-- Invite new admin users
-- Manage permissions
-- View activity logs
-- Security monitoring
-
-**[SCREENSHOT NEEDED: User management interface]**
-**File to Screenshot:** `/admin/team-management` - Team management page
-**Elements to Capture:** User list, permission controls, invite functionality
-
-### 11.3 Technical Documentation
-
-#### 11.3.1 API Documentation
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** Supabase API documentation or generated API docs
-**Elements to Show:** Endpoint definitions, request/response formats, authentication
-
-#### 11.3.2 Database Schema Reference
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** Database schema documentation
-**Elements to Show:** Table definitions, relationships, constraints
-
-#### 11.3.3 Deployment Guide
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** `DEPLOYMENT.md` or similar documentation
-**Elements to Show:** Step-by-step deployment instructions, environment variables
-
----
+// ... keep existing code
 
 ## 12. Conclusion and Future Work
 
-### 12.1 Project Summary
-
-The La Posh Signature Hotel & Suites management system successfully addresses the modern hospitality industry's need for comprehensive digital solutions. The system demonstrates effective integration of contemporary web technologies to create a secure, scalable, and user-friendly platform with intelligent room status management.
-
-#### 12.1.1 Objectives Achievement
-✅ **Full-stack hotel management system:** Complete booking and administrative functionality
-✅ **Automatic room status management:** Real-time status updates upon booking confirmation
-✅ **Secure authentication:** Multi-layered security with RLS implementation
-✅ **Intuitive admin dashboard:** Comprehensive management interface with real-time status monitoring
-✅ **Responsive public website:** Mobile-optimized guest experience
-✅ **Real-time availability:** Dynamic booking system with automatic status transitions
-✅ **Audit logging:** Comprehensive activity tracking including automated status changes
-✅ **Role-based permissions:** Granular access control
-
-### 12.2 Key Contributions
-
-#### 12.2.1 Technical Contributions
-1. **Intelligent Room Status Management:** Automatic status transitions with error handling
-2. **Innovative Security Implementation:** Advanced RLS policies with granular permissions
-3. **Modern Architecture:** Serverless BaaS integration with React.js
-4. **Performance Optimization:** Sub-3-second page load times
-5. **Comprehensive Audit System:** Complete administrative and system activity tracking
-
-#### 12.2.2 Business Value
-1. **Operational Efficiency:** 40% reduction in manual booking processes, eliminated manual status updates
-2. **Enhanced Security:** Zero security incidents during testing period
-3. **Improved User Experience:** 95% user satisfaction rating with real-time status updates
-4. **Scalability:** Support for 1000+ concurrent users with automatic status management
-
-### 12.3 Lessons Learned
-
-#### 12.3.1 Technical Insights
-- **Database Design:** Proper normalization crucial for performance and status consistency
-- **Security:** RLS provides robust data protection for sensitive operations
-- **User Experience:** Mobile-first design essential for modern applications
-- **Testing:** Comprehensive testing prevents production issues, especially for automated processes
-- **Error Handling:** Graceful degradation important for non-critical operations like status updates
-
-#### 12.3.2 Project Management
-- **Iterative Development:** Agile methodology improved delivery speed
-- **Documentation:** Continuous documentation saves development time
-- **Stakeholder Communication:** Regular updates ensure requirement alignment
-- **Feature Priority:** Core functionality (booking) vs. enhancement features (status updates)
-
-### 12.4 Limitations and Challenges
-
-#### 12.4.1 Current Limitations
-1. **Payment Integration:** Not implemented in current version
-2. **Multi-language Support:** English-only interface
-3. **Advanced Reporting:** Limited analytics capabilities
-4. **Third-party Integration:** No external booking platform integration
-5. **Manual Status Override:** Admins cannot manually change room status from 'taken' back to 'available'
-
-#### 12.4.2 Challenges Overcome
-1. **Complex Permission System:** Resolved through careful RLS design
-2. **Real-time Updates:** Addressed with Supabase real-time subscriptions
-3. **Mobile Responsiveness:** Achieved through systematic breakpoint testing
-4. **Security Compliance:** Met through comprehensive audit implementation
-5. **Atomic Operations:** Ensured booking and status update consistency
-
-### 12.5 Future Enhancements
-
-#### 12.5.1 Short-term Improvements (3-6 months)
-1. **Enhanced Room Management**
-   - Manual room status override capabilities
-   - Maintenance mode status
-   - Scheduled availability changes
-
-2. **Payment Gateway Integration**
-   - Stripe/PayPal integration
-   - Secure payment processing
-   - Automated invoice generation
-
-3. **Enhanced Analytics**
-   - Occupancy rate tracking
-   - Revenue analytics dashboard
-   - Room utilization reports
-
-#### 12.5.2 Medium-term Enhancements (6-12 months)
-1. **Advanced Status Management**
-   - Room cleaning status
-   - Maintenance scheduling
-   - Automated check-in/check-out status updates
-
-2. **AI Integration**
-   - Predictive analytics for room demand
-   - Dynamic pricing based on occupancy
-   - Automated customer service chatbot
-
-3. **Mobile Application**
-   - React Native implementation
-   - Push notifications for status changes
-   - Offline booking capability
-
-#### 12.5.3 Long-term Vision (1-2 years)
-1. **IoT Integration**
-   - Smart room sensors for automatic status detection
-   - Energy management based on occupancy status
-   - Automated maintenance alerts
-
-2. **Enterprise Features**
-   - Multi-property support
-   - Advanced reporting and analytics
-   - Integration with property management systems
-
-3. **Machine Learning**
-   - Occupancy prediction models
-   - Guest preference analysis
-   - Optimal pricing algorithms
-
-### 12.6 Industry Impact
-
-This project demonstrates the practical application of modern web technologies in the hospitality sector, contributing to:
-
-1. **Digital Transformation:** Showcasing automated status management benefits
-2. **Security Standards:** Implementing best practices for data protection
-3. **User Experience:** Setting new standards for hotel booking interfaces
-4. **Academic Research:** Providing real-world application of theoretical concepts
-5. **Industry Innovation:** Demonstrating intelligent room management systems
-
-### 12.7 Final Reflections
-
-The development of this hotel management system has been an invaluable learning experience, combining theoretical computer science knowledge with practical software engineering skills. The implementation of automatic room status management demonstrates the power of thoughtful system design in reducing manual processes and improving operational efficiency.
-
-The project successfully validates the chosen technology stack and architectural decisions, particularly in handling complex business logic like automatic status transitions while maintaining data integrity and user experience. The system's successful implementation provides a solid foundation for future enhancements and real-world deployment.
-
-The automatic room status management feature, while seemingly simple, represents a significant improvement in operational efficiency and demonstrates the importance of considering the complete user journey and business process automation in software design.
-
----
+// ... keep existing code
 
 ## 13. References
 
-[Add your actual references here following academic citation format]
-
-1. Smith, J., Anderson, K., & Brown, L. (2023). Digital Transformation in Hospitality Management. *Journal of Hotel Technology*, 15(3), 245-267.
-
-2. Johnson, M., & Lee, S. (2024). Serverless Architecture Adoption in Modern Web Development. *ACM Computing Surveys*, 56(2), 1-34.
-
-3. OWASP Foundation. (2023). *OWASP Top 10 - 2023*. Retrieved from https://owasp.org/Top10/
-
-4. Hotel Technology Association. (2024). Guest Technology Preferences Survey. *HTA Annual Report*, 12, 89-102.
-
-5. React.js Team. (2024). *React Documentation*. Retrieved from https://react.dev/
-
-6. Supabase Team. (2024). *Supabase Documentation*. Retrieved from https://supabase.com/docs
-
-7. PostgreSQL Global Development Group. (2024). *PostgreSQL Documentation*. Retrieved from https://www.postgresql.org/docs/
-
-8. Tailwind CSS Team. (2024). *Tailwind CSS Documentation*. Retrieved from https://tailwindcss.com/docs
-
-9. TypeScript Team. (2024). *TypeScript Handbook*. Retrieved from https://www.typescriptlang.org/docs/
-
-10. Vite Team. (2024). *Vite Guide*. Retrieved from https://vitejs.dev/guide/
-
-[Add additional academic references, books, and research papers relevant to your project]
-
----
+// ... keep existing code
 
 ## 14. Appendices
 
-### Appendix A: Source Code Structure
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** Complete project directory structure
-**Tool:** VS Code file explorer or terminal `tree` command
-**Elements to Show:** All directories and key files with brief descriptions
-
-### Appendix B: Database Schema SQL
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** Complete database creation scripts including room status management
-**Location:** `supabase/migrations/` directory
-**Elements to Show:** All table definitions, indexes, constraints, and RLS policies
-
-### Appendix C: API Endpoints
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** Comprehensive API documentation including status update endpoints
-**Location:** Supabase API reference or generated documentation
-**Elements to Show:** All endpoints with request/response examples
-
-### Appendix D: Test Cases
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** Detailed test case documentation including room status update tests
-**Location:** Test files or test documentation
-**Elements to Show:** Unit tests, integration tests, and user acceptance tests
-
-### Appendix E: Performance Metrics
-**[SCREENSHOT NEEDED]**
-**File to Screenshot:** Detailed performance testing results including status update performance
-**Tool:** Lighthouse reports, performance monitoring dashboard
-**Elements to Show:** Load times, response times, Core Web Vitals, database query performance
-
-### Appendix F: Security Audit Report
-**[SCREENSHOT NEEDED]**
-**File to Screenshot:** Security testing and audit results including status management security
-**Tool:** Security scanning tools, penetration testing results
-**Elements to Show:** Vulnerability scans, access control tests, audit logs
-
-### Appendix G: User Feedback
-**[SCREENSHOT NEEDED]**
-**File to Screenshot:** User testing feedback and surveys
-**Elements to Show:** User satisfaction scores, feedback comments, usability test results
-
-### Appendix H: Screenshots
-**[SCREENSHOT NEEDED]**
-**Files to Screenshot:** Comprehensive application screenshots including booking confirmation and status updates
-
-**Essential Screenshots to Include:**
-1. **Homepage** (`/`) - Hero section, featured rooms, navigation
-2. **Rooms Page** (`/rooms`) - Room grid, filtering, availability display
-3. **Booking Form** (`/booking`) - Complete booking process, date selection
-4. **Booking Confirmation** - Success message, email confirmation
-5. **Admin Login** (`/admin/login`) - Authentication form
-6. **Admin Dashboard** (`/admin/dashboard`) - Statistics, recent activity
-7. **Booking Management** (`/admin/bookings`) - Booking table, status updates
-8. **Room Management** (`/admin/rooms`) - Room list, availability controls
-9. **Team Management** (`/admin/team-management`) - User permissions
-10. **Activity Logs** (`/admin/activity-logs`) - Audit trail, system logs
-11. **Mobile Views** - Responsive design on mobile devices
-12. **Error States** - Error messages, validation feedback
-
-### Appendix I: Installation Guide
-**[CODE SNIPPET NEEDED]**
-**File to Screenshot:** Detailed installation and setup instructions
-**Location:** `README.md` or `INSTALLATION.md`
-**Elements to Show:** Prerequisites, environment setup, deployment steps
-
-### Appendix J: Configuration Files
-**[CODE SNIPPET NEEDED]**
-**Files to Screenshot:** Important configuration files and environment setup
-**Files to Include:**
-- `package.json` - Dependencies and scripts
-- `tailwind.config.ts` - Styling configuration
-- `vite.config.ts` - Build configuration
-- `supabase/config.toml` - Backend configuration
-- `.env.example` - Environment variables template
-
-### Appendix K: Room Status Management Flow
-**[UML DIAGRAM NEEDED]**
-**Diagram Type:** Flowchart showing the automatic room status update process
-**Elements to Include:**
-- Guest booking initiation
-- Availability check
-- Booking confirmation
-- Automatic status update
-- Error handling paths
-- Notification triggers
-- Admin logging
-
-**Recommended Tool:** Draw.io, Lucidchart, or PlantUML
-**Format:** High-resolution diagram showing complete workflow
+// ... keep existing code
 
 ---
 
-**Total Pages:** 162
-**Word Count:** Approximately 26,500 words
-**Figures/Tables:** 50+ (to be added as indicated)
+**Total Pages:** 162  
+**Word Count:** Approximately 26,500 words  
+**Figures/Tables:** 50+ (to be added as indicated)  
 **Code Samples:** 30+ throughout the document
 
 ---
@@ -1512,4 +196,3 @@ The automatic room status management feature, while seemingly simple, represents
 *This thesis report demonstrates the complete lifecycle of a modern web application development project, from initial requirements gathering through deployment and future planning. The comprehensive documentation serves as both an academic submission and a practical guide for similar projects, with special emphasis on intelligent automation features like automatic room status management.*
 
 **Note:** All placeholder sections marked with "[Add ... here]" should be filled with actual content specific to your implementation, testing results, and academic requirements.
-
